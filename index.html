@@ -6,7 +6,7 @@
     <title>For Nayanika ❤️</title>
     
     <!-- Fonts & Libraries -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@200;400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@200;400&family=Share+Tech+Mono&family=Great+Vibes&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
@@ -19,6 +19,7 @@
         :root {
             --neon-green: #0f0;
             --love-pink: #ec4899;
+            --krishna-blue: #3b82f6; 
             --glass-border: rgba(255, 255, 255, 0.15);
         }
 
@@ -36,7 +37,7 @@
         
         .romantic-bg {
             position: fixed; inset: 0; z-index: -1; opacity: 0; transition: opacity 2s;
-            background: linear-gradient(-45deg, #2e021d, #1a0b2e, #000000, #2f1025);
+            background: linear-gradient(-45deg, #1e1b4b, #312e81, #000000, #4c1d95);
             background-size: 400% 400%;
             animation: aurora 15s ease infinite;
         }
@@ -53,7 +54,6 @@
         .hidden-section { display: none !important; } 
         .flex-section { display: flex !important; }
         
-        /* THE GLASS PANEL */
         .glass-panel { 
             width: 100%; height: 100dvh; position: relative; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -99,6 +99,18 @@
         .soul-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4); }
         .soul-btn:active { transform: scale(0.95); }
 
+        /* --- FLUTE TOGGLE --- */
+        .flute-toggle {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px); display: none; /* hidden initially */
+            align-items: center; justify-content: center; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .flute-toggle.active { background: rgba(59, 130, 246, 0.3); box-shadow: 0 0 15px var(--krishna-blue); }
+        .flute-toggle span { font-size: 24px; filter: drop-shadow(0 0 5px white); }
+
         /* --- SPECIFIC STYLES --- */
         .romantic-heading {
             font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 3.5rem;
@@ -115,22 +127,11 @@
         .photo-frame img { width: 100%; height: 200px; object-fit: cover; filter: sepia(20%); }
         .photo-frame:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 50; }
 
-        /* 2. Video (Square Cinema Mode) */
         .cinema-container {
-            width: 350px; /* Fixed Square Width */
-            height: 350px; /* Fixed Square Height */
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(236, 72, 153, 0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            background: #000;
+            width: 350px; height: 350px; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 0 50px rgba(236, 72, 153, 0.3); border: 1px solid rgba(255,255,255,0.2); background: #000;
         }
-        /* Make video fill the square exactly */
-        .cinema-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .cinema-container video { width: 100%; height: 100%; object-fit: cover; }
 
         /* Heart & Cake */
         .heart-path { fill: #2a0a12; stroke: #9d174d; stroke-width: 2; transition: all 1s; }
@@ -150,6 +151,55 @@
         }
         .flame.out { opacity: 0; transform: scale(0); transition: 0.3s; }
 
+        /* KRISHNA THEMES */
+        .matki-container { width: 150px; height: 180px; position: relative; cursor: pointer; transition: transform 0.2s; }
+        .matki-container:active { transform: scale(0.95) rotate(-5deg); }
+        .matki-body {
+            width: 100%; height: 100%; background: radial-gradient(circle at 30% 30%, #a16207, #713f12);
+            border-radius: 50% 50% 40% 40%; border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+        }
+        .sudarshan-chakra {
+            width: 300px; height: 300px; position: absolute;
+            background: conic-gradient(from 0deg, transparent, #3b82f6, #60a5fa, #fff, transparent);
+            border-radius: 50%; opacity: 0.6; pointer-events: none; filter: blur(5px);
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .diya-container { width: 100px; height: 60px; position: relative; cursor: pointer; background: radial-gradient(ellipse at center, #b45309, #78350f); border-radius: 10% 10% 50% 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .diya-flame {
+            width: 30px; height: 50px; background: linear-gradient(to bottom, #fef08a, #f59e0b, #ef4444);
+            border-radius: 50% 50% 20% 20%; position: absolute; top: -35px; left: 35px;
+            filter: blur(2px); box-shadow: 0 0 20px #f59e0b; animation: flicker 0.4s infinite alternate;
+            opacity: 0; transition: opacity 1s;
+        }
+        @keyframes flicker { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
+
+        /* --- NEW ANIMATION STYLES (Crowd, Rain, Season) --- */
+        .silhouette {
+            position: absolute; background: #444; width: 60px; height: 120px;
+            border-radius: 50% 50% 0 0; filter: blur(8px); opacity: 0.7;
+            animation: roam 5s infinite alternate;
+        }
+        @keyframes roam { 0% { transform: translateX(-20px); } 100% { transform: translateX(20px); } }
+
+        .season-bg {
+            position: absolute; inset:0; z-index:-1;
+            animation: seasons 12s infinite; opacity: 0.3;
+        }
+        @keyframes seasons {
+            0% { background: #10b981; } /* Spring */
+            33% { background: #fbbf24; } /* Summer */
+            66% { background: #60a5fa; } /* Winter */
+            100% { background: #10b981; }
+        }
+
+        .rain-window {
+            background: url('https://media.giphy.com/media/t7Qb8655Z1oHF4DK0N/giphy.gif'); /* Simple rain placeholder */
+            background-size: cover; opacity: 0.2; position: absolute; inset:0; pointer-events:none;
+        }
+
         /* Video Overlay */
         #love-video-overlay {
             position: fixed; inset: 0; z-index: 500; background: black;
@@ -165,7 +215,17 @@
     <div class="romantic-bg" id="romance-bg"></div>
     <canvas id="bg-canvas" style="position: fixed; top:0; left:0; z-index:1; pointer-events:none;"></canvas>
     
+    <!-- Audio Sources -->
     <audio id="bg-music" loop preload="auto"><source src="songs1/love12.mp3" type="audio/mpeg"></audio>
+    <audio id="flute-music" loop preload="auto"><source src="songs1/flute.mp3" type="audio/mpeg"></audio>
+    <!-- NEW AUDIOS -->
+    <audio id="crowd-audio" loop preload="auto"><source src="songs1/crowd.mp3" type="audio/mpeg"></audio>
+    <audio id="rain-audio" loop preload="auto"><source src="songs1/rain.mp3" type="audio/mpeg"></audio>
+
+    <!-- Flute Toggle UI -->
+    <div id="flute-btn" class="flute-toggle" onclick="toggleFluteMode()">
+        <span>🪈</span>
+    </div>
 
     <!-- LOADER -->
     <div id="loader" class="fixed inset-0 bg-black z-[200] flex flex-col items-center justify-center font-mono">
@@ -173,9 +233,9 @@
         <p class="text-green-500 text-xs tracking-[0.4em] uppercase">Initializing System...</p>
     </div>
 
-    <!-- 1. HACKER PRANK STAGE -->
+    <!-- 1. HACKER PRANK STAGE (Unchanged) -->
     <div id="prank-stage" class="fixed inset-0 z-[150] flex flex-col items-center justify-center hidden-section" style="font-family: 'Share Tech Mono', monospace;">
-        <!-- Step 1 -->
+        <!-- Steps 1-7 (Same as before) -->
         <div id="prank-1" class="flex-section flex-col items-center w-full p-6">
             <h1 class="text-4xl text-green-500 mb-8 font-bold tracking-widest animate-pulse">SECURITY CHECK</h1>
             <div class="bg-black/80 border border-green-800 p-8 rounded-sm w-full max-w-sm">
@@ -184,7 +244,6 @@
                 <button onclick="nextPrank(2)" class="tech-btn w-full">INITIATE SCAN</button>
             </div>
         </div>
-        <!-- Step 2 -->
         <div id="prank-2" class="hidden-section flex-col items-center text-center">
             <h2 class="text-2xl text-green-500 mb-8 tracking-widest">ANALYZING BIOMETRICS...</h2>
             <div class="w-40 h-40 border-4 border-green-500 border-t-transparent rounded-full animate-spin mb-8 shadow-[0_0_20px_#0f0]"></div>
@@ -192,7 +251,6 @@
             <p id="status-text" class="text-yellow-400 text-lg opacity-0 mt-2 font-bold blink">>> STATUS: GRANDMA MODE DETECTED</p>
             <button id="btn-2" onclick="nextPrank(3)" class="tech-btn mt-8 opacity-0">ACCEPT FATE</button>
         </div>
-        <!-- Step 3 -->
         <div id="prank-3" class="hidden-section flex-col items-center text-center w-full max-w-md px-4">
             <h2 class="text-2xl text-green-500 mb-8">MEASURING ATTITUDE...</h2>
             <div class="w-full h-10 bg-gray-900 border border-green-500 relative overflow-hidden">
@@ -201,7 +259,6 @@
             <p id="sass-msg" class="text-red-500 text-2xl font-bold opacity-0 mt-6 animate-bounce">⚠️ WARNING: SASS OVERLOAD ⚠️</p>
             <button id="btn-3" onclick="nextPrank(4)" class="tech-btn mt-8 opacity-0">GUILTY</button>
         </div>
-        <!-- Step 4 -->
         <div id="prank-4" class="hidden-section flex-col items-center text-center">
             <h2 class="text-2xl text-green-500 mb-8">HEIGHT CALIBRATION</h2>
             <div class="border-l-4 border-b-4 border-green-500 p-4 w-40 h-80 flex items-end justify-center relative bg-gray-900/50">
@@ -210,7 +267,6 @@
             <p id="height-result" class="text-white mt-6 text-xl opacity-0">RESULT: SMOL BEAN (POTATO) 🥔</p>
             <button id="btn-4" onclick="nextPrank(5)" class="tech-btn mt-6 opacity-0">CONTINUE</button>
         </div>
-        <!-- Step 5 -->
         <div id="prank-5" class="hidden-section flex-col items-center text-center">
             <h2 class="text-2xl text-green-500 mb-6">SYSTEM ERROR</h2>
             <div class="text-left w-80 p-6 bg-gray-900 border border-red-500 font-mono text-sm space-y-3">
@@ -220,7 +276,6 @@
             </div>
             <button id="btn-5" onclick="nextPrank(6)" class="tech-btn mt-8 opacity-0 border-red-500 text-red-500">SKIP DOWNLOAD</button>
         </div>
-        <!-- Step 6 -->
         <div id="prank-6" class="hidden-section flex-col items-center text-center">
             <h2 class="text-2xl text-green-500 mb-8">MATH TEST (EASY MODE)</h2>
             <h1 class="text-5xl text-white mb-10 font-bold">2 + 2 = ?</h1>
@@ -230,7 +285,6 @@
             </div>
             <p id="iq-msg" class="text-red-500 mt-6 text-xl h-8 font-bold"></p>
         </div>
-        <!-- Step 7 -->
         <div id="prank-7" class="hidden-section flex-col items-center text-center w-full h-full justify-center p-4">
             <h2 class="text-3xl text-red-500 mb-8 font-bold">FINAL QUESTION</h2>
             <p class="text-white mb-12 text-xl tracking-wider">Who is the favorite child?</p>
@@ -251,7 +305,6 @@
 
         <!-- Chap 1: Reveal -->
         <div id="chap-1" class="chapter-container chapter-active">
-            <!-- Increased Size to w-80 h-80 (approx 320px) -->
             <div class="w-80 h-80 rounded-full border-[3px] border-pink-400 p-2 mb-8 shadow-[0_0_40px_rgba(236,72,153,0.4)]">
                 <img src="New folder (3)/mylove1.jpg" onerror="this.src='https://placehold.co/400x400/pink/white?text=My+Love'" class="w-full h-full object-cover rounded-full filter brightness-110">
             </div>
@@ -280,8 +333,22 @@
             </div>
         </div>
 
-        <!-- Chap 4: Timeline -->
+        <!-- NEW CHAP 4: PERSPECTIVE SHIFT (Idea 2) -->
         <div id="chap-4" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-4">How We See You</h2>
+            <div class="relative w-80 h-96 bg-black rounded-lg overflow-hidden border border-white/20">
+                <img id="persp-img" src="New folder (3)/photo1.jpeg" onerror="this.src='https://placehold.co/300x400/gray/white?text=You'" class="w-full h-full object-cover transition-all duration-500 grayscale brightness-75">
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <p id="persp-txt" class="text-2xl font-bold uppercase tracking-widest text-gray-400/50">Messy</p>
+                </div>
+            </div>
+            <input type="range" min="0" max="100" value="0" class="w-64 mt-6 accent-pink-500" oninput="updatePerspective(this.value)">
+            <p class="text-xs text-gray-400 mt-2">Slide to see my view</p>
+            <button id="persp-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">The Truth</button>
+        </div>
+
+        <!-- Chap 5: Timeline -->
+        <div id="chap-5" class="chapter-container">
             <h2 class="romantic-heading mb-6">Our Infinity</h2>
             <div class="glass-card p-10 relative overflow-hidden group">
                 <div class="absolute inset-0 bg-pink-500/10 blur-xl group-hover:bg-pink-500/20 transition duration-700"></div>
@@ -292,8 +359,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-10">Heal Me</button>
         </div>
 
-        <!-- Chap 5: Heart -->
-        <div id="chap-5" class="chapter-container">
+        <!-- Chap 6: Heart -->
+        <div id="chap-6" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-4">You Healed Me</h2>
             <div class="heart-container cursor-pointer transform hover:scale-110 transition duration-500" onclick="healHeart(this)">
                 <svg viewBox="0 0 100 100" class="w-48 h-48 overflow-visible filter drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]">
@@ -305,8 +372,8 @@
             <button id="heal-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none">Sync Hearts</button>
         </div>
 
-        <!-- Chap 6: Sync -->
-        <div id="chap-6" class="chapter-container">
+        <!-- Chap 7: Sync -->
+        <div id="chap-7" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Feel My Heartbeat</h2>
             <div class="relative">
                 <div class="absolute inset-0 bg-pink-600 blur-3xl opacity-20 animate-pulse"></div>
@@ -316,8 +383,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-10">Touch</button>
         </div>
 
-        <!-- Chap 7: Hand Drag -->
-        <div id="chap-7" class="chapter-container">
+        <!-- Chap 8: Hand Drag -->
+        <div id="chap-8" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">Hold My Hand</h2>
             <div class="relative w-full h-80 max-w-md bg-white/5 rounded-xl border border-white/10 mt-4 touch-none overflow-hidden" id="drag-zone">
                 <div class="absolute inset-0 flex items-center justify-center text-white/5 text-6xl">❤</div>
@@ -327,24 +394,46 @@
             <button id="hand-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">View Memories</button>
         </div>
 
-        <!-- Chap 8: Photo Voice -->
-        <div id="chap-8" class="chapter-container">
+        <!-- NEW CHAP 9: CROWDED ROOM (Idea 4) -->
+        <div id="chap-9" class="chapter-container" onmouseenter="startCrowd()" onmouseleave="stopCrowd()">
+            <div class="absolute inset-0 flex items-center justify-center overflow-hidden">
+                <!-- Silhouettes -->
+                <div class="silhouette" style="left:10%; top:40%; animation-delay:0s"></div>
+                <div class="silhouette" style="left:30%; top:20%; animation-delay:1s"></div>
+                <div class="silhouette" style="left:70%; top:50%; animation-delay:2s"></div>
+                <div class="silhouette" style="left:80%; top:30%; animation-delay:0.5s"></div>
+                <div class="silhouette" style="left:20%; top:60%; animation-delay:3s"></div>
+                <div class="silhouette" style="left:60%; top:70%; animation-delay:1.5s"></div>
+            </div>
+            
+            <div class="relative z-10 w-64 h-64 flex items-center justify-center group">
+                <div class="absolute inset-0 bg-black/80 group-hover:opacity-0 transition duration-700 flex items-center justify-center">
+                    <p class="text-gray-400 text-xs tracking-widest uppercase animate-pulse">Find Her...</p>
+                </div>
+                <img src="New folder (3)/promise4.jpg" onerror="this.src='https://placehold.co/300x300/pink/white?text=Nayanika'" class="w-full h-full object-cover rounded-full shadow-[0_0_50px_#ec4899] opacity-20 group-hover:opacity-100 transition duration-700" onmouseenter="foundHer()">
+            </div>
+            <p id="crowd-msg" class="text-pink-300 mt-8 opacity-0 transition font-serif italic text-xl">"In a loud world, my eyes only find you."</p>
+            <button id="crowd-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Continue</button>
+        </div>
+
+        <!-- Chap 10: Photo Voice -->
+        <div id="chap-10" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-8">Voices & Memories</h2>
             <div class="flex flex-col md:flex-row gap-8 items-center justify-center">
                 <div class="photo-frame transform -rotate-6 hover:rotate-0" onclick="playVoice('songs1/voice1.mp3', this)">
-                    <img src="New folder (3)/photo1.jpg" onerror="this.src='https://placehold.co/300x400/pink/white?text=Sweet+Memory'">
+                    <img src="New folder (3)/mylove2.jpg" onerror="this.src='https://placehold.co/300x400/pink/white?text=Sweet+Memory'">
                     <p class="text-black text-center font-serif mt-2 italic text-sm">Tap to Listen ♫</p>
                 </div>
                 <div class="photo-frame transform rotate-3 hover:rotate-0" onclick="playVoice('songs1/voice2.mp3', this)">
-                    <img src="New folder (3)/photo2.jpg" onerror="this.src='https://placehold.co/300x400/purple/white?text=Us+Forever'">
+                    <img src="New folder (3)/promise1.jpg" onerror="this.src='https://placehold.co/300x400/purple/white?text=Us+Forever'">
                     <p class="text-black text-center font-serif mt-2 italic text-sm">Your Voice ♫</p>
                 </div>
             </div>
             <button onclick="nextChapter()" class="soul-btn mt-12">Secrets</button>
         </div>
 
-        <!-- Chap 9: Secrets -->
-        <div id="chap-9" class="chapter-container">
+        <!-- Chap 11: Secrets -->
+        <div id="chap-11" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-10">Little Secrets</h2>
             <div class="grid grid-cols-2 gap-6 w-full max-w-md">
                 <div class="glass-card cursor-pointer hover:bg-white/10 transition" onclick="this.innerHTML='<span class=\'text-pink-300 italic\'>I love your jealousy</span>'">
@@ -357,28 +446,54 @@
             <button onclick="nextChapter()" class="soul-btn mt-10">Our Movie</button>
         </div>
 
-        <!-- Chap 10: Video 1 (Main Memory) -->
-        <div id="chap-10" class="chapter-container">
+        <!-- Chap 12: Video -->
+        <div id="chap-12" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Our Moments</h2>
-            <!-- Updated to Square Cinema Container -->
             <div class="cinema-container">
                 <video id="mem-vid" controls playsinline poster="New folder (3)/photo1.jpg">
                     <source src="New folder (3)/video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
                 </video>
             </div>
             <button onclick="stopVideo()" class="soul-btn mt-6">Continue</button>
         </div>
 
-        <!-- Chap 11: Funny -->
-        <div id="chap-11" class="chapter-container">
+        <!-- NEW CHAP 13: TRANSLATION OF SILENCE (Idea 5) -->
+        <div id="chap-13" class="chapter-container" onclick="revealSilence()">
+            <h2 class="romantic-heading text-3xl mb-8">When we are silent...</h2>
+            <div class="flex flex-col gap-6 text-center max-w-md">
+                <p id="silence-1" class="text-gray-400 opacity-0 transition duration-1000">I don't just hear silence.</p>
+                <p id="silence-2" class="text-pink-200 font-serif text-xl opacity-0 transition duration-1000 delay-500">I hear your breathing like a lullaby.</p>
+                <p id="silence-3" class="text-white opacity-0 transition duration-1000 delay-1000">I think about holding you until my arms go numb.</p>
+            </div>
+            <p class="text-xs text-gray-500 mt-12 animate-pulse">Tap anywhere to listen</p>
+            <button id="silence-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Next</button>
+        </div>
+
+        <!-- Chap 14: Makhan Chor -->
+        <div id="chap-14" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-8">Who is the Thief?</h2>
+            <p class="text-white/60 mb-6 text-sm">Krishna stole butter. What did you steal?</p>
+            <div id="matki" class="matki-container" onclick="breakMatki()">
+                <div class="matki-body"><span class="text-4xl">🏺</span></div>
+                <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none"><span class="text-xs text-white/50 font-bold uppercase tracking-widest">Tap to Break</span></div>
+            </div>
+            <div id="matki-secret" class="hidden flex-col items-center">
+                <img src="New folder (3)/promise11.jpg" onerror="this.src='https://placehold.co/150x150/pink/white?text=You'" class="w-32 h-32 rounded-full border-4 border-pink-500 mb-4 shadow-[0_0_30px_#ec4899] animate-[fadeIn_1s]">
+                <h3 class="text-2xl font-serif text-pink-300 italic">"You are my Makhan Chor"</h3>
+                <p class="text-white mt-2">Because you stole my heart.</p>
+            </div>
+            <button id="matki-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">Guilty as Charged</button>
+        </div>
+
+        <!-- Chap 15: Funny -->
+        <div id="chap-15" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Giggle Gallery</h2>
             <div class="grid grid-cols-2 gap-4 w-full max-w-md" id="funny-grid"></div>
             <button onclick="nextChapter()" class="soul-btn mt-8">Next</button>
         </div>
 
-        <!-- Chap 12: Laugh Check -->
-        <div id="chap-12" class="chapter-container">
+        <!-- Chap 16: Laugh Check -->
+        <div id="chap-16" class="chapter-container">
             <h1 class="romantic-heading text-4xl mb-12">Did you laugh?</h1>
             <div class="flex gap-8">
                 <button onclick="nextChapter()" class="soul-btn bg-green-500/20 hover:bg-green-500/40 border-green-400">YES</button>
@@ -386,37 +501,70 @@
             </div>
         </div>
 
-        <!-- Chap 13: Puzzle -->
-        <div id="chap-13" class="chapter-container">
+        <!-- Chap 17: My Radha -->
+        <div id="chap-17" class="chapter-container">
+            <div class="glass-card max-w-md relative overflow-hidden">
+                <div class="absolute top-[-50px] left-[-50px] w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-40"></div>
+                <h2 class="text-4xl font-[Great_Vibes] text-blue-300 mb-6">My Radha</h2>
+                <p class="text-lg text-gray-200 font-light leading-relaxed italic">"In a world of noise, you are my devotion.<br><br>You are the Radha to my story—the one who completes the melody of my life."</p>
+                <div class="mt-8 text-2xl text-blue-400">🪈 🪷</div>
+            </div>
+            <button onclick="nextChapter()" class="soul-btn mt-8">Continue</button>
+        </div>
+
+        <!-- Chap 18: Puzzle -->
+        <div id="chap-18" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Fix Us</h2>
             <div id="puzzle-container" class="relative w-[300px] h-[300px] border border-white/20 shadow-2xl"></div>
             <button id="puz-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">Perfect Match</button>
         </div>
 
-        <!-- Chap 14: Letter -->
-        <div id="chap-14" class="chapter-container">
+        <!-- Chap 19: Letter -->
+        <div id="chap-19" class="chapter-container">
             <div id="letter-closed" class="glass-card p-12 cursor-pointer bg-gradient-to-br from-pink-900 to-purple-900 hover:scale-105 transition duration-500" onclick="openLetter()">
                 <div class="text-6xl mb-4">💌</div>
                 <span class="font-serif italic text-xl">A letter for you...</span>
             </div>
             <div id="letter-open" class="hidden glass-card max-w-md text-left max-h-[70vh] overflow-y-auto animate-[fadeIn_1s]">
                 <h3 class="font-serif text-2xl text-pink-300 mb-4">My Dearest Sunu,</h3>
-                <p class="leading-relaxed text-gray-200 font-light">
-                    Distance is hard, but you are worth every mile. Every moment without you feels like an eternity, but every memory with you is my treasure.<br><br>
-                    I promise to love you, annoy you, and cherish you forever.
-                </p>
+                <p class="leading-relaxed text-gray-200 font-light">Distance is hard, but you are worth every mile. Every moment without you feels like an eternity, but every memory with you is my treasure.<br><br>I promise to love you, annoy you, and cherish you forever.</p>
                 <p class="text-right mt-6 font-serif italic text-pink-300">- Rudra</p>
                 <div class="border-t border-white/10 mt-6 pt-4">
-                    <button onclick="playVoice('songs1/voicenote.mp3', this)" class="w-full bg-white/5 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white/10 transition">
-                        <span>▶</span> <span class="text-xs uppercase tracking-widest">Listen to my Voice</span>
-                    </button>
+                    <button onclick="playVoice('songs1/voicenote.mp3', this)" class="w-full bg-white/5 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white/10 transition"><span>▶</span> <span class="text-xs uppercase tracking-widest">Listen to my Voice</span></button>
                 </div>
                 <button onclick="nextChapter()" class="text-xs underline mt-6 text-center w-full block text-gray-400 hover:text-white">Close Letter</button>
             </div>
         </div>
 
-        <!-- Chap 15: Promises -->
-        <div id="chap-15" class="chapter-container">
+        <!-- NEW CHAP 20: LAST THOUGHT LOG (Idea 10) -->
+        <div id="chap-20" class="chapter-container" onclick="playLog()">
+            <h2 class="romantic-heading text-3xl mb-6">My Brain Log</h2>
+            <ul id="brain-log" class="text-left font-mono text-sm space-y-4 max-w-xs mx-auto">
+                <li class="opacity-0">> 11:45 PM: Checking Alarm...</li>
+                <li class="opacity-0">> 11:50 PM: Fluffing Pillow...</li>
+                <li class="opacity-0 text-pink-400">> 11:55 PM: Thinking of Nayanika.</li>
+                <li class="opacity-0 text-pink-500 font-bold">> 12:00 AM: Still Nayanika.</li>
+                <li class="opacity-0 text-pink-600 font-bold">> 07:00 AM: Nayanika.</li>
+            </ul>
+            <p class="text-xs text-gray-500 mt-8 animate-pulse">Tap to read data</p>
+            <button id="log-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Always You</button>
+        </div>
+
+        <!-- Chap 21: Sudarshan Shield -->
+        <div id="chap-21" class="chapter-container">
+            <div class="relative w-80 h-80 flex items-center justify-center">
+                <div class="sudarshan-chakra"></div>
+                <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-blue-400 shadow-[0_0_50px_#3b82f6] z-10 relative">
+                    <img src="New folder (3)/mylove1.jpg" onerror="this.src='https://placehold.co/200x200/blue/white?text=US'" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <h2 class="romantic-heading text-3xl mt-8 mb-2 text-blue-200">Divine Protection</h2>
+            <p class="text-blue-100/70 font-light text-center max-w-xs">"No distance or time can hurt us. We are protected by His grace."</p>
+            <button onclick="nextChapter()" class="soul-btn mt-8 border-blue-400 text-blue-100 hover:bg-blue-900/30">My Promises</button>
+        </div>
+
+        <!-- Chap 22: Promises -->
+        <div id="chap-22" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">My Vows</h2>
             <div class="relative w-80 h-96 bg-black rounded-lg overflow-hidden shadow-[0_0_40px_rgba(236,72,153,0.3)] border border-pink-500/30">
                 <img id="prom-img" class="w-full h-full object-cover opacity-60 transition duration-1000" src="">
@@ -430,8 +578,27 @@
             <button id="prom-btn" onclick="nextProm()" class="soul-btn mt-4">Next Promise</button>
         </div>
 
-        <!-- Chap 16: Surprise Box -->
-        <div id="chap-16" class="chapter-container">
+        <!-- NEW CHAP 23: WAITING ROOM (Idea 6) -->
+        <div id="chap-23" class="chapter-container">
+            <div class="season-bg"></div>
+            <h2 class="romantic-heading text-3xl mb-8">I Will Wait</h2>
+            <div class="text-6xl animate-bounce">🪑 🧍‍♂️</div>
+            <p class="text-xl font-serif mt-8 text-center max-w-md">"I would wait for you through every season.<br>A few months of distance is nothing compared to an eternity with you."</p>
+            <button onclick="nextChapter()" class="soul-btn mt-8">My Faith</button>
+        </div>
+
+        <!-- Chap 24: Eternal Souls -->
+        <div id="chap-24" class="chapter-container">
+            <div class="glass-card max-w-md border-blue-500/30">
+                <div class="text-4xl text-blue-400 mb-4">🕉️</div>
+                <p class="font-serif italic text-xl text-white leading-loose">"The soul is neither born, nor does it die. It is eternal.<br>Just like the soul, my love for you has no beginning and no end."</p>
+                <p class="text-xs text-blue-300 mt-4 uppercase tracking-widest">- Inspired by Bhagavad Gita</p>
+            </div>
+            <button onclick="nextChapter()" class="soul-btn mt-8">Surprise</button>
+        </div>
+
+        <!-- Chap 25: Surprise Box -->
+        <div id="chap-25" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-6">A Little Surprise</h2>
             <div id="surprise-box" class="w-48 h-48 bg-pink-900/30 border border-pink-500/50 rounded-lg flex items-center justify-center cursor-pointer animate-bounce pointer-events-auto shadow-[0_0_30px_#ec4899]" onclick="openSurprise()">
                 <span class="text-6xl">🎁</span>
@@ -439,12 +606,27 @@
             <div id="surprise-content" class="hidden flex-col items-center max-w-md text-center bg-black/80 p-6 rounded-xl border border-pink-500/30 backdrop-blur-xl">
                 <img src="New folder (3)/surprise_box.jpg" class="w-full h-48 object-cover rounded-lg mb-4">
                 <p class="text-pink-200 font-serif italic text-lg">"Just like this box, my heart is full of surprises for you."</p>
-                <button onclick="nextChapter()" class="soul-btn mt-4">Future</button>
+                <button onclick="nextChapter()" class="soul-btn mt-4">My Refuge</button>
             </div>
         </div>
 
-        <!-- Chap 17: Love Question -->
-        <div id="chap-17" class="chapter-container">
+        <!-- NEW CHAP 26: SAFE HOUSE (Idea 8) -->
+        <div id="chap-26" class="chapter-container">
+            <div class="rain-window"></div>
+            <h2 class="romantic-heading text-3xl mb-6">Your Safe House</h2>
+            <div class="glass-card max-w-sm p-6 bg-orange-900/20 border-orange-500/30">
+                <div class="text-6xl mb-4">🔥 ☕</div>
+                <p class="text-orange-200 font-serif italic">"The world is loud. Come here to hide. I am your shelter."</p>
+                <div class="flex gap-4 justify-center mt-6">
+                    <button class="text-xs border border-white/20 p-2 rounded hover:bg-white/10" onclick="toggleRain()">🌧️ Toggle Rain</button>
+                    <button class="text-xs border border-white/20 p-2 rounded hover:bg-white/10" onclick="alert('Warmth sent to your heart ❤️')">🪵 Add Wood</button>
+                </div>
+            </div>
+            <button onclick="nextChapter()" class="soul-btn mt-8">Last Question</button>
+        </div>
+
+        <!-- Chap 27: Love Question -->
+        <div id="chap-27" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">One Last Question...</h2>
             <h1 class="text-5xl md:text-7xl font-serif text-pink-400 mb-12 italic">Do you love me?</h1>
             <div class="flex gap-8 relative h-20 w-full justify-center">
@@ -454,8 +636,21 @@
             <p id="plea-msg" class="text-pink-400 font-mono mt-8 opacity-0 text-lg transition-opacity duration-300">Please click Yes 🥺</p>
         </div>
 
-        <!-- Chap 18: Cake -->
-        <div id="chap-18" class="chapter-container">
+        <!-- Chap 28: Virtual Diya -->
+        <div id="chap-28" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-8 text-amber-200">Make a Wish</h2>
+            <div class="relative w-64 h-80 flex flex-col items-center">
+                <div class="w-full h-64 rounded-t-lg overflow-hidden shadow-[0_0_30px_#fbbf24]">
+                    <img src="New folder (3)/krishna.jpg" onerror="this.src='https://placehold.co/300x400/orange/white?text=Lord+Krishna'" class="w-full h-full object-cover">
+                </div>
+                <div class="diya-container -mt-4 z-10" onclick="lightDiya(this)"><div class="diya-flame"></div></div>
+            </div>
+            <p id="diya-msg" class="text-amber-100 mt-8 opacity-0 transition font-serif italic">"May He guide us forever. Jai Shri Krishna."</p>
+            <button id="diya-btn" onclick="nextChapter()" class="soul-btn mt-6 opacity-0 pointer-events-none border-amber-500 text-amber-200">Amen</button>
+        </div>
+
+        <!-- Chap 29: Cake -->
+        <div id="chap-29" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-10">Happy Birthday!</h2>
             <p id="cake-msg" class="text-pink-300 text-sm mb-8 opacity-0 transition-opacity font-mono tracking-widest">Make a wish & blow the candles 🕯️</p>
             <div class="flex flex-col items-center cursor-pointer group">
@@ -464,19 +659,17 @@
                     <div class="candle" onclick="blow(this)"><div class="flame"></div></div>
                     <div class="candle" onclick="blow(this)"><div class="flame"></div></div>
                 </div>
-                <div class="cake-body" onclick="cutCake()">
-                    <span class="text-pink-900/50 font-bold text-lg">Click to Cut</span>
-                </div>
+                <div class="cake-body" onclick="cutCake()"><span class="text-pink-900/50 font-bold text-lg">Click to Cut</span></div>
                 <div class="w-64 h-4 bg-black/20 rounded-full mt-4 blur-sm"></div>
             </div>
         </div>
 
-        <!-- Chap 19: Finale -->
-        <div id="chap-19" class="chapter-container">
+        <!-- Chap 30: Finale -->
+        <div id="chap-30" class="chapter-container">
             <div class="photo-frame p-2 bg-white transform rotate-2" style="width: 350px;">
-                <img src="New folder (3)/surprise.jpg" onerror="this.src='https://placehold.co/400x500/pink/white?text=I+Love+You'" class="w-full rounded mb-0" style="height: 350px;">
+                <img src="New folder (3)/promise5.jpg" onerror="this.src='https://placehold.co/400x500/pink/white?text=I+Love+You'" class="w-full rounded mb-0" style="height: 350px;">
             </div>
-            <h1 class="font-serif text-5xl text-white mt-8 mb-4 italic text-shadow">I Love You, Nayanika.</h1>
+            <h1 class="font-serif text-5xl text-white mt-8 mb-4 italic text-shadow">Happy Birthday Sunu, You Are My Answered Prayer.</h1>
             <p class="text-pink-200 mb-8 font-light">Forever & Always.</p>
             <button onclick="location.reload()" class="soul-btn border-pink-500 text-pink-200 hover:bg-pink-900/50">Replay Our Story ↻</button>
         </div>
@@ -496,10 +689,40 @@
 
         // --- GLOBAL VARIABLES ---
         let currentChap = 1;
-        const totalChap = 19;
+        const totalChap = 30; // UPDATED COUNT
         const bgMusic = document.getElementById('bg-music');
+        const fluteMusic = document.getElementById('flute-music');
+        const crowdAudio = document.getElementById('crowd-audio');
+        const rainAudio = document.getElementById('rain-audio');
+        
         let currentVoice = null;
         let attemptCount = 0;
+        let isFluteMode = false;
+
+        // --- PEACOCK MOUSE TRAIL ---
+        document.addEventListener('mousemove', function(e) { createPeacockTrail(e.clientX, e.clientY); });
+        document.addEventListener('touchmove', function(e) { createPeacockTrail(e.touches[0].clientX, e.touches[0].clientY); });
+        function createPeacockTrail(x, y) {
+            const p = document.createElement('div');
+            p.style.cssText = `position: fixed; pointer-events: none; z-index: 9999; left: ${x}px; top: ${y}px; width: 15px; height: 15px; background: radial-gradient(circle, #06b6d4, #10b981); border-radius: 50%; opacity: 0.8; box-shadow: 0 0 8px #06b6d4;`;
+            document.body.appendChild(p);
+            gsap.to(p, { y: y + 20, opacity: 0, scale: 0, duration: 0.8, onComplete: () => p.remove() });
+        }
+
+        // --- FLUTE LOGIC ---
+        function toggleFluteMode() {
+            const btn = document.getElementById('flute-btn');
+            if (!isFluteMode) {
+                bgMusic.pause(); fluteMusic.play().catch(e => console.log(e));
+                btn.classList.add('active');
+                gsap.to("#romance-bg", {background: "linear-gradient(-45deg, #0c4a6e, #0f172a, #000, #1e3a8a)", duration: 2});
+            } else {
+                fluteMusic.pause(); bgMusic.play().catch(e => console.log(e));
+                btn.classList.remove('active');
+                gsap.to("#romance-bg", {background: "linear-gradient(-45deg, #2e021d, #1a0b2e, #000000, #2f1025)", duration: 2});
+            }
+            isFluteMode = !isFluteMode;
+        }
 
         // --- INITIALIZATION ---
         window.onload = () => {
@@ -509,22 +732,18 @@
                 document.getElementById("prank-stage").classList.add("flex-section");
                 initParticles();
                 
-                // Initialize Video Listener for Chapter 10
+                // Video Logic
                 const memVid = document.getElementById('mem-vid');
                 if(memVid) {
-                    memVid.onplay = () => { bgMusic.pause(); };
-                    memVid.onpause = () => { bgMusic.play().catch(e=>console.log(e)); };
-                    memVid.onended = () => { bgMusic.play().catch(e=>console.log(e)); };
+                    memVid.onplay = () => { bgMusic.pause(); fluteMusic.pause(); };
+                    memVid.onpause = () => { if(isFluteMode) fluteMusic.play(); else bgMusic.play(); };
+                    memVid.onended = () => { if(isFluteMode) fluteMusic.play(); else bgMusic.play(); };
                 }
             }});
         };
 
-        // --- PRANK LOGIC ---
-        function forceTyping(el) { 
-            const targetText = "DRAMA QUEEN";
-            if (el.value.length > 0) el.value = targetText.substring(0, el.value.length);
-        }
-        
+        // --- PRANK & ROMANCE NAVIGATION ---
+        function forceTyping(el) { const targetText = "DRAMA QUEEN"; if (el.value.length > 0) el.value = targetText.substring(0, el.value.length); }
         function nextPrank(n) {
             const prev = document.getElementById(`prank-${n-1}`);
             const next = document.getElementById(`prank-${n}`);
@@ -537,28 +756,16 @@
                 if(n===5) { gsap.to("#dl-1", {opacity:1}); gsap.to("#dl-2", {opacity:1, delay:1}); gsap.to("#dl-3", {opacity:1, delay:2}); gsap.to("#btn-5", {opacity:1, delay:3}); }
             }
         }
-
-        function passIQ() { 
-            const msg = document.getElementById('iq-msg');
-            msg.className = "text-green-500 mt-6 text-xl h-8 font-bold"; msg.innerText = "✅ SURPRISINGLY CORRECT"; 
-            setTimeout(() => nextPrank(7), 1500); 
-        }
+        function passIQ() { const msg = document.getElementById('iq-msg'); msg.className = "text-green-500 mt-6 text-xl h-8 font-bold"; msg.innerText = "✅ SURPRISINGLY CORRECT"; setTimeout(() => nextPrank(7), 1500); }
+        function moveButton(btn) { attemptCount++; if(attemptCount > 5) { btn.innerText = "OKAY FINE 🙄"; btn.onclick = triggerGlitch; btn.onmouseover = null; return; } gsap.to(btn, { x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*200, duration: 0.3 }); }
         
-        function moveButton(btn) { 
-            attemptCount++;
-            if(attemptCount > 5) { btn.innerText = "OKAY FINE 🙄"; btn.onclick = triggerGlitch; btn.onmouseover = null; return; }
-            gsap.to(btn, { x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*200, duration: 0.3 }); 
-        }
-
         function triggerGlitch() {
             const prank = document.getElementById("prank-stage");
-            // Disable interactions on prank stage immediately
             prank.style.pointerEvents = "none";
-            
-            bgMusic.volume = 0.5; bgMusic.play().catch(e=>console.log("Audio needed interaction"));
+            document.getElementById('flute-btn').style.display = 'flex';
+            bgMusic.volume = 0.5; bgMusic.play().catch(e=>console.log("Audio needed"));
             gsap.to("#tech-bg", {opacity: 0, duration: 2});
             gsap.to("#romance-bg", {opacity: 1, duration: 2});
-            
             gsap.to(prank, {opacity: 0, duration: 1.5, onComplete: () => {
                 prank.style.display = "none";
                 document.getElementById("main-stage").classList.add("visible");
@@ -566,12 +773,9 @@
             }});
         }
 
-        // --- ROMANCE LOGIC ---
         function nextChapter() {
-            // Visual feedback
             const activeBtn = document.querySelector('.chapter-active .soul-btn');
             if(activeBtn) gsap.to(activeBtn, {scale: 0.95, duration: 0.1, yoyo: true, repeat: 1});
-
             const v = document.getElementById('mem-vid'); if(v) v.pause();
             const curr = document.getElementById(`chap-${currentChap}`);
             const next = document.getElementById(`chap-${currentChap+1}`);
@@ -592,234 +796,99 @@
             }
         }
 
+        // --- NEW & EXISTING FEATURES INIT ---
         function initChapterFeatures(id) {
             if(id === 2) { gsap.to("#g1", {opacity:1, duration:1}); gsap.to("#g2", {opacity:1, x:0, delay:0.5}); gsap.to("#g3", {opacity:1, x:0, delay:1}); gsap.to("#g4", {opacity:1, delay:2}); gsap.to("#g-btn", {opacity:1, delay:3}); }
             if(id === 3) initQuiz();
-            if(id === 4) initTimer();
-            if(id === 7) initHand();
-            if(id === 11) initFunny();
-            if(id === 13) initPuzzle();
-            if(id === 15) loadProm(0);
-            if(id === 18) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); }
-            if(id === 19) { confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); }
+            if(id === 5) initTimer(); // Timeline
+            if(id === 8) initHand(); // Hand Drag
+            if(id === 15) initFunny(); // Funny Grid
+            if(id === 18) initPuzzle(); // Puzzle
+            if(id === 22) loadProm(0); // Promises
+            if(id === 29) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); } // Cake
+            if(id === 30) { confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } // Finale
         }
 
-        // --- FEATURES ---
+        // --- INTERACTION LOGIC ---
+        function updatePerspective(val) {
+            const img = document.getElementById('persp-img');
+            const txt = document.getElementById('persp-txt');
+            const btn = document.getElementById('persp-btn');
+            img.style.filter = `grayscale(${100-val}%) brightness(${75 + (val*0.25)}%)`;
+            if(val > 80) { txt.innerText = "MASTERPIECE"; txt.style.color = "#ec4899"; gsap.to(btn, {opacity:1, pointerEvents:'auto'}); }
+            else { txt.innerText = "MESSY"; txt.style.color = "rgba(156, 163, 175, 0.5)"; }
+        }
+
+        function startCrowd() { if(crowdAudio) crowdAudio.play().catch(e=>console.log(e)); }
+        function stopCrowd() { if(crowdAudio) crowdAudio.pause(); }
+        function foundHer() {
+            stopCrowd();
+            gsap.to("#crowd-msg", {opacity:1});
+            gsap.to("#crowd-btn", {opacity:1, pointerEvents:'auto'});
+            // Play "Found" voice here if available
+        }
+
+        function revealSilence() {
+            gsap.to("#silence-1", {opacity:1, duration:1});
+            gsap.to("#silence-2", {opacity:1, duration:1, delay:2});
+            gsap.to("#silence-3", {opacity:1, duration:1, delay:4});
+            gsap.to("#silence-btn", {opacity:1, pointerEvents:'auto', delay:5});
+        }
+
+        function playLog() {
+            const items = document.querySelectorAll('#brain-log li');
+            items.forEach((item, i) => gsap.to(item, {opacity:1, delay: i*0.8}));
+            gsap.to("#log-btn", {opacity:1, pointerEvents:'auto', delay: items.length*0.8});
+        }
+
+        function toggleRain() {
+            if(rainAudio.paused) rainAudio.play(); else rainAudio.pause();
+        }
+
+        // --- EXISTING LOGIC (Heal, Quiz, Matki, etc.) ---
         function healHeart(el) { 
             if(el.classList.contains('healed')) return; el.classList.add("healed"); 
             confetti({particleCount: 50, spread: 60, colors:['#ec4899']}); 
             gsap.to("#heal-msg", {opacity:1, delay:0.5}); gsap.to("#heal-btn", {opacity:1, delay:1, pointerEvents:"auto"}); 
         }
-        
         function initHand() {
-            setTimeout(() => {
-                Draggable.create("#her-hand", { type:"x,y", bounds:"#drag-zone", onDragEnd: function() {
-                    const h1 = document.getElementById('my-hand').getBoundingClientRect();
-                    const h2 = this.target.getBoundingClientRect();
-                    if(Math.hypot(h1.x - h2.x, h1.y - h2.y) < 80) { 
-                        confetti({particleCount: 30, spread: 50}); 
-                        gsap.to("#her-hand", {x:0, y:0, duration:0.5}); 
-                        gsap.to("#hand-btn", {opacity:1, pointerEvents:"auto"});
-                    }
-                }});
-            }, 100);
+            setTimeout(() => { Draggable.create("#her-hand", { type:"x,y", bounds:"#drag-zone", onDragEnd: function() {
+                const h1 = document.getElementById('my-hand').getBoundingClientRect(); const h2 = this.target.getBoundingClientRect();
+                if(Math.hypot(h1.x - h2.x, h1.y - h2.y) < 80) { confetti({particleCount: 30, spread: 50}); gsap.to("#her-hand", {x:0, y:0, duration:0.5}); gsap.to("#hand-btn", {opacity:1, pointerEvents:"auto"}); }
+            }});}, 100);
         }
-
         function playVoice(src, el) { 
-            if(currentVoice) { 
-                currentVoice.pause(); 
-                currentVoice.currentTime = 0; 
-                document.querySelectorAll('.photo-frame').forEach(p => p.classList.remove('playing')); 
-            }
-            
-            // Pause BG Music
-            bgMusic.pause();
-
-            currentVoice = new Audio(src); 
-            currentVoice.play().catch(e => console.log(e));
-            
-            if(el) { 
-                el.classList.add('playing'); 
-                gsap.to(el, {scale: 1.05, duration: 0.2, yoyo: true, repeat: 1}); 
-            }
-            
-            currentVoice.onended = () => { 
-                if(el) el.classList.remove('playing');
-                // Resume BG Music
-                bgMusic.play().catch(e=>console.log(e));
-            };
+            if(currentVoice) { currentVoice.pause(); currentVoice.currentTime = 0; document.querySelectorAll('.photo-frame').forEach(p => p.classList.remove('playing')); }
+            if(!isFluteMode) bgMusic.pause(); else fluteMusic.pause();
+            currentVoice = new Audio(src); currentVoice.play().catch(e => console.log(e));
+            if(el) { el.classList.add('playing'); gsap.to(el, {scale: 1.05, duration: 0.2, yoyo: true, repeat: 1}); }
+            currentVoice.onended = () => { if(el) el.classList.remove('playing'); if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); };
         }
-
-        function stopVideo() { 
-            const v = document.getElementById('mem-vid'); 
-            v.pause(); 
-            // Ensure music is back on if they skip
-            bgMusic.play().catch(e=>console.log(e));
-            nextChapter(); 
+        function stopVideo() { const v = document.getElementById('mem-vid'); v.pause(); if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); nextChapter(); }
+        function breakMatki() {
+            const m = document.getElementById('matki');
+            gsap.to(m, {scale:0, opacity:0, duration:0.3, onComplete:()=>{ m.style.display="none"; document.getElementById('matki-secret').classList.remove('hidden'); document.getElementById('matki-secret').classList.add('flex'); confetti({particleCount:100, spread:70}); gsap.to("#matki-btn", {opacity:1, pointerEvents:"auto", delay:1}); }});
         }
-
-        // QUIZ
-        let qIdx = 0;
-        const qData = [{q:"What color was I wearing when we first met?", a:["Blue Shirt", "Black Hoodie"], c:1}, {q:"What is my favorite food?", a:["Biryani/Pizza", "You ;)"], c:1}];
+        function lightDiya(el) { const f = el.querySelector('.diya-flame'); if(f.style.opacity != 1) { f.style.opacity = 1; gsap.to("#diya-msg", {opacity:1, delay:0.5}); gsap.to("#diya-btn", {opacity:1, pointerEvents:"auto", delay:1.5}); } }
+        let qIdx = 0; const qData = [{q:"What color was I wearing when we first met?", a:["Blue Shirt", "Black Hoodie"], c:1}, {q:"What is my favorite food?", a:["Biryani/Pizza", "You ;)"], c:1}];
         function initQuiz() { loadQ(); }
-        function loadQ() {
-            if(qIdx >= qData.length) { nextChapter(); return; }
-            const q = qData[qIdx]; document.getElementById('quiz-q').innerText = q.q;
-            const div = document.getElementById('quiz-options'); div.innerHTML = "";
-            q.a.forEach((opt, i) => {
-                let b = document.createElement("button"); b.className = "soul-btn w-full mt-0"; b.innerText = opt;
-                b.onclick = () => { 
-                    if(i===q.c) { b.style.background = "#059669"; b.innerText += " ✅"; setTimeout(()=>{qIdx++; loadQ()}, 800); } 
-                    else { b.style.background = "#b91c1c"; gsap.to(b, {x:10, duration:0.1, yoyo:true, repeat:3}); } 
-                }; div.appendChild(b);
-            });
-        }
-
-        // TIMER
-        function initTimer() { 
-            const start = new Date("2024-05-22");
-            setInterval(() => { 
-                const diff = new Date() - start;
-                document.getElementById('timer').innerText = `${Math.floor(diff / (1000*60*60*24))}d ${Math.floor((diff % (1000*60*60*24)) / (1000*60*60))}h`; 
-            }, 1000); 
-        }
-
-        // FUNNY GRID
-        function initFunny() {
-            const d = document.getElementById('funny-grid'); d.innerHTML = "";
-            for(let i=1; i<=4; i++) {
-                let div = document.createElement('div'); div.className = "overflow-hidden rounded-lg shadow-lg h-32 cursor-pointer";
-                div.innerHTML = `<img src="New folder (3)/funny${i}.jpg" onerror="this.src='https://placehold.co/150x150/pink/white'" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">`;
-                d.appendChild(div);
-            }
-        }
-
-        // PUZZLE
-        function initPuzzle() {
-            const c = document.getElementById('puzzle-container'); c.innerHTML = ""; let count = 0;
-            for(let i=0; i<9; i++) {
-                let p = document.createElement('div');
-                Object.assign(p.style, {
-                    position:'absolute', width:'100px', height:'100px',
-                    backgroundImage:`url('New folder (3)/mylove1.jpg')`, backgroundSize:"300px 300px",
-                    backgroundPosition:`${-(i%3)*100}px ${-Math.floor(i/3)*100}px`,
-                    left:(i%3)*100+'px', top:Math.floor(i/3)*100+'px', cursor:'pointer', border:'1px solid rgba(255,255,255,0.5)'
-                });
-                gsap.fromTo(p, {x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, opacity:0, rotation:Math.random()*360}, {opacity:1, duration:1, delay: i*0.1});
-                p.onclick = function() {
-                    gsap.to(this, {x:0, y:0, rotation:0, zIndex:1, border:"none", duration:0.5});
-                    this.style.pointerEvents = 'none'; count++;
-                    if(count>=5) gsap.to("#puz-btn", {opacity:1, pointerEvents:"auto"});
-                }; c.appendChild(p);
-            }
-        }
-
-        // LETTER
-        function openLetter() {
-            gsap.to('#letter-closed', {opacity:0, scale:0.8, duration:0.5, display:'none'});
-            document.getElementById('letter-open').classList.remove('hidden');
-            gsap.from('#letter-open', {opacity:0, y:20, duration:0.8, delay:0.4});
-        }
-
-        // PROMISES
-        const promises = [
-            { text: "I promise to stay.", sub: "Through storms and silence.", img: "New folder (3)/promise1.jpg" },
-            { text: "I promise to listen.", sub: "Even to what you don't say.", img: "New folder (3)/promise2.jpg" },
-            { text: "I promise to love you daily.", sub: "Not just on good days.", img: "New folder (3)/promise3.jpg" },
-            { text: "I promise to be your home.", sub: "Your safe place.", img: "New folder (3)/promise4.jpg" },
-            { text: "I promise to be patient.", sub: "When things get tough.", img: "New folder (3)/promise5.jpg" },
-            { text: "I promise to support your dreams.", sub: "Your wins are my wins.", img: "New folder (3)/promise6.jpg" },
-            { text: "I promise to be honest.", sub: "Always.", img: "New folder (3)/promise7.jpg" },
-            { text: "I promise to protect your heart.", sub: "Like it's my own.", img: "New folder (3)/promise8.jpg" },
-            { text: "I promise to adventure with you.", sub: "Life is a journey.", img: "New folder (3)/promise9.jpg" },
-            { text: "I promise to grow with you.", sub: "Side by side.", img: "New folder (3)/promise10.jpg" },
-            { text: "I promise to respect you.", sub: "In every way.", img: "New folder (3)/promise11.jpg" },
-            { text: "I promise to comfort you.", sub: "When tears fall.", img: "New folder (3)/promise12.jpg" },
-            { text: "I promise to make you laugh.", sub: "Every single day.", img: "New folder (3)/promise13.jpg" },
-            { text: "I promise to be loyal.", sub: "You are my only one.", img: "New folder (3)/promise14.jpg" },
-            { text: "I promise to be your best friend.", sub: "Forever.", img: "New folder (3)/promise15.jpg" },
-            { text: "I promise to forgive.", sub: "We are only human.", img: "New folder (3)/promise16.jpg" },
-            { text: "I promise to prioritize you.", sub: "You come first.", img: "New folder (3)/promise17.jpg" },
-            { text: "I promise to love you forever.", sub: "To infinity.", img: "New folder (3)/promise18.jpg" }
-        ];
+        function loadQ() { if(qIdx >= qData.length) { nextChapter(); return; } const q = qData[qIdx]; document.getElementById('quiz-q').innerText = q.q; const div = document.getElementById('quiz-options'); div.innerHTML = ""; q.a.forEach((opt, i) => { let b = document.createElement("button"); b.className = "soul-btn w-full mt-0"; b.innerText = opt; b.onclick = () => { if(i===q.c) { b.style.background = "#059669"; b.innerText += " ✅"; setTimeout(()=>{qIdx++; loadQ()}, 800); } else { b.style.background = "#b91c1c"; gsap.to(b, {x:10, duration:0.1, yoyo:true, repeat:3}); } }; div.appendChild(b); }); }
+        function initTimer() { const start = new Date("2024-05-22"); setInterval(() => { const diff = new Date() - start; document.getElementById('timer').innerText = `${Math.floor(diff / (1000*60*60*24))}d ${Math.floor((diff % (1000*60*60*24)) / (1000*60*60))}h`; }, 1000); }
+        function initFunny() { const d = document.getElementById('funny-grid'); d.innerHTML = ""; for(let i=1; i<=4; i++) { let div = document.createElement('div'); div.className = "overflow-hidden rounded-lg shadow-lg h-32 cursor-pointer"; div.innerHTML = `<img src="New folder (3)/funny${i}.jpg" onerror="this.src='https://placehold.co/150x150/pink/white'" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">`; d.appendChild(div); } }
+        function initPuzzle() { const c = document.getElementById('puzzle-container'); c.innerHTML = ""; let count = 0; for(let i=0; i<9; i++) { let p = document.createElement('div'); Object.assign(p.style, { position:'absolute', width:'100px', height:'100px', backgroundImage:`url('New folder (3)/mylove1.jpg')`, backgroundSize:"300px 300px", backgroundPosition:`${-(i%3)*100}px ${-Math.floor(i/3)*100}px`, left:(i%3)*100+'px', top:Math.floor(i/3)*100+'px', cursor:'pointer', border:'1px solid rgba(255,255,255,0.5)' }); gsap.fromTo(p, {x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, opacity:0, rotation:Math.random()*360}, {opacity:1, duration:1, delay: i*0.1}); p.onclick = function() { gsap.to(this, {x:0, y:0, rotation:0, zIndex:1, border:"none", duration:0.5}); this.style.pointerEvents = 'none'; count++; if(count>=5) gsap.to("#puz-btn", {opacity:1, pointerEvents:"auto"}); }; c.appendChild(p); } }
+        function openLetter() { gsap.to('#letter-closed', {opacity:0, scale:0.8, duration:0.5, display:'none'}); document.getElementById('letter-open').classList.remove('hidden'); gsap.from('#letter-open', {opacity:0, y:20, duration:0.8, delay:0.4}); }
+        const promises = [ { text: "I promise to stay.", sub: "Through storms and silence.", img: "New folder (3)/promise1.jpg" }, { text: "I promise to listen.", sub: "Even to what you don't say.", img: "New folder (3)/promise2.jpg" }, { text: "I promise to love you daily.", sub: "Not just on good days.", img: "New folder (3)/promise3.jpg" }, { text: "I promise to be your home.", sub: "Your safe place.", img: "New folder (3)/promise4.jpg" }, { text: "I promise to be patient.", sub: "When things get tough.", img: "New folder (3)/promise5.jpg" }, { text: "I promise to support your dreams.", sub: "Your wins are my wins.", img: "New folder (3)/promise6.jpg" }, { text: "I promise to be honest.", sub: "Always.", img: "New folder (3)/promise7.jpg" }, { text: "I promise to protect your heart.", sub: "Like it's my own.", img: "New folder (3)/promise8.jpg" }, { text: "I promise to adventure with you.", sub: "Life is a journey.", img: "New folder (3)/promise9.jpg" }, { text: "I promise to grow with you.", sub: "Side by side.", img: "New folder (3)/promise10.jpg" }, { text: "I promise to respect you.", sub: "In every way.", img: "New folder (3)/promise11.jpg" }, { text: "I promise to comfort you.", sub: "When tears fall.", img: "New folder (3)/promise12.jpg" }, { text: "I promise to make you laugh.", sub: "Every single day.", img: "New folder (3)/promise13.jpg" }, { text: "I promise to be loyal.", sub: "You are my only one.", img: "New folder (3)/promise14.jpg" }, { text: "I promise to be your best friend.", sub: "Forever.", img: "New folder (3)/promise15.jpg" }, { text: "I promise to forgive.", sub: "We are only human.", img: "New folder (3)/promise16.jpg" }, { text: "I promise to prioritize you.", sub: "You come first.", img: "New folder (3)/promise17.jpg" }, { text: "I promise to love you forever.", sub: "To infinity.", img: "New folder (3)/promise18.jpg" } ];
         let pIdx = 0;
-        function loadProm(i) {
-            const txt = document.getElementById('prom-txt'), sub = document.getElementById('prom-sub'), img = document.getElementById('prom-img');
-            document.getElementById('prom-counter').innerText = `${i + 1} / ${promises.length}`;
-            gsap.to([txt, sub], {opacity:0, y:10, duration:0.3, onComplete:()=>{
-                txt.innerText = promises[i].text; sub.innerText = promises[i].sub;
-                gsap.to([txt, sub], {opacity:1, y:0, duration:0.5});
-            }});
-            gsap.to(img, {opacity:0, duration:0.3, onComplete:()=>{
-                img.src = promises[i].img; img.onerror = function() { this.src=`https://placehold.co/300x400/black/white?text=Promise`; };
-                gsap.to(img, {opacity:0.6, duration:0.5});
-            }});
-        }
-        function nextProm() { 
-            if (pIdx < promises.length - 1) { pIdx++; loadProm(pIdx); if(pIdx===promises.length-1) document.getElementById("prom-btn").innerText = "Finish Vows"; } 
-            else { nextChapter(); }
-        }
-
-        // SURPRISE BOX
-        function openSurprise() {
-            gsap.to("#surprise-box", {scale:1.5, opacity:0, duration:0.5, onComplete:()=>{
-                document.getElementById("surprise-box").style.display="none";
-                const c = document.getElementById("surprise-content"); c.classList.remove("hidden"); c.classList.add("flex");
-                gsap.fromTo(c, {scale:0.5, opacity:0}, {scale:1, opacity:1, duration:1, ease:"elastic.out"});
-                confetti({particleCount:50, spread:70});
-            }});
-        }
-
-        // LOVE QUESTION
-        function moveLoveNoBtn(btn) {
-            document.getElementById("plea-msg").style.opacity = 1;
-            gsap.to(btn, { x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*100, duration: 0.2 });
-        }
-        function handleLoveYes() {
-            bgMusic.pause();
-            const ol = document.getElementById("love-video-overlay");
-            ol.style.display = "flex";
-            gsap.to(ol, {opacity:1, duration:1});
-            const v = document.getElementById("final-love-video");
-            v.play();
-            // Listen for end
-            v.onended = () => { bgMusic.play().catch(e=>console.log(e)); };
-        }
-        function closeLoveVideo() {
-            const ol = document.getElementById("love-video-overlay");
-            document.getElementById("final-love-video").pause();
-            gsap.to(ol, {opacity:0, duration:1, onComplete:()=>{ ol.style.display="none"; bgMusic.play(); nextChapter(); }});
-        }
-
-        // CAKE
+        function loadProm(i) { const txt = document.getElementById('prom-txt'), sub = document.getElementById('prom-sub'), img = document.getElementById('prom-img'); document.getElementById('prom-counter').innerText = `${i + 1} / ${promises.length}`; gsap.to([txt, sub], {opacity:0, y:10, duration:0.3, onComplete:()=>{ txt.innerText = promises[i].text; sub.innerText = promises[i].sub; gsap.to([txt, sub], {opacity:1, y:0, duration:0.5}); }}); gsap.to(img, {opacity:0, duration:0.3, onComplete:()=>{ img.src = promises[i].img; img.onerror = function() { this.src=`https://placehold.co/300x400/black/white?text=Promise`; }; gsap.to(img, {opacity:0.6, duration:0.5}); }}); }
+        function nextProm() { if (pIdx < promises.length - 1) { pIdx++; loadProm(pIdx); if(pIdx===promises.length-1) document.getElementById("prom-btn").innerText = "Finish Vows"; } else { nextChapter(); } }
+        function openSurprise() { gsap.to("#surprise-box", {scale:1.5, opacity:0, duration:0.5, onComplete:()=>{ document.getElementById("surprise-box").style.display="none"; const c = document.getElementById("surprise-content"); c.classList.remove("hidden"); c.classList.add("flex"); gsap.fromTo(c, {scale:0.5, opacity:0}, {scale:1, opacity:1, duration:1, ease:"elastic.out"}); confetti({particleCount:50, spread:70}); }}); }
+        function moveLoveNoBtn(btn) { document.getElementById("plea-msg").style.opacity = 1; gsap.to(btn, { x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*100, duration: 0.2 }); }
+        function handleLoveYes() { if(!isFluteMode) bgMusic.pause(); else fluteMusic.pause(); const ol = document.getElementById("love-video-overlay"); ol.style.display = "flex"; gsap.to(ol, {opacity:1, duration:1}); const v = document.getElementById("final-love-video"); v.play(); v.onended = () => { if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); }; }
+        function closeLoveVideo() { const ol = document.getElementById("love-video-overlay"); document.getElementById("final-love-video").pause(); gsap.to(ol, {opacity:0, duration:1, onComplete:()=>{ ol.style.display="none"; if(!isFluteMode) bgMusic.play(); nextChapter(); }}); }
         let candles = 0;
-        function blow(el) { 
-            const flame = el.querySelector('.flame');
-            if(!flame.classList.contains('out')) { flame.classList.add('out'); candles++; if(navigator.vibrate) navigator.vibrate(50); }
-        }
-        function cutCake() { 
-            if(candles >= 3) { 
-                document.getElementById('cake-msg').style.opacity = 0;
-                confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899'] });
-                setTimeout(nextChapter, 1500); 
-            } else {
-                const msg = document.getElementById('cake-msg'); msg.innerText = "Blow the candles first! 🌬️";
-                gsap.fromTo(msg, {x:-5}, {x:5, duration:0.1, repeat:3, yoyo:true});
-            }
-        }
-
-        // PARTICLES
-        function initParticles() {
-            const c=document.getElementById('bg-canvas'); const s=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000); 
-            const r=new THREE.WebGLRenderer({canvas:c, alpha:true}); r.setSize(window.innerWidth, window.innerHeight);
-            const g=new THREE.BufferGeometry(); const count = 1500; const p=new Float32Array(count*3);
-            for(let i=0;i<count*3;i++) p[i]=(Math.random()-0.5)*15;
-            g.setAttribute('position',new THREE.BufferAttribute(p,3));
-            const m=new THREE.PointsMaterial({size:0.015, color:0xffffff, transparent:true, opacity:0.8});
-            const pts = new THREE.Points(g,m); s.add(pts); cam.position.z=5;
-            function a(){ requestAnimationFrame(a); pts.rotation.y += 0.0005; pts.rotation.x += 0.0002; r.render(s,cam); } a();
-            window.addEventListener('resize', () => { cam.aspect = window.innerWidth / window.innerHeight; cam.updateProjectionMatrix(); r.setSize(window.innerWidth, window.innerHeight); });
-        }
+        function blow(el) { const flame = el.querySelector('.flame'); if(!flame.classList.contains('out')) { flame.classList.add('out'); candles++; if(navigator.vibrate) navigator.vibrate(50); } }
+        function cutCake() { if(candles >= 3) { document.getElementById('cake-msg').style.opacity = 0; confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899'] }); setTimeout(nextChapter, 1500); } else { const msg = document.getElementById('cake-msg'); msg.innerText = "Blow the candles first! 🌬️"; gsap.fromTo(msg, {x:-5}, {x:5, duration:0.1, repeat:3, yoyo:true}); } }
+        function initParticles() { const c=document.getElementById('bg-canvas'); const s=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000); const r=new THREE.WebGLRenderer({canvas:c, alpha:true}); r.setSize(window.innerWidth, window.innerHeight); const g=new THREE.BufferGeometry(); const count = 1500; const p=new Float32Array(count*3); for(let i=0;i<count*3;i++) p[i]=(Math.random()-0.5)*15; g.setAttribute('position',new THREE.BufferAttribute(p,3)); const m=new THREE.PointsMaterial({size:0.015, color:0xffffff, transparent:true, opacity:0.8}); const pts = new THREE.Points(g,m); s.add(pts); cam.position.z=5; function a(){ requestAnimationFrame(a); pts.rotation.y += 0.0005; pts.rotation.x += 0.0002; r.render(s,cam); } a(); window.addEventListener('resize', () => { cam.aspect = window.innerWidth / window.innerHeight; cam.updateProjectionMatrix(); r.setSize(window.innerWidth, window.innerHeight); }); }
     </script>
 </body>
 </html>
