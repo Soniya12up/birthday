@@ -27,6 +27,7 @@
             margin: 0; overflow: hidden; background-color: #000; 
             font-family: 'Montserrat', sans-serif; color: #fce7f3; 
             -webkit-tap-highlight-color: transparent; 
+            overscroll-behavior: none;
         }
 
         /* --- BACKGROUNDS --- */
@@ -176,7 +177,7 @@
         }
         @keyframes flicker { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
 
-        /* --- NEW ANIMATION STYLES (Crowd, Rain, Season) --- */
+        /* --- NEW ANIMATION STYLES --- */
         .silhouette {
             position: absolute; background: #444; width: 60px; height: 120px;
             border-radius: 50% 50% 0 0; filter: blur(8px); opacity: 0.7;
@@ -200,12 +201,17 @@
             background-size: cover; opacity: 0.2; position: absolute; inset:0; pointer-events:none;
         }
 
-        /* Video Overlay */
+        /* Biometric & Red String */
+        @keyframes scan { 0% {top:0%} 50% {top:100%} 100% {top:0%} }
+
         #love-video-overlay {
             position: fixed; inset: 0; z-index: 500; background: black;
             display: none; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 1s;
         }
+        
+        /* Mobile Interaction Fixes */
+        .touch-none { touch-action: none; user-select: none; }
     </style>
 </head>
 <body>
@@ -215,12 +221,17 @@
     <div class="romantic-bg" id="romance-bg"></div>
     <canvas id="bg-canvas" style="position: fixed; top:0; left:0; z-index:1; pointer-events:none;"></canvas>
     
-    <!-- Audio Sources -->
+    <!-- Audio Sources - Error handling added in JS -->
     <audio id="bg-music" loop preload="auto"><source src="songs1/love12.mp3" type="audio/mpeg"></audio>
     <audio id="flute-music" loop preload="auto"><source src="songs1/flute.mp3" type="audio/mpeg"></audio>
-    <!-- NEW AUDIOS -->
     <audio id="crowd-audio" loop preload="auto"><source src="songs1/crowd.mp3" type="audio/mpeg"></audio>
     <audio id="rain-audio" loop preload="auto"><source src="songs1/rain.mp3" type="audio/mpeg"></audio>
+    
+    <!-- Vocal Piano Audios -->
+    <audio id="vp-1"><source src="songs1/vp1.mp3" type="audio/mpeg"></audio>
+    <audio id="vp-2"><source src="songs1/vp2.mp3" type="audio/mpeg"></audio>
+    <audio id="vp-3"><source src="songs1/vp3.mp3" type="audio/mpeg"></audio>
+    <audio id="vp-4"><source src="songs1/vp4.mp3" type="audio/mpeg"></audio>
 
     <!-- Flute Toggle UI -->
     <div id="flute-btn" class="flute-toggle" onclick="toggleFluteMode()">
@@ -233,9 +244,9 @@
         <p class="text-green-500 text-xs tracking-[0.4em] uppercase">Initializing System...</p>
     </div>
 
-    <!-- 1. HACKER PRANK STAGE (Unchanged) -->
+    <!-- 1. HACKER PRANK STAGE -->
     <div id="prank-stage" class="fixed inset-0 z-[150] flex flex-col items-center justify-center hidden-section" style="font-family: 'Share Tech Mono', monospace;">
-        <!-- Steps 1-7 (Same as before) -->
+        <!-- Steps 1-7 -->
         <div id="prank-1" class="flex-section flex-col items-center w-full p-6">
             <h1 class="text-4xl text-green-500 mb-8 font-bold tracking-widest animate-pulse">SECURITY CHECK</h1>
             <div class="bg-black/80 border border-green-800 p-8 rounded-sm w-full max-w-sm">
@@ -333,7 +344,7 @@
             </div>
         </div>
 
-        <!-- NEW CHAP 4: PERSPECTIVE SHIFT (Idea 2) -->
+        <!-- Chap 4: Perspective Shift -->
         <div id="chap-4" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">How We See You</h2>
             <div class="relative w-80 h-96 bg-black rounded-lg overflow-hidden border border-white/20">
@@ -388,16 +399,15 @@
             <h2 class="romantic-heading text-3xl mb-4">Hold My Hand</h2>
             <div class="relative w-full h-80 max-w-md bg-white/5 rounded-xl border border-white/10 mt-4 touch-none overflow-hidden" id="drag-zone">
                 <div class="absolute inset-0 flex items-center justify-center text-white/5 text-6xl">❤</div>
-                <div id="my-hand" class="hand" style="bottom:15%; right:15%; opacity:0.6; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));">🫴</div>
-                <div id="her-hand" class="hand" style="top:15%; left:15%; filter: drop-shadow(0 0 10px rgba(255,192,203,0.5));">🤚</div>
+                <div id="my-hand" class="hand" style="position:absolute; bottom:15%; right:15%; opacity:0.6; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); font-size:40px;">🫴</div>
+                <div id="her-hand" class="hand touch-none" style="position:absolute; top:15%; left:15%; filter: drop-shadow(0 0 10px rgba(255,192,203,0.5)); font-size:40px;">🤚</div>
             </div>
             <button id="hand-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">View Memories</button>
         </div>
 
-        <!-- NEW CHAP 9: CROWDED ROOM (Idea 4) -->
+        <!-- Chap 9: Crowded Room -->
         <div id="chap-9" class="chapter-container" onmouseenter="startCrowd()" onmouseleave="stopCrowd()">
             <div class="absolute inset-0 flex items-center justify-center overflow-hidden">
-                <!-- Silhouettes -->
                 <div class="silhouette" style="left:10%; top:40%; animation-delay:0s"></div>
                 <div class="silhouette" style="left:30%; top:20%; animation-delay:1s"></div>
                 <div class="silhouette" style="left:70%; top:50%; animation-delay:2s"></div>
@@ -405,7 +415,6 @@
                 <div class="silhouette" style="left:20%; top:60%; animation-delay:3s"></div>
                 <div class="silhouette" style="left:60%; top:70%; animation-delay:1.5s"></div>
             </div>
-            
             <div class="relative z-10 w-64 h-64 flex items-center justify-center group">
                 <div class="absolute inset-0 bg-black/80 group-hover:opacity-0 transition duration-700 flex items-center justify-center">
                     <p class="text-gray-400 text-xs tracking-widest uppercase animate-pulse">Find Her...</p>
@@ -450,14 +459,15 @@
         <div id="chap-12" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Our Moments</h2>
             <div class="cinema-container">
-                <video id="mem-vid" controls playsinline poster="New folder (3)/photo1.jpg">
+                <video id="mem-vid" controls playsinline poster="New folder (3)/photo1.jpg" onerror="console.log('Video missing, skipping');">
                     <source src="New folder (3)/video.mp4" type="video/mp4">
+                    Your browser does not support video.
                 </video>
             </div>
             <button onclick="stopVideo()" class="soul-btn mt-6">Continue</button>
         </div>
 
-        <!-- NEW CHAP 13: TRANSLATION OF SILENCE (Idea 5) -->
+        <!-- Chap 13: Silence -->
         <div id="chap-13" class="chapter-container" onclick="revealSilence()">
             <h2 class="romantic-heading text-3xl mb-8">When we are silent...</h2>
             <div class="flex flex-col gap-6 text-center max-w-md">
@@ -536,7 +546,7 @@
             </div>
         </div>
 
-        <!-- NEW CHAP 20: LAST THOUGHT LOG (Idea 10) -->
+        <!-- Chap 20: Brain Log -->
         <div id="chap-20" class="chapter-container" onclick="playLog()">
             <h2 class="romantic-heading text-3xl mb-6">My Brain Log</h2>
             <ul id="brain-log" class="text-left font-mono text-sm space-y-4 max-w-xs mx-auto">
@@ -578,7 +588,7 @@
             <button id="prom-btn" onclick="nextProm()" class="soul-btn mt-4">Next Promise</button>
         </div>
 
-        <!-- NEW CHAP 23: WAITING ROOM (Idea 6) -->
+        <!-- Chap 23: Waiting Room -->
         <div id="chap-23" class="chapter-container">
             <div class="season-bg"></div>
             <h2 class="romantic-heading text-3xl mb-8">I Will Wait</h2>
@@ -604,13 +614,13 @@
                 <span class="text-6xl">🎁</span>
             </div>
             <div id="surprise-content" class="hidden flex-col items-center max-w-md text-center bg-black/80 p-6 rounded-xl border border-pink-500/30 backdrop-blur-xl">
-                <img src="New folder (3)/surprise_box.jpg" class="w-full h-48 object-cover rounded-lg mb-4">
+                <img src="New folder (3)/surprise_box.jpg" onerror="this.src='https://placehold.co/400x300/pink/white?text=Surprise'" class="w-full h-48 object-cover rounded-lg mb-4">
                 <p class="text-pink-200 font-serif italic text-lg">"Just like this box, my heart is full of surprises for you."</p>
                 <button onclick="nextChapter()" class="soul-btn mt-4">My Refuge</button>
             </div>
         </div>
 
-        <!-- NEW CHAP 26: SAFE HOUSE (Idea 8) -->
+        <!-- Chap 26: Safe House -->
         <div id="chap-26" class="chapter-container">
             <div class="rain-window"></div>
             <h2 class="romantic-heading text-3xl mb-6">Your Safe House</h2>
@@ -649,8 +659,128 @@
             <button id="diya-btn" onclick="nextChapter()" class="soul-btn mt-6 opacity-0 pointer-events-none border-amber-500 text-amber-200">Amen</button>
         </div>
 
-        <!-- Chap 29: Cake -->
+        <!-- Chap 29: Time Capsule -->
         <div id="chap-29" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-6">Time Capsule</h2>
+            <div class="glass-card max-w-md w-full relative z-10">
+                <p class="text-xs text-pink-300 uppercase tracking-widest mb-4">Write a message for us in 2030</p>
+                <div class="relative w-full">
+                    <textarea id="capsule-input" class="w-full h-32 bg-black/30 border border-pink-500/30 rounded-lg p-4 text-pink-100 focus:outline-none focus:border-pink-500 font-serif italic resize-none" placeholder="Dear future us..."></textarea>
+                    <div id="capsule-lock" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none">
+                        <div class="text-5xl mb-2">🔒</div>
+                        <p class="text-green-500 font-mono text-xs tracking-widest uppercase">Encrypted & Stored</p>
+                        <p class="text-gray-500 text-[10px] mt-1">Unlock Date: 22 May 2030</p>
+                    </div>
+                </div>
+                <button id="capsule-btn" onclick="sendCapsule()" class="soul-btn mt-6 w-full text-sm">Seal & Send to Future</button>
+            </div>
+            <div class="absolute inset-0 pointer-events-none">
+                <div id="data-stream" class="hidden absolute left-1/2 bottom-1/2 w-1 h-1 bg-green-500 shadow-[0_0_20px_#0f0]"></div>
+            </div>
+            <button id="capsule-next" onclick="nextChapter()" class="soul-btn mt-8 opacity-0 pointer-events-none">Continue</button>
+        </div>
+
+        <!-- Chap 30: Foggy Mirror -->
+        <div id="chap-30" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-4">Wipe the Mirror</h2>
+            <p class="text-gray-400 text-xs mb-6 uppercase tracking-widest">The glass is foggy. Clear it to see the truth.</p>
+            <div class="relative w-[300px] h-[400px] border-4 border-gray-800 rounded-lg shadow-[0_0_50px_rgba(255,255,255,0.1)] overflow-hidden cursor-crosshair touch-none">
+                <div class="absolute inset-0 flex items-center justify-center bg-black">
+                    <img src="New folder (3)/promise1.jpg" onerror="this.src='https://placehold.co/300x400/pink/white?text=I+Love+You'" class="w-full h-full object-cover">
+                    <div class="absolute bottom-10 text-center w-full px-4">
+                        <p class="text-white font-[Great_Vibes] text-3xl drop-shadow-md">You are my clearest view.</p>
+                    </div>
+                </div>
+                <canvas id="fog-canvas" width="300" height="400" class="absolute inset-0 z-20"></canvas>
+            </div>
+            <button id="mirror-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">See Clearly</button>
+        </div>
+
+        <!-- NEW CHAP 31: BUCKET LIST (Renumbered) -->
+        <div id="chap-31" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-6">Our Bucket List</h2>
+            <div class="grid grid-cols-1 gap-4 text-left w-72">
+                <label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5">
+                    <input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)">
+                    <span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Late Night Drive 🚗</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5">
+                    <input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)">
+                    <span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Cook Together 🍝</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5">
+                    <input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)">
+                    <span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Visit Vrindavan 🪷</span>
+                </label>
+            </div>
+            <button onclick="nextChapter()" class="soul-btn mt-8">Let's Do Them All</button>
+        </div>
+
+        <!-- NEW CHAP 32: BIOMETRIC SOUL MATCH (Renumbered) -->
+        <div id="chap-32" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-8">Identity Verification</h2>
+            <div class="relative w-64 h-80 flex flex-col items-center justify-center">
+                <div class="w-48 h-64 border-2 border-pink-500/50 rounded-2xl relative overflow-hidden bg-black/50 shadow-[0_0_30px_rgba(236,72,153,0.2)]">
+                    <div id="scan-line" class="absolute top-0 left-0 w-full h-1 bg-green-500 shadow-[0_0_15px_#0f0] animate-[scan_2s_infinite]"></div>
+                    <img id="print-1" src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Fingerprint_arch.svg" class="absolute inset-0 w-full h-full p-8 opacity-30 filter invert" style="color:white;">
+                    <img id="print-2" src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Fingerprint_arch.svg" class="absolute inset-0 w-full h-full p-8 opacity-0 filter invert" style="transform: scaleX(-1);">
+                </div>
+                <div id="touch-zone" class="absolute inset-0 z-20 cursor-pointer touch-none" ontouchstart="startScan()" ontouchend="stopScan()" onmousedown="startScan()" onmouseup="stopScan()"></div>
+            </div>
+            <p id="scan-msg" class="text-green-400 font-mono mt-6 text-sm tracking-widest animate-pulse">HOLD TO SCAN FINGERPRINT</p>
+            <button id="match-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">Match Confirmed</button>
+        </div>
+
+        <!-- NEW CHAP 33: VOCAL PIANO (Renumbered) -->
+        <div id="chap-33" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-8">Play My Voice</h2>
+            <div class="flex gap-4 flex-wrap justify-center max-w-sm">
+                <button onclick="playNote(1)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">I</button>
+                <button onclick="playNote(2)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">❤️</button>
+                <button onclick="playNote(3)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">U</button>
+                <button onclick="playNote(4)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">💋</button>
+            </div>
+            <p class="text-xs text-gray-500 mt-6">Tap to create a melody</p>
+            <button onclick="nextChapter()" class="soul-btn mt-8">Continue</button>
+        </div>
+
+        <!-- NEW CHAP 34: BREAK GLASS (Renumbered) -->
+        <div id="chap-34" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-4">In Case of Sadness</h2>
+            <div id="glass-case" class="relative w-full max-w-sm aspect-video border-8 border-gray-800 bg-gray-900 shadow-2xl cursor-pointer" onclick="breakGlass()">
+                <div class="absolute inset-0 flex items-center justify-center z-20 bg-white/10 backdrop-blur-[2px]">
+                    <span class="text-4xl font-bold text-white/50 border-4 border-white/50 p-4 transform -rotate-12">BREAK GLASS</span>
+                </div>
+                <div class="absolute inset-0 bg-black flex items-center justify-center">
+                    <span class="text-6xl">🔨</span>
+                </div>
+            </div>
+            <div id="comfort-video-container" class="hidden w-full max-w-sm aspect-video bg-black border border-pink-500/50 shadow-[0_0_30px_#ec4899]">
+                <video id="comfort-video" class="w-full h-full object-cover" controls onerror="console.log('Comfort video missing')">
+                    <source src="New folder (3)/comfort.mp4" type="video/mp4">
+                    Video missing.
+                </video>
+            </div>
+            <button id="break-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">I Am Here</button>
+        </div>
+
+        <!-- NEW CHAP 35: REVERSE TIMELINE (Renumbered) -->
+        <div id="chap-35" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-2">Grow Old With Me</h2>
+            <div class="relative w-72 h-96 rounded-lg overflow-hidden border-2 border-white/20 mt-4">
+                <img src="New folder (3)/photo1.jpeg" onerror="this.src='https://placehold.co/300x400/gray/white?text=Young+Us'" class="absolute inset-0 w-full h-full object-cover" alt="Young Us">
+                <img id="old-img" src="New folder (3)/old_us.jpg" onerror="this.src='https://placehold.co/300x400/sepia/white?text=Us+In+2070'" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-100" style="filter: sepia(0.5) contrast(1.2);">
+                <div class="absolute bottom-4 left-0 w-full text-center">
+                    <p id="timeline-year" class="text-2xl font-bold text-white drop-shadow-md">2024</p>
+                </div>
+            </div>
+            <input type="range" min="2024" max="2074" value="2024" class="w-64 mt-6 accent-pink-500" oninput="updateTimeline(this.value)">
+            <p class="text-pink-200 font-serif italic text-sm mt-4 text-center max-w-xs">"I want you until my hands shake and my hair turns grey."</p>
+            <button onclick="nextChapter()" class="soul-btn mt-6">Celebrate</button>
+        </div>
+
+        <!-- Chap 36: Cake (Renumbered) -->
+        <div id="chap-36" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-10">Happy Birthday!</h2>
             <p id="cake-msg" class="text-pink-300 text-sm mb-8 opacity-0 transition-opacity font-mono tracking-widest">Make a wish & blow the candles 🕯️</p>
             <div class="flex flex-col items-center cursor-pointer group">
@@ -664,8 +794,8 @@
             </div>
         </div>
 
-        <!-- Chap 30: Finale -->
-        <div id="chap-30" class="chapter-container">
+        <!-- Chap 37: Finale (Renumbered) -->
+        <div id="chap-37" class="chapter-container">
             <div class="photo-frame p-2 bg-white transform rotate-2" style="width: 350px;">
                 <img src="New folder (3)/promise5.jpg" onerror="this.src='https://placehold.co/400x500/pink/white?text=I+Love+You'" class="w-full rounded mb-0" style="height: 350px;">
             </div>
@@ -678,8 +808,9 @@
 
     <!-- LOVE VIDEO OVERLAY -->
     <div id="love-video-overlay">
-        <video id="final-love-video" class="w-full h-full max-w-4xl max-h-[80vh] object-contain" controls>
+        <video id="final-love-video" class="w-full h-full max-w-4xl max-h-[80vh] object-contain" controls onerror="console.log('Final video missing')">
             <source src="New folder (3)/answer.mp4" type="video/mp4">
+            Video missing.
         </video>
         <button onclick="closeLoveVideo()" class="soul-btn mt-4">Continue Journey</button>
     </div>
@@ -689,7 +820,7 @@
 
         // --- GLOBAL VARIABLES ---
         let currentChap = 1;
-        const totalChap = 30; // UPDATED COUNT
+        const totalChap = 37; // Updated Total after removing chapters
         const bgMusic = document.getElementById('bg-music');
         const fluteMusic = document.getElementById('flute-music');
         const crowdAudio = document.getElementById('crowd-audio');
@@ -698,13 +829,19 @@
         let currentVoice = null;
         let attemptCount = 0;
         let isFluteMode = false;
+        let lastMouseTime = 0;
 
-        // --- PEACOCK MOUSE TRAIL ---
+        // --- PEACOCK MOUSE TRAIL (THROTTLED) ---
         document.addEventListener('mousemove', function(e) { createPeacockTrail(e.clientX, e.clientY); });
         document.addEventListener('touchmove', function(e) { createPeacockTrail(e.touches[0].clientX, e.touches[0].clientY); });
+        
         function createPeacockTrail(x, y) {
+            const now = Date.now();
+            if (now - lastMouseTime < 50) return; // Throttle to improve performance
+            lastMouseTime = now;
+            
             const p = document.createElement('div');
-            p.style.cssText = `position: fixed; pointer-events: none; z-index: 9999; left: ${x}px; top: ${y}px; width: 15px; height: 15px; background: radial-gradient(circle, #06b6d4, #10b981); border-radius: 50%; opacity: 0.8; box-shadow: 0 0 8px #06b6d4;`;
+            p.style.cssText = `position: fixed; pointer-events: none; z-index: 9999; left: ${x}px; top: ${y}px; width: 15px; height: 15px; background: radial-gradient(circle, #06b6d4, #10b981); border-radius: 50%; opacity: 0.8; box-shadow: 0 0 8px #06b6d4; transform: translate(-50%, -50%);`;
             document.body.appendChild(p);
             gsap.to(p, { y: y + 20, opacity: 0, scale: 0, duration: 0.8, onComplete: () => p.remove() });
         }
@@ -713,11 +850,11 @@
         function toggleFluteMode() {
             const btn = document.getElementById('flute-btn');
             if (!isFluteMode) {
-                bgMusic.pause(); fluteMusic.play().catch(e => console.log(e));
+                bgMusic.pause(); fluteMusic.play().catch(e => console.log("Audio waiting for interact"));
                 btn.classList.add('active');
                 gsap.to("#romance-bg", {background: "linear-gradient(-45deg, #0c4a6e, #0f172a, #000, #1e3a8a)", duration: 2});
             } else {
-                fluteMusic.pause(); bgMusic.play().catch(e => console.log(e));
+                fluteMusic.pause(); bgMusic.play().catch(e => console.log("Audio waiting for interact"));
                 btn.classList.remove('active');
                 gsap.to("#romance-bg", {background: "linear-gradient(-45deg, #2e021d, #1a0b2e, #000000, #2f1025)", duration: 2});
             }
@@ -730,9 +867,8 @@
                 document.getElementById("loader").style.display = "none";
                 document.getElementById("prank-stage").classList.remove("hidden-section");
                 document.getElementById("prank-stage").classList.add("flex-section");
-                initParticles();
+                try { initParticles(); } catch(e) { console.log("WebGL not supported, skipping particles"); }
                 
-                // Video Logic
                 const memVid = document.getElementById('mem-vid');
                 if(memVid) {
                     memVid.onplay = () => { bgMusic.pause(); fluteMusic.pause(); };
@@ -743,8 +879,23 @@
         };
 
         // --- PRANK & ROMANCE NAVIGATION ---
-        function forceTyping(el) { const targetText = "DRAMA QUEEN"; if (el.value.length > 0) el.value = targetText.substring(0, el.value.length); }
+        function forceTyping(el) { 
+            // Unlock audio on first interaction
+            if(bgMusic.paused && !isFluteMode) {
+                // We don't play yet, but we wake up the audio context
+                bgMusic.muted = true; 
+                bgMusic.play().then(() => { bgMusic.pause(); bgMusic.muted = false; }).catch(e=>console.log(e));
+            }
+            const targetText = "DRAMA QUEEN"; 
+            if (el.value.length > 0) el.value = targetText.substring(0, el.value.length); 
+        }
+        
         function nextPrank(n) {
+            // Ensure audio is unlocked on button click if input interaction was missed
+            if(n===2 && bgMusic.paused) {
+                 bgMusic.muted = true; bgMusic.play().then(() => { bgMusic.pause(); bgMusic.muted = false; }).catch(e=>console.log(e));
+            }
+            
             const prev = document.getElementById(`prank-${n-1}`);
             const next = document.getElementById(`prank-${n}`);
             if(prev) { prev.classList.remove("flex-section"); prev.classList.add("hidden-section"); }
@@ -763,7 +914,11 @@
             const prank = document.getElementById("prank-stage");
             prank.style.pointerEvents = "none";
             document.getElementById('flute-btn').style.display = 'flex';
-            bgMusic.volume = 0.5; bgMusic.play().catch(e=>console.log("Audio needed"));
+            
+            // Actually play music now
+            bgMusic.volume = 0.5; 
+            bgMusic.play().catch(e=>console.log("Audio blocked - click anywhere"));
+            
             gsap.to("#tech-bg", {opacity: 0, duration: 2});
             gsap.to("#romance-bg", {opacity: 1, duration: 2});
             gsap.to(prank, {opacity: 0, duration: 1.5, onComplete: () => {
@@ -776,7 +931,11 @@
         function nextChapter() {
             const activeBtn = document.querySelector('.chapter-active .soul-btn');
             if(activeBtn) gsap.to(activeBtn, {scale: 0.95, duration: 0.1, yoyo: true, repeat: 1});
-            const v = document.getElementById('mem-vid'); if(v) v.pause();
+            
+            // Resume music if it was paused by video
+            if (bgMusic.paused && !isFluteMode && currentChap > 1) bgMusic.play().catch(e=>{});
+            if (fluteMusic.paused && isFluteMode && currentChap > 1) fluteMusic.play().catch(e=>{});
+
             const curr = document.getElementById(`chap-${currentChap}`);
             const next = document.getElementById(`chap-${currentChap+1}`);
             
@@ -789,24 +948,29 @@
                         gsap.fromTo(next, {opacity:0, y:30}, {opacity:1, y:0, duration:0.8});
                         initChapterFeatures(currentChap);
                         const p = document.getElementById('progress');
-                        p.style.transition = 'none'; p.style.width = '0%';
-                        setTimeout(() => { p.style.transition = 'width 1.5s ease'; p.style.width = '100%'; }, 50);
+                        if(p) {
+                            p.style.transition = 'none'; p.style.width = '0%';
+                            setTimeout(() => { p.style.transition = 'width 1.5s ease'; p.style.width = '100%'; }, 50);
+                        }
                     }
                 }});
             }
         }
 
-        // --- NEW & EXISTING FEATURES INIT ---
+        // --- FEATURE INITIALIZATION ---
         function initChapterFeatures(id) {
             if(id === 2) { gsap.to("#g1", {opacity:1, duration:1}); gsap.to("#g2", {opacity:1, x:0, delay:0.5}); gsap.to("#g3", {opacity:1, x:0, delay:1}); gsap.to("#g4", {opacity:1, delay:2}); gsap.to("#g-btn", {opacity:1, delay:3}); }
             if(id === 3) initQuiz();
-            if(id === 5) initTimer(); // Timeline
-            if(id === 8) initHand(); // Hand Drag
-            if(id === 15) initFunny(); // Funny Grid
-            if(id === 18) initPuzzle(); // Puzzle
-            if(id === 22) loadProm(0); // Promises
-            if(id === 29) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); } // Cake
-            if(id === 30) { confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } // Finale
+            if(id === 5) initTimer();
+            if(id === 8) initHand();
+            if(id === 15) initFunny();
+            if(id === 18) initPuzzle();
+            if(id === 22) loadProm(0);
+            if(id === 30) initFog();
+            // ID 31 is now Bucket List (no specific init needed, just event listeners)
+            // ID 32 is now Biometric
+            if(id === 36) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); } // Cake was 38
+            if(id === 37) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } // Finale was 39
         }
 
         // --- INTERACTION LOGIC ---
@@ -819,13 +983,12 @@
             else { txt.innerText = "MESSY"; txt.style.color = "rgba(156, 163, 175, 0.5)"; }
         }
 
-        function startCrowd() { if(crowdAudio) crowdAudio.play().catch(e=>console.log(e)); }
+        function startCrowd() { if(crowdAudio) crowdAudio.play().catch(e=>console.log("Audio waiting")); }
         function stopCrowd() { if(crowdAudio) crowdAudio.pause(); }
         function foundHer() {
             stopCrowd();
             gsap.to("#crowd-msg", {opacity:1});
             gsap.to("#crowd-btn", {opacity:1, pointerEvents:'auto'});
-            // Play "Found" voice here if available
         }
 
         function revealSilence() {
@@ -842,10 +1005,9 @@
         }
 
         function toggleRain() {
-            if(rainAudio.paused) rainAudio.play(); else rainAudio.pause();
+            if(rainAudio.paused) rainAudio.play().catch(e=>{}); else rainAudio.pause();
         }
 
-        // --- EXISTING LOGIC (Heal, Quiz, Matki, etc.) ---
         function healHeart(el) { 
             if(el.classList.contains('healed')) return; el.classList.add("healed"); 
             confetti({particleCount: 50, spread: 60, colors:['#ec4899']}); 
@@ -854,13 +1016,18 @@
         function initHand() {
             setTimeout(() => { Draggable.create("#her-hand", { type:"x,y", bounds:"#drag-zone", onDragEnd: function() {
                 const h1 = document.getElementById('my-hand').getBoundingClientRect(); const h2 = this.target.getBoundingClientRect();
-                if(Math.hypot(h1.x - h2.x, h1.y - h2.y) < 80) { confetti({particleCount: 30, spread: 50}); gsap.to("#her-hand", {x:0, y:0, duration:0.5}); gsap.to("#hand-btn", {opacity:1, pointerEvents:"auto"}); }
+                // Improved collision detection
+                if(Math.hypot(h1.x - h2.x, h1.y - h2.y) < 100) { 
+                    confetti({particleCount: 30, spread: 50}); 
+                    gsap.to("#her-hand", {x:0, y:0, duration:0.5}); 
+                    gsap.to("#hand-btn", {opacity:1, pointerEvents:"auto"}); 
+                }
             }});}, 100);
         }
         function playVoice(src, el) { 
             if(currentVoice) { currentVoice.pause(); currentVoice.currentTime = 0; document.querySelectorAll('.photo-frame').forEach(p => p.classList.remove('playing')); }
             if(!isFluteMode) bgMusic.pause(); else fluteMusic.pause();
-            currentVoice = new Audio(src); currentVoice.play().catch(e => console.log(e));
+            currentVoice = new Audio(src); currentVoice.play().catch(e => console.log("Audio missing"));
             if(el) { el.classList.add('playing'); gsap.to(el, {scale: 1.05, duration: 0.2, yoyo: true, repeat: 1}); }
             currentVoice.onended = () => { if(el) el.classList.remove('playing'); if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); };
         }
@@ -874,7 +1041,7 @@
         function initQuiz() { loadQ(); }
         function loadQ() { if(qIdx >= qData.length) { nextChapter(); return; } const q = qData[qIdx]; document.getElementById('quiz-q').innerText = q.q; const div = document.getElementById('quiz-options'); div.innerHTML = ""; q.a.forEach((opt, i) => { let b = document.createElement("button"); b.className = "soul-btn w-full mt-0"; b.innerText = opt; b.onclick = () => { if(i===q.c) { b.style.background = "#059669"; b.innerText += " ✅"; setTimeout(()=>{qIdx++; loadQ()}, 800); } else { b.style.background = "#b91c1c"; gsap.to(b, {x:10, duration:0.1, yoyo:true, repeat:3}); } }; div.appendChild(b); }); }
         function initTimer() { const start = new Date("2024-05-22"); setInterval(() => { const diff = new Date() - start; document.getElementById('timer').innerText = `${Math.floor(diff / (1000*60*60*24))}d ${Math.floor((diff % (1000*60*60*24)) / (1000*60*60))}h`; }, 1000); }
-        function initFunny() { const d = document.getElementById('funny-grid'); d.innerHTML = ""; for(let i=1; i<=4; i++) { let div = document.createElement('div'); div.className = "overflow-hidden rounded-lg shadow-lg h-32 cursor-pointer"; div.innerHTML = `<img src="New folder (3)/funny${i}.jpg" onerror="this.src='https://placehold.co/150x150/pink/white'" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">`; d.appendChild(div); } }
+        function initFunny() { const d = document.getElementById('funny-grid'); d.innerHTML = ""; for(let i=1; i<=4; i++) { let div = document.createElement('div'); div.className = "overflow-hidden rounded-lg shadow-lg h-32 cursor-pointer"; div.innerHTML = `<img src="New folder (3)/funny${i}.jpg" onerror="this.src='https://placehold.co/150x150/pink/white?text=Funny+${i}'" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">`; d.appendChild(div); } }
         function initPuzzle() { const c = document.getElementById('puzzle-container'); c.innerHTML = ""; let count = 0; for(let i=0; i<9; i++) { let p = document.createElement('div'); Object.assign(p.style, { position:'absolute', width:'100px', height:'100px', backgroundImage:`url('New folder (3)/mylove1.jpg')`, backgroundSize:"300px 300px", backgroundPosition:`${-(i%3)*100}px ${-Math.floor(i/3)*100}px`, left:(i%3)*100+'px', top:Math.floor(i/3)*100+'px', cursor:'pointer', border:'1px solid rgba(255,255,255,0.5)' }); gsap.fromTo(p, {x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, opacity:0, rotation:Math.random()*360}, {opacity:1, duration:1, delay: i*0.1}); p.onclick = function() { gsap.to(this, {x:0, y:0, rotation:0, zIndex:1, border:"none", duration:0.5}); this.style.pointerEvents = 'none'; count++; if(count>=5) gsap.to("#puz-btn", {opacity:1, pointerEvents:"auto"}); }; c.appendChild(p); } }
         function openLetter() { gsap.to('#letter-closed', {opacity:0, scale:0.8, duration:0.5, display:'none'}); document.getElementById('letter-open').classList.remove('hidden'); gsap.from('#letter-open', {opacity:0, y:20, duration:0.8, delay:0.4}); }
         const promises = [ { text: "I promise to stay.", sub: "Through storms and silence.", img: "New folder (3)/promise1.jpg" }, { text: "I promise to listen.", sub: "Even to what you don't say.", img: "New folder (3)/promise2.jpg" }, { text: "I promise to love you daily.", sub: "Not just on good days.", img: "New folder (3)/promise3.jpg" }, { text: "I promise to be your home.", sub: "Your safe place.", img: "New folder (3)/promise4.jpg" }, { text: "I promise to be patient.", sub: "When things get tough.", img: "New folder (3)/promise5.jpg" }, { text: "I promise to support your dreams.", sub: "Your wins are my wins.", img: "New folder (3)/promise6.jpg" }, { text: "I promise to be honest.", sub: "Always.", img: "New folder (3)/promise7.jpg" }, { text: "I promise to protect your heart.", sub: "Like it's my own.", img: "New folder (3)/promise8.jpg" }, { text: "I promise to adventure with you.", sub: "Life is a journey.", img: "New folder (3)/promise9.jpg" }, { text: "I promise to grow with you.", sub: "Side by side.", img: "New folder (3)/promise10.jpg" }, { text: "I promise to respect you.", sub: "In every way.", img: "New folder (3)/promise11.jpg" }, { text: "I promise to comfort you.", sub: "When tears fall.", img: "New folder (3)/promise12.jpg" }, { text: "I promise to make you laugh.", sub: "Every single day.", img: "New folder (3)/promise13.jpg" }, { text: "I promise to be loyal.", sub: "You are my only one.", img: "New folder (3)/promise14.jpg" }, { text: "I promise to be your best friend.", sub: "Forever.", img: "New folder (3)/promise15.jpg" }, { text: "I promise to forgive.", sub: "We are only human.", img: "New folder (3)/promise16.jpg" }, { text: "I promise to prioritize you.", sub: "You come first.", img: "New folder (3)/promise17.jpg" }, { text: "I promise to love you forever.", sub: "To infinity.", img: "New folder (3)/promise18.jpg" } ];
@@ -883,11 +1050,56 @@
         function nextProm() { if (pIdx < promises.length - 1) { pIdx++; loadProm(pIdx); if(pIdx===promises.length-1) document.getElementById("prom-btn").innerText = "Finish Vows"; } else { nextChapter(); } }
         function openSurprise() { gsap.to("#surprise-box", {scale:1.5, opacity:0, duration:0.5, onComplete:()=>{ document.getElementById("surprise-box").style.display="none"; const c = document.getElementById("surprise-content"); c.classList.remove("hidden"); c.classList.add("flex"); gsap.fromTo(c, {scale:0.5, opacity:0}, {scale:1, opacity:1, duration:1, ease:"elastic.out"}); confetti({particleCount:50, spread:70}); }}); }
         function moveLoveNoBtn(btn) { document.getElementById("plea-msg").style.opacity = 1; gsap.to(btn, { x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*100, duration: 0.2 }); }
-        function handleLoveYes() { if(!isFluteMode) bgMusic.pause(); else fluteMusic.pause(); const ol = document.getElementById("love-video-overlay"); ol.style.display = "flex"; gsap.to(ol, {opacity:1, duration:1}); const v = document.getElementById("final-love-video"); v.play(); v.onended = () => { if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); }; }
+        function handleLoveYes() { if(!isFluteMode) bgMusic.pause(); else fluteMusic.pause(); const ol = document.getElementById("love-video-overlay"); ol.style.display = "flex"; gsap.to(ol, {opacity:1, duration:1}); const v = document.getElementById("final-love-video"); v.play().catch(e=>console.log("Video fail")); v.onended = () => { if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); }; }
         function closeLoveVideo() { const ol = document.getElementById("love-video-overlay"); document.getElementById("final-love-video").pause(); gsap.to(ol, {opacity:0, duration:1, onComplete:()=>{ ol.style.display="none"; if(!isFluteMode) bgMusic.play(); nextChapter(); }}); }
         let candles = 0;
         function blow(el) { const flame = el.querySelector('.flame'); if(!flame.classList.contains('out')) { flame.classList.add('out'); candles++; if(navigator.vibrate) navigator.vibrate(50); } }
         function cutCake() { if(candles >= 3) { document.getElementById('cake-msg').style.opacity = 0; confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899'] }); setTimeout(nextChapter, 1500); } else { const msg = document.getElementById('cake-msg'); msg.innerText = "Blow the candles first! 🌬️"; gsap.fromTo(msg, {x:-5}, {x:5, duration:0.1, repeat:3, yoyo:true}); } }
+        
+        // --- NEW FUNCTIONS FOR ADDED CHAPTERS ---
+        function sendCapsule() {
+            const input = document.getElementById('capsule-input');
+            const btn = document.getElementById('capsule-btn');
+            const lock = document.getElementById('capsule-lock');
+            const stream = document.getElementById('data-stream');
+            if(input.value.trim() === "") { input.placeholder = "Please write something first..."; gsap.to(input, {x:10, duration:0.1, yoyo:true, repeat:3}); return; }
+            gsap.to(input, {duration: 0.5, opacity: 0.3});
+            gsap.to(lock, {opacity: 1, duration: 0.5, pointerEvents: 'auto'});
+            gsap.to(btn, {opacity: 0, scale: 0, duration: 0.3});
+            stream.classList.remove('hidden');
+            gsap.fromTo(stream, {y: 0, opacity: 1, scaleY: 1}, {y: -500, opacity: 0, scaleY: 20, duration: 1, ease: "power2.in"});
+            gsap.to("#capsule-next", {opacity: 1, pointerEvents: "auto", delay: 1});
+            confetti({particleCount: 30, colors: ['#0f0']});
+        }
+        function initFog() {
+            const canvas = document.getElementById('fog-canvas'); const ctx = canvas.getContext('2d'); const width = canvas.width; const height = canvas.height;
+            ctx.fillStyle = "rgba(200, 200, 200, 0.9)"; ctx.fillRect(0, 0, width, height);
+            ctx.font = "20px Serif"; ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.textAlign = "center"; ctx.fillText("Wipe Me", width/2, height/2);
+            let isDrawing = false;
+            function wipe(x, y) { ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI * 2); ctx.fill(); checkClear(); }
+            function getPos(e) { const rect = canvas.getBoundingClientRect(); return { x: (e.clientX || e.touches[0].clientX) - rect.left, y: (e.clientY || e.touches[0].clientY) - rect.top }; }
+            canvas.addEventListener('mousedown', () => isDrawing = true); canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mousemove', (e) => { if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } });
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }); canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } });
+            function checkClear() { const imgData = ctx.getImageData(0,0, width, height); let transparent = 0; for(let i=3; i<imgData.data.length; i+=4) if(imgData.data[i] === 0) transparent++; if(transparent > (width*height)*0.6) { gsap.to(canvas, {opacity:0, duration:1, pointerEvents:'none'}); gsap.to("#mirror-btn", {opacity:1, pointerEvents:"auto"}); confetti({particleCount: 30, spread: 40}); } }
+        }
+        function checkBucket(el) {
+            if(el.checked) { gsap.to(el.nextElementSibling, {color: "#ec4899", textShadow: "0 0 10px #ec4899", scale: 1.05, duration: 0.2}); confetti({particleCount: 10, spread: 30, origin: {y: 0.5}}); } else { gsap.to(el.nextElementSibling, {color: "#d1d5db", textShadow: "none", scale: 1}); }
+        }
+        let scanTimer;
+        function startScan() { document.getElementById('scan-line').style.background = '#ec4899'; document.getElementById('scan-msg').innerText = "SCANNING..."; document.getElementById('scan-msg').style.color = "#ec4899"; scanTimer = setTimeout(() => { gsap.to("#print-2", {opacity: 0.5, duration: 2}); gsap.to("#print-1", {x: -10, rotation: -15, color: "#ec4899", duration: 2}); gsap.to("#print-2", {x: 10, rotation: 15, color: "#ec4899", opacity: 0.5, duration: 2}); setTimeout(() => { document.getElementById('scan-msg').innerText = "100% SOULMATE MATCH FOUND"; document.getElementById('scan-line').style.display = 'none'; confetti({particleCount: 50, colors: ['#ec4899']}); gsap.to("#match-btn", {opacity: 1, pointerEvents: "auto"}); }, 2000); }, 500); }
+        function stopScan() { clearTimeout(scanTimer); }
+        function playNote(n) { const a = document.getElementById(`vp-${n}`); a.currentTime = 0; a.play().catch(e=>{}); if(navigator.vibrate) navigator.vibrate(30); }
+        function breakGlass() {
+            const glass = document.getElementById('glass-case');
+            const vid = document.getElementById('comfort-video-container');
+            const v = document.getElementById('comfort-video');
+            if(navigator.vibrate) navigator.vibrate([50,50,50]);
+            gsap.to(glass, {scale:1.1, opacity:0, duration:0.2, onComplete:()=>{ glass.style.display="none"; vid.classList.remove('hidden'); v.play().catch(e=>console.log("Video fail")); gsap.to("#break-btn", {opacity:1, pointerEvents:"auto", delay:2}); }});
+        }
+        function updateTimeline(val) { document.getElementById('timeline-year').innerText = val; document.getElementById('old-img').style.opacity = (val - 2024) / 50; }
+        
         function initParticles() { const c=document.getElementById('bg-canvas'); const s=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000); const r=new THREE.WebGLRenderer({canvas:c, alpha:true}); r.setSize(window.innerWidth, window.innerHeight); const g=new THREE.BufferGeometry(); const count = 1500; const p=new Float32Array(count*3); for(let i=0;i<count*3;i++) p[i]=(Math.random()-0.5)*15; g.setAttribute('position',new THREE.BufferAttribute(p,3)); const m=new THREE.PointsMaterial({size:0.015, color:0xffffff, transparent:true, opacity:0.8}); const pts = new THREE.Points(g,m); s.add(pts); cam.position.z=5; function a(){ requestAnimationFrame(a); pts.rotation.y += 0.0005; pts.rotation.x += 0.0002; r.render(s,cam); } a(); window.addEventListener('resize', () => { cam.aspect = window.innerWidth / window.innerHeight; cam.updateProjectionMatrix(); r.setSize(window.innerWidth, window.innerHeight); }); }
     </script>
 </body>
