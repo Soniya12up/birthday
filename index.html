@@ -467,8 +467,42 @@
             <button onclick="stopVideo()" class="soul-btn mt-6">Continue</button>
         </div>
 
-        <!-- Chap 13: Silence -->
-        <div id="chap-13" class="chapter-container" onclick="revealSilence()">
+        <!-- NEW CHAP 13: VIDEO CALL (Added Feature) -->
+        <div id="chap-13" class="chapter-container">
+            <div class="bg-black/90 rounded-2xl border border-gray-700 w-80 h-[500px] relative overflow-hidden shadow-2xl flex flex-col items-center">
+                <!-- Header -->
+                <div class="w-full p-4 flex items-center justify-between bg-black/40 z-20">
+                    <span class="text-white text-xs">WhatsApp Video...</span>
+                    <span class="text-green-500 text-xs font-mono">ENCRYPTED</span>
+                </div>
+                <!-- Video/Image -->
+                <img src="New folder (3)/promise4.jpg" onerror="this.src='https://placehold.co/300x500/black/white?text=Sunu'" class="absolute inset-0 w-full h-full object-cover opacity-60">
+                
+                <!-- Overlay Elements -->
+                <div class="absolute inset-0 flex flex-col items-center justify-end pb-20 z-10">
+                    <h3 class="text-2xl font-bold text-white mb-2">My World 🌎</h3>
+                    <p class="text-white/70 font-mono text-sm mb-8 animate-pulse">02:45:12</p>
+                    
+                    <div class="flex gap-8 items-center">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-xl">📷</div>
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-xl">🎤</div>
+                        <!-- The Broken Button -->
+                        <div id="end-call-btn" class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center text-3xl cursor-pointer transition-transform duration-100 shadow-[0_0_20px_red]" onmouseover="moveEndButton(this)" onclick="clickEndButton()">📞</div>
+                    </div>
+                </div>
+
+                <!-- Error Message Layer -->
+                <div id="call-error" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-6 text-center hidden z-50">
+                    <span class="text-red-500 text-6xl mb-4">⚠️</span>
+                    <h2 class="text-red-500 font-mono text-xl mb-4">ERROR: CANNOT DISCONNECT</h2>
+                    <p class="text-white font-serif italic text-lg leading-relaxed">"The hardest part is saying goodbye. So I made a call that never ends. I am always listening, always here."</p>
+                    <button onclick="nextChapter()" class="soul-btn mt-8">Promise</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chap 14: Silence (Renumbered from 13) -->
+        <div id="chap-14" class="chapter-container" onclick="revealSilence()">
             <h2 class="romantic-heading text-3xl mb-8">When we are silent...</h2>
             <div class="flex flex-col gap-6 text-center max-w-md">
                 <p id="silence-1" class="text-gray-400 opacity-0 transition duration-1000">I don't just hear silence.</p>
@@ -479,8 +513,8 @@
             <button id="silence-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Next</button>
         </div>
 
-        <!-- Chap 14: Makhan Chor -->
-        <div id="chap-14" class="chapter-container">
+        <!-- Chap 15: Makhan Chor (Renumbered from 14) -->
+        <div id="chap-15" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Who is the Thief?</h2>
             <p class="text-white/60 mb-6 text-sm">Krishna stole butter. What did you steal?</p>
             <div id="matki" class="matki-container" onclick="breakMatki()">
@@ -495,15 +529,30 @@
             <button id="matki-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">Guilty as Charged</button>
         </div>
 
-        <!-- Chap 15: Funny -->
-        <div id="chap-15" class="chapter-container">
+        <!-- Chap 16: Funny (Renumbered from 15) -->
+        <div id="chap-16" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Giggle Gallery</h2>
             <div class="grid grid-cols-2 gap-4 w-full max-w-md" id="funny-grid"></div>
             <button onclick="nextChapter()" class="soul-btn mt-8">Next</button>
         </div>
 
-        <!-- Chap 16: Laugh Check -->
-        <div id="chap-16" class="chapter-container">
+        <!-- NEW CHAP 17: IRRITATION CONVERTER (Added Feature) -->
+        <div id="chap-17" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-6">I Love Your Moods</h2>
+            <div class="relative w-64 h-64">
+                <div id="tease-card" class="w-full h-full rounded-full border-4 border-red-500 overflow-hidden shadow-[0_0_40px_red] cursor-pointer relative" onclick="pokeHer()">
+                    <img id="tease-img" src="New folder (3)/angry.jpg" onerror="this.src='https://placehold.co/300x300/red/white?text=Angry+Face'" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-transparent transition">
+                        <span id="poke-text" class="text-2xl font-bold text-white drop-shadow-md">Poke Me! 👆</span>
+                    </div>
+                </div>
+            </div>
+            <p id="tease-msg" class="text-white mt-8 font-serif text-lg text-center max-w-md italic h-12">"I love it when you get mad..."</p>
+            <button id="tease-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Love You</button>
+        </div>
+
+        <!-- Chap 18: Laugh Check (Renumbered from 16) -->
+        <div id="chap-18" class="chapter-container">
             <h1 class="romantic-heading text-4xl mb-12">Did you laugh?</h1>
             <div class="flex gap-8">
                 <button onclick="nextChapter()" class="soul-btn bg-green-500/20 hover:bg-green-500/40 border-green-400">YES</button>
@@ -511,8 +560,8 @@
             </div>
         </div>
 
-        <!-- Chap 17: My Radha -->
-        <div id="chap-17" class="chapter-container">
+        <!-- Chap 19: My Radha (Renumbered from 17) -->
+        <div id="chap-19" class="chapter-container">
             <div class="glass-card max-w-md relative overflow-hidden">
                 <div class="absolute top-[-50px] left-[-50px] w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-40"></div>
                 <h2 class="text-4xl font-[Great_Vibes] text-blue-300 mb-6">My Radha</h2>
@@ -522,15 +571,15 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Continue</button>
         </div>
 
-        <!-- Chap 18: Puzzle -->
-        <div id="chap-18" class="chapter-container">
+        <!-- Chap 20: Puzzle (Renumbered from 18) -->
+        <div id="chap-20" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Fix Us</h2>
             <div id="puzzle-container" class="relative w-[300px] h-[300px] border border-white/20 shadow-2xl"></div>
             <button id="puz-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">Perfect Match</button>
         </div>
 
-        <!-- Chap 19: Letter -->
-        <div id="chap-19" class="chapter-container">
+        <!-- Chap 21: Letter (Renumbered from 19) -->
+        <div id="chap-21" class="chapter-container">
             <div id="letter-closed" class="glass-card p-12 cursor-pointer bg-gradient-to-br from-pink-900 to-purple-900 hover:scale-105 transition duration-500" onclick="openLetter()">
                 <div class="text-6xl mb-4">💌</div>
                 <span class="font-serif italic text-xl">A letter for you...</span>
@@ -546,8 +595,8 @@
             </div>
         </div>
 
-        <!-- Chap 20: Brain Log -->
-        <div id="chap-20" class="chapter-container" onclick="playLog()">
+        <!-- Chap 22: Brain Log (Renumbered from 20) -->
+        <div id="chap-22" class="chapter-container" onclick="playLog()">
             <h2 class="romantic-heading text-3xl mb-6">My Brain Log</h2>
             <ul id="brain-log" class="text-left font-mono text-sm space-y-4 max-w-xs mx-auto">
                 <li class="opacity-0">> 11:45 PM: Checking Alarm...</li>
@@ -560,8 +609,8 @@
             <button id="log-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Always You</button>
         </div>
 
-        <!-- Chap 21: Sudarshan Shield -->
-        <div id="chap-21" class="chapter-container">
+        <!-- Chap 23: Sudarshan Shield (Renumbered from 21) -->
+        <div id="chap-23" class="chapter-container">
             <div class="relative w-80 h-80 flex items-center justify-center">
                 <div class="sudarshan-chakra"></div>
                 <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-blue-400 shadow-[0_0_50px_#3b82f6] z-10 relative">
@@ -573,8 +622,52 @@
             <button onclick="nextChapter()" class="soul-btn mt-8 border-blue-400 text-blue-100 hover:bg-blue-900/30">My Promises</button>
         </div>
 
-        <!-- Chap 22: Promises -->
-        <div id="chap-22" class="chapter-container">
+        <!-- NEW CHAP 24: VRINDAVAN WEDDING (Added Feature) -->
+        <div id="chap-24" class="chapter-container">
+            <div class="absolute inset-0 bg-black z-[-1]">
+                <img src="New folder (3)/vrindavan_bg.jpg" onerror="this.src='https://placehold.co/800x600/1e1b4b/white?text=Prem+Mandir+Night'" class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+            </div>
+            
+            <h2 class="romantic-heading text-3xl mb-2 text-yellow-200">Manasi Seva</h2>
+            <p class="text-xs text-yellow-100/70 mb-8 uppercase tracking-widest">Drag garlands to exchange vows</p>
+
+            <div class="flex justify-between items-center w-full max-w-md px-4 h-64 relative" id="wedding-zone">
+                <!-- Groom Side -->
+                <div class="flex flex-col items-center">
+                    <div id="target-groom" class="w-24 h-24 rounded-full border-2 border-yellow-500 overflow-hidden mb-4 shadow-[0_0_20px_orange] bg-black">
+                        <img src="New folder (3)/photo1.jpeg" onerror="this.src='https://placehold.co/100x100/333/fff?text=Rudra'" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Marigold Garland (Draggable) -->
+                    <div id="garland-yellow" class="w-20 h-20 cursor-grab active:cursor-grabbing z-20">
+                         <svg viewBox="0 0 100 100" class="w-full h-full filter drop-shadow-lg">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#facc15" stroke-width="8" stroke-dasharray="5,5"/>
+                            <text x="50" y="55" font-size="30" text-anchor="middle">🌼</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Bride Side -->
+                <div class="flex flex-col items-center">
+                    <div id="target-bride" class="w-24 h-24 rounded-full border-2 border-red-500 overflow-hidden mb-4 shadow-[0_0_20px_red] bg-black">
+                        <img src="New folder (3)/mylove1.jpg" onerror="this.src='https://placehold.co/100x100/333/fff?text=Nayanika'" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Red Rose Garland (Draggable) -->
+                    <div id="garland-red" class="w-20 h-20 cursor-grab active:cursor-grabbing z-20">
+                        <svg viewBox="0 0 100 100" class="w-full h-full filter drop-shadow-lg">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#ef4444" stroke-width="8" stroke-dasharray="5,5"/>
+                            <text x="50" y="55" font-size="30" text-anchor="middle">🌹</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <p id="wedding-msg" class="text-yellow-100 font-serif italic text-center mt-8 px-8 opacity-0 transition-opacity duration-1000 max-w-md">"In the eyes of Krishna, I am already yours."</p>
+            <button id="wedding-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Jai Shri Krishna</button>
+        </div>
+
+        <!-- Chap 25: Promises (Renumbered from 22) -->
+        <div id="chap-25" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">My Vows</h2>
             <div class="relative w-80 h-96 bg-black rounded-lg overflow-hidden shadow-[0_0_40px_rgba(236,72,153,0.3)] border border-pink-500/30">
                 <img id="prom-img" class="w-full h-full object-cover opacity-60 transition duration-1000" src="">
@@ -588,8 +681,8 @@
             <button id="prom-btn" onclick="nextProm()" class="soul-btn mt-4">Next Promise</button>
         </div>
 
-        <!-- Chap 23: Waiting Room -->
-        <div id="chap-23" class="chapter-container">
+        <!-- Chap 26: Waiting Room (Renumbered from 23) -->
+        <div id="chap-26" class="chapter-container">
             <div class="season-bg"></div>
             <h2 class="romantic-heading text-3xl mb-8">I Will Wait</h2>
             <div class="text-6xl animate-bounce">🪑 🧍‍♂️</div>
@@ -597,8 +690,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">My Faith</button>
         </div>
 
-        <!-- Chap 24: Eternal Souls -->
-        <div id="chap-24" class="chapter-container">
+        <!-- Chap 27: Eternal Souls (Renumbered from 24) -->
+        <div id="chap-27" class="chapter-container">
             <div class="glass-card max-w-md border-blue-500/30">
                 <div class="text-4xl text-blue-400 mb-4">🕉️</div>
                 <p class="font-serif italic text-xl text-white leading-loose">"The soul is neither born, nor does it die. It is eternal.<br>Just like the soul, my love for you has no beginning and no end."</p>
@@ -607,8 +700,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Surprise</button>
         </div>
 
-        <!-- Chap 25: Surprise Box -->
-        <div id="chap-25" class="chapter-container">
+        <!-- Chap 28: Surprise Box (Renumbered from 25) -->
+        <div id="chap-28" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-6">A Little Surprise</h2>
             <div id="surprise-box" class="w-48 h-48 bg-pink-900/30 border border-pink-500/50 rounded-lg flex items-center justify-center cursor-pointer animate-bounce pointer-events-auto shadow-[0_0_30px_#ec4899]" onclick="openSurprise()">
                 <span class="text-6xl">🎁</span>
@@ -620,8 +713,8 @@
             </div>
         </div>
 
-        <!-- Chap 26: Safe House -->
-        <div id="chap-26" class="chapter-container">
+        <!-- Chap 29: Safe House (Renumbered from 26) -->
+        <div id="chap-29" class="chapter-container">
             <div class="rain-window"></div>
             <h2 class="romantic-heading text-3xl mb-6">Your Safe House</h2>
             <div class="glass-card max-w-sm p-6 bg-orange-900/20 border-orange-500/30">
@@ -635,8 +728,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Last Question</button>
         </div>
 
-        <!-- Chap 27: Love Question -->
-        <div id="chap-27" class="chapter-container">
+        <!-- Chap 30: Love Question (Renumbered from 27) -->
+        <div id="chap-30" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">One Last Question...</h2>
             <h1 class="text-5xl md:text-7xl font-serif text-pink-400 mb-12 italic">Do you love me?</h1>
             <div class="flex gap-8 relative h-20 w-full justify-center">
@@ -646,8 +739,8 @@
             <p id="plea-msg" class="text-pink-400 font-mono mt-8 opacity-0 text-lg transition-opacity duration-300">Please click Yes 🥺</p>
         </div>
 
-        <!-- Chap 28: Virtual Diya -->
-        <div id="chap-28" class="chapter-container">
+        <!-- Chap 31: Virtual Diya (Renumbered from 28) -->
+        <div id="chap-31" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8 text-amber-200">Make a Wish</h2>
             <div class="relative w-64 h-80 flex flex-col items-center">
                 <div class="w-full h-64 rounded-t-lg overflow-hidden shadow-[0_0_30px_#fbbf24]">
@@ -659,8 +752,8 @@
             <button id="diya-btn" onclick="nextChapter()" class="soul-btn mt-6 opacity-0 pointer-events-none border-amber-500 text-amber-200">Amen</button>
         </div>
 
-        <!-- Chap 29: Time Capsule -->
-        <div id="chap-29" class="chapter-container">
+        <!-- Chap 32: Time Capsule (Renumbered from 29) -->
+        <div id="chap-32" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Time Capsule</h2>
             <div class="glass-card max-w-md w-full relative z-10">
                 <p class="text-xs text-pink-300 uppercase tracking-widest mb-4">Write a message for us in 2030</p>
@@ -680,8 +773,8 @@
             <button id="capsule-next" onclick="nextChapter()" class="soul-btn mt-8 opacity-0 pointer-events-none">Continue</button>
         </div>
 
-        <!-- Chap 30: Foggy Mirror -->
-        <div id="chap-30" class="chapter-container">
+        <!-- Chap 33: Foggy Mirror (Renumbered from 30) -->
+        <div id="chap-33" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">Wipe the Mirror</h2>
             <p class="text-gray-400 text-xs mb-6 uppercase tracking-widest">The glass is foggy. Clear it to see the truth.</p>
             <div class="relative w-[300px] h-[400px] border-4 border-gray-800 rounded-lg shadow-[0_0_50px_rgba(255,255,255,0.1)] overflow-hidden cursor-crosshair touch-none">
@@ -696,8 +789,8 @@
             <button id="mirror-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">See Clearly</button>
         </div>
 
-        <!-- NEW CHAP 31: BUCKET LIST (Renumbered) -->
-        <div id="chap-31" class="chapter-container">
+        <!-- Chap 34: Bucket List (Renumbered from 31) -->
+        <div id="chap-34" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Our Bucket List</h2>
             <div class="grid grid-cols-1 gap-4 text-left w-72">
                 <label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5">
@@ -716,8 +809,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Let's Do Them All</button>
         </div>
 
-        <!-- NEW CHAP 32: BIOMETRIC SOUL MATCH (Renumbered) -->
-        <div id="chap-32" class="chapter-container">
+        <!-- Chap 35: Biometric (Renumbered from 32) -->
+        <div id="chap-35" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Identity Verification</h2>
             <div class="relative w-64 h-80 flex flex-col items-center justify-center">
                 <div class="w-48 h-64 border-2 border-pink-500/50 rounded-2xl relative overflow-hidden bg-black/50 shadow-[0_0_30px_rgba(236,72,153,0.2)]">
@@ -731,8 +824,8 @@
             <button id="match-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">Match Confirmed</button>
         </div>
 
-        <!-- NEW CHAP 33: VOCAL PIANO (Renumbered) -->
-        <div id="chap-33" class="chapter-container">
+        <!-- Chap 36: Vocal Piano (Renumbered from 33) -->
+        <div id="chap-36" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Play My Voice</h2>
             <div class="flex gap-4 flex-wrap justify-center max-w-sm">
                 <button onclick="playNote(1)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">I</button>
@@ -744,8 +837,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Continue</button>
         </div>
 
-        <!-- NEW CHAP 34: BREAK GLASS (Renumbered) -->
-        <div id="chap-34" class="chapter-container">
+        <!-- Chap 37: Break Glass (Renumbered from 34) -->
+        <div id="chap-37" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">In Case of Sadness</h2>
             <div id="glass-case" class="relative w-full max-w-sm aspect-video border-8 border-gray-800 bg-gray-900 shadow-2xl cursor-pointer" onclick="breakGlass()">
                 <div class="absolute inset-0 flex items-center justify-center z-20 bg-white/10 backdrop-blur-[2px]">
@@ -764,8 +857,8 @@
             <button id="break-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">I Am Here</button>
         </div>
 
-        <!-- NEW CHAP 35: REVERSE TIMELINE (Renumbered) -->
-        <div id="chap-35" class="chapter-container">
+        <!-- Chap 38: Reverse Timeline (Renumbered from 35) -->
+        <div id="chap-38" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-2">Grow Old With Me</h2>
             <div class="relative w-72 h-96 rounded-lg overflow-hidden border-2 border-white/20 mt-4">
                 <img src="New folder (3)/photo1.jpeg" onerror="this.src='https://placehold.co/300x400/gray/white?text=Young+Us'" class="absolute inset-0 w-full h-full object-cover" alt="Young Us">
@@ -779,8 +872,8 @@
             <button onclick="nextChapter()" class="soul-btn mt-6">Celebrate</button>
         </div>
 
-        <!-- Chap 36: Cake (Renumbered) -->
-        <div id="chap-36" class="chapter-container">
+        <!-- Chap 39: Cake (Renumbered from 36) -->
+        <div id="chap-39" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-10">Happy Birthday!</h2>
             <p id="cake-msg" class="text-pink-300 text-sm mb-8 opacity-0 transition-opacity font-mono tracking-widest">Make a wish & blow the candles 🕯️</p>
             <div class="flex flex-col items-center cursor-pointer group">
@@ -794,8 +887,30 @@
             </div>
         </div>
 
-        <!-- Chap 37: Finale (Renumbered) -->
-        <div id="chap-37" class="chapter-container">
+        <!-- Chap 40: Physics Teacher Shyari (Renumbered from 37) -->
+        <div id="chap-40" class="chapter-container">
+            <h2 class="romantic-heading text-3xl mb-6">A Theory on Love</h2>
+            <div class="glass-card p-4 border-green-500/30 bg-gray-900/60 shadow-[0_0_30px_rgba(16,185,129,0.2)] relative">
+                <div class="absolute -top-4 -left-4 text-4xl animate-bounce">🍎</div>
+                <div class="absolute -bottom-4 -right-4 text-4xl animate-pulse">⚛️</div>
+                <div class="cinema-container" style="border-color: #10b981; box-shadow: 0 0 20px rgba(16,185,129,0.2);">
+                    <video id="phy-vid" controls playsinline class="w-full h-full object-cover">
+                        <source src="New folder (3)/physics_shyri.mp4" type="video/mp4">
+                        Your browser does not support video.
+                    </video>
+                </div>
+                <p class="text-green-200 font-mono text-xs mt-6 tracking-widest uppercase">
+                    >> Source: Physics Teacher<br>
+                    >> Conclusion: Gravity fails before you.
+                </p>
+            </div>
+            <button onclick="stopPhyVideo()" class="soul-btn mt-8 border-green-500 text-green-100 hover:bg-green-900/30">
+                Hypothesis Proven ✅
+            </button>
+        </div>
+
+        <!-- Chap 41: Finale (Renumbered from 38) -->
+        <div id="chap-41" class="chapter-container">
             <div class="photo-frame p-2 bg-white transform rotate-2" style="width: 350px;">
                 <img src="New folder (3)/promise5.jpg" onerror="this.src='https://placehold.co/400x500/pink/white?text=I+Love+You'" class="w-full rounded mb-0" style="height: 350px;">
             </div>
@@ -820,7 +935,7 @@
 
         // --- GLOBAL VARIABLES ---
         let currentChap = 1;
-        const totalChap = 37; // Updated Total after removing chapters
+        const totalChap = 41; // Updated for new chapters
         const bgMusic = document.getElementById('bg-music');
         const fluteMusic = document.getElementById('flute-music');
         const crowdAudio = document.getElementById('crowd-audio');
@@ -831,13 +946,44 @@
         let isFluteMode = false;
         let lastMouseTime = 0;
 
-        // --- PEACOCK MOUSE TRAIL (THROTTLED) ---
+        // --- AUDIO MANAGER HELPERS ---
+        function pauseBackgroundMusic() {
+            bgMusic.pause();
+            fluteMusic.pause();
+        }
+
+        function resumeBackgroundMusic() {
+            // Only resume if we are past the prank stage
+            if (document.getElementById('main-stage').classList.contains('visible')) {
+                if (isFluteMode) {
+                    fluteMusic.play().catch(e => console.log("Audio waiting for interact"));
+                } else {
+                    bgMusic.play().catch(e => console.log("Audio waiting for interact"));
+                }
+            }
+        }
+
+        // Apply logic to all videos automatically
+        function attachMediaListeners() {
+            const videoIds = ['mem-vid', 'comfort-video', 'phy-vid', 'final-love-video'];
+            
+            videoIds.forEach(id => {
+                const vid = document.getElementById(id);
+                if(vid) {
+                    vid.addEventListener('play', pauseBackgroundMusic);
+                    vid.addEventListener('pause', resumeBackgroundMusic);
+                    vid.addEventListener('ended', resumeBackgroundMusic);
+                }
+            });
+        }
+
+        // --- PEACOCK MOUSE TRAIL ---
         document.addEventListener('mousemove', function(e) { createPeacockTrail(e.clientX, e.clientY); });
         document.addEventListener('touchmove', function(e) { createPeacockTrail(e.touches[0].clientX, e.touches[0].clientY); });
         
         function createPeacockTrail(x, y) {
             const now = Date.now();
-            if (now - lastMouseTime < 50) return; // Throttle to improve performance
+            if (now - lastMouseTime < 50) return; 
             lastMouseTime = now;
             
             const p = document.createElement('div');
@@ -846,15 +992,20 @@
             gsap.to(p, { y: y + 20, opacity: 0, scale: 0, duration: 0.8, onComplete: () => p.remove() });
         }
 
-        // --- FLUTE LOGIC ---
+        // --- FLUTE TOGGLE ---
         function toggleFluteMode() {
             const btn = document.getElementById('flute-btn');
+            // Stop currently playing voice if any
+            if(currentVoice) { currentVoice.pause(); currentVoice = null; }
+
             if (!isFluteMode) {
-                bgMusic.pause(); fluteMusic.play().catch(e => console.log("Audio waiting for interact"));
+                bgMusic.pause(); 
+                fluteMusic.play().catch(e => console.log("Audio waiting"));
                 btn.classList.add('active');
                 gsap.to("#romance-bg", {background: "linear-gradient(-45deg, #0c4a6e, #0f172a, #000, #1e3a8a)", duration: 2});
             } else {
-                fluteMusic.pause(); bgMusic.play().catch(e => console.log("Audio waiting for interact"));
+                fluteMusic.pause(); 
+                bgMusic.play().catch(e => console.log("Audio waiting"));
                 btn.classList.remove('active');
                 gsap.to("#romance-bg", {background: "linear-gradient(-45deg, #2e021d, #1a0b2e, #000000, #2f1025)", duration: 2});
             }
@@ -867,22 +1018,16 @@
                 document.getElementById("loader").style.display = "none";
                 document.getElementById("prank-stage").classList.remove("hidden-section");
                 document.getElementById("prank-stage").classList.add("flex-section");
-                try { initParticles(); } catch(e) { console.log("WebGL not supported, skipping particles"); }
+                try { initParticles(); } catch(e) { console.log("WebGL error"); }
                 
-                const memVid = document.getElementById('mem-vid');
-                if(memVid) {
-                    memVid.onplay = () => { bgMusic.pause(); fluteMusic.pause(); };
-                    memVid.onpause = () => { if(isFluteMode) fluteMusic.play(); else bgMusic.play(); };
-                    memVid.onended = () => { if(isFluteMode) fluteMusic.play(); else bgMusic.play(); };
-                }
+                // Initialize Audio Handlers
+                attachMediaListeners();
             }});
         };
 
-        // --- PRANK & ROMANCE NAVIGATION ---
+        // --- PRANK & NAVIGATION ---
         function forceTyping(el) { 
-            // Unlock audio on first interaction
             if(bgMusic.paused && !isFluteMode) {
-                // We don't play yet, but we wake up the audio context
                 bgMusic.muted = true; 
                 bgMusic.play().then(() => { bgMusic.pause(); bgMusic.muted = false; }).catch(e=>console.log(e));
             }
@@ -891,11 +1036,9 @@
         }
         
         function nextPrank(n) {
-            // Ensure audio is unlocked on button click if input interaction was missed
             if(n===2 && bgMusic.paused) {
                  bgMusic.muted = true; bgMusic.play().then(() => { bgMusic.pause(); bgMusic.muted = false; }).catch(e=>console.log(e));
             }
-            
             const prev = document.getElementById(`prank-${n-1}`);
             const next = document.getElementById(`prank-${n}`);
             if(prev) { prev.classList.remove("flex-section"); prev.classList.add("hidden-section"); }
@@ -915,9 +1058,8 @@
             prank.style.pointerEvents = "none";
             document.getElementById('flute-btn').style.display = 'flex';
             
-            // Actually play music now
             bgMusic.volume = 0.5; 
-            bgMusic.play().catch(e=>console.log("Audio blocked - click anywhere"));
+            bgMusic.play().catch(e=>console.log("Audio blocked"));
             
             gsap.to("#tech-bg", {opacity: 0, duration: 2});
             gsap.to("#romance-bg", {opacity: 1, duration: 2});
@@ -932,10 +1074,6 @@
             const activeBtn = document.querySelector('.chapter-active .soul-btn');
             if(activeBtn) gsap.to(activeBtn, {scale: 0.95, duration: 0.1, yoyo: true, repeat: 1});
             
-            // Resume music if it was paused by video
-            if (bgMusic.paused && !isFluteMode && currentChap > 1) bgMusic.play().catch(e=>{});
-            if (fluteMusic.paused && isFluteMode && currentChap > 1) fluteMusic.play().catch(e=>{});
-
             const curr = document.getElementById(`chap-${currentChap}`);
             const next = document.getElementById(`chap-${currentChap+1}`);
             
@@ -963,15 +1101,110 @@
             if(id === 3) initQuiz();
             if(id === 5) initTimer();
             if(id === 8) initHand();
-            if(id === 15) initFunny();
-            if(id === 18) initPuzzle();
-            if(id === 22) loadProm(0);
-            if(id === 30) initFog();
-            // ID 31 is now Bucket List (no specific init needed, just event listeners)
-            // ID 32 is now Biometric
-            if(id === 36) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); } // Cake was 38
-            if(id === 37) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } // Finale was 39
+            if(id === 13) initVideoCall(); // NEW
+            if(id === 16) initFunny();
+            if(id === 17) initTease(); // NEW
+            if(id === 20) initPuzzle();
+            if(id === 24) initVrindavan(); // NEW
+            if(id === 25) loadProm(0);
+            if(id === 33) initFog();
+            if(id === 39) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); } 
+            if(id === 41) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); }
         }
+
+        // --- NEW FEATURES LOGIC ---
+        function initVideoCall() {
+            // No specific init logic needed other than button interactions handled inline
+        }
+
+        function moveEndButton(btn) {
+            const x = (Math.random() - 0.5) * 200;
+            const y = (Math.random() - 0.5) * 200;
+            gsap.to(btn, {x: x, y: y, duration: 0.2});
+        }
+
+        function clickEndButton() {
+            // If they manage to click it (mobile mainly)
+            const btn = document.getElementById('end-call-btn');
+            gsap.to(btn, {scale: 0, opacity: 0, duration: 0.2});
+            // Show error
+            document.getElementById('call-error').style.display = 'flex';
+            // Play comfort voice note
+            playVoice('songs1/comfort_voice.mp3', null); // Ensure you name your file this or change it
+        }
+
+        let pokeCount = 0;
+        function pokeHer() {
+            pokeCount++;
+            const card = document.getElementById('tease-card');
+            const img = document.getElementById('tease-img');
+            const txt = document.getElementById('poke-text');
+            const msg = document.getElementById('tease-msg');
+            
+            // Shake effect
+            gsap.fromTo(card, {x: -10}, {x: 10, duration: 0.1, yoyo: true, repeat: 3});
+            
+            if(pokeCount < 6) {
+                // Irritation phase
+                if(navigator.vibrate) navigator.vibrate(50);
+                txt.innerText = ["Stop!", "Go away!", "I'm blocking u!", "Ughhh!", "Last warning!"][pokeCount-1] || "Don't!";
+                card.style.borderColor = `rgb(${255}, ${255 - (pokeCount*40)}, ${255 - (pokeCount*40)})`; // Redder
+            } else {
+                // Love phase
+                img.src = "New folder (3)/photo1.jpeg"; // Your favorite smiling photo
+                card.style.borderColor = "#ec4899"; // Pink
+                card.style.boxShadow = "0 0 40px #ec4899";
+                txt.style.display = "none";
+                msg.innerText = "But your smile is my favorite thing in the world.";
+                confetti({particleCount: 50, spread: 60, colors: ['#ec4899']});
+                gsap.to("#tease-btn", {opacity: 1, pointerEvents: "auto"});
+            }
+        }
+
+        function initVrindavan() {
+            let placed = 0;
+            
+            // Setup Draggables
+            Draggable.create("#garland-yellow", {
+                type: "x,y",
+                onDragEnd: function() {
+                    if (this.hitTest("#target-bride", "50%")) {
+                        gsap.to(this.target, {x: 0, y: 0, opacity: 0, duration: 0.5}); // Garland worn (disappear logic for simple UI)
+                        // Or animate it onto the neck if you had specific CSS for it. For now, simple consume logic.
+                        placed++;
+                        checkWedding();
+                    } else {
+                        gsap.to(this.target, {x: 0, y: 0, duration: 0.5}); // Return
+                    }
+                }
+            });
+
+            Draggable.create("#garland-red", {
+                type: "x,y",
+                onDragEnd: function() {
+                    if (this.hitTest("#target-groom", "50%")) {
+                        gsap.to(this.target, {x: 0, y: 0, opacity: 0, duration: 0.5});
+                        placed++;
+                        checkWedding();
+                    } else {
+                        gsap.to(this.target, {x: 0, y: 0, duration: 0.5});
+                    }
+                }
+            });
+
+            function checkWedding() {
+                if(placed >= 2) {
+                    confetti({particleCount: 200, spread: 100, colors: ['#facc15', '#ef4444', '#ffffff']});
+                    gsap.to("#wedding-msg", {opacity: 1, delay: 0.5});
+                    gsap.to("#wedding-btn", {opacity: 1, pointerEvents: "auto", delay: 1});
+                    if(!isFluteMode) {
+                        // Optional: play flute sound specifically here if desired
+                        // fluteMusic.play(); 
+                    }
+                }
+            }
+        }
+
 
         // --- INTERACTION LOGIC ---
         function updatePerspective(val) {
@@ -983,7 +1216,7 @@
             else { txt.innerText = "MESSY"; txt.style.color = "rgba(156, 163, 175, 0.5)"; }
         }
 
-        function startCrowd() { if(crowdAudio) crowdAudio.play().catch(e=>console.log("Audio waiting")); }
+        function startCrowd() { if(crowdAudio) crowdAudio.play().catch(e=>{}); }
         function stopCrowd() { if(crowdAudio) crowdAudio.pause(); }
         function foundHer() {
             stopCrowd();
@@ -1016,7 +1249,6 @@
         function initHand() {
             setTimeout(() => { Draggable.create("#her-hand", { type:"x,y", bounds:"#drag-zone", onDragEnd: function() {
                 const h1 = document.getElementById('my-hand').getBoundingClientRect(); const h2 = this.target.getBoundingClientRect();
-                // Improved collision detection
                 if(Math.hypot(h1.x - h2.x, h1.y - h2.y) < 100) { 
                     confetti({particleCount: 30, spread: 50}); 
                     gsap.to("#her-hand", {x:0, y:0, duration:0.5}); 
@@ -1024,19 +1256,58 @@
                 }
             }});}, 100);
         }
+
+        // --- REWRITTEN VOICE PLAYER ---
         function playVoice(src, el) { 
-            if(currentVoice) { currentVoice.pause(); currentVoice.currentTime = 0; document.querySelectorAll('.photo-frame').forEach(p => p.classList.remove('playing')); }
-            if(!isFluteMode) bgMusic.pause(); else fluteMusic.pause();
-            currentVoice = new Audio(src); currentVoice.play().catch(e => console.log("Audio missing"));
-            if(el) { el.classList.add('playing'); gsap.to(el, {scale: 1.05, duration: 0.2, yoyo: true, repeat: 1}); }
-            currentVoice.onended = () => { if(el) el.classList.remove('playing'); if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); };
+            // 1. Pause background music
+            pauseBackgroundMusic();
+
+            // 2. Stop any existing voice to prevent overlap
+            if(currentVoice) {
+                currentVoice.pause();
+                currentVoice = null;
+                document.querySelectorAll('.photo-frame').forEach(p => p.classList.remove('playing'));
+            }
+
+            // 3. Create and play new voice
+            currentVoice = new Audio(src); 
+            currentVoice.play().catch(e => console.log("Audio missing"));
+            
+            // Visual effects
+            if(el) { 
+                el.classList.add('playing'); 
+                gsap.to(el, {scale: 1.05, duration: 0.2, yoyo: true, repeat: 1}); 
+            }
+
+            // 4. Resume background music when voice ends
+            currentVoice.onended = () => { 
+                if(el) el.classList.remove('playing'); 
+                currentVoice = null;
+                resumeBackgroundMusic();
+            };
         }
-        function stopVideo() { const v = document.getElementById('mem-vid'); v.pause(); if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); nextChapter(); }
+
+        function stopVideo() { 
+            const v = document.getElementById('mem-vid'); 
+            if(v) v.pause(); 
+            // Logic handled by event listeners now, but extra safety:
+            resumeBackgroundMusic();
+            nextChapter(); 
+        }
+        
+        function stopPhyVideo() { 
+            const v = document.getElementById('phy-vid'); 
+            if(v) v.pause(); 
+            resumeBackgroundMusic();
+            nextChapter(); 
+        }
+        
         function breakMatki() {
             const m = document.getElementById('matki');
             gsap.to(m, {scale:0, opacity:0, duration:0.3, onComplete:()=>{ m.style.display="none"; document.getElementById('matki-secret').classList.remove('hidden'); document.getElementById('matki-secret').classList.add('flex'); confetti({particleCount:100, spread:70}); gsap.to("#matki-btn", {opacity:1, pointerEvents:"auto", delay:1}); }});
         }
         function lightDiya(el) { const f = el.querySelector('.diya-flame'); if(f.style.opacity != 1) { f.style.opacity = 1; gsap.to("#diya-msg", {opacity:1, delay:0.5}); gsap.to("#diya-btn", {opacity:1, pointerEvents:"auto", delay:1.5}); } }
+        
         let qIdx = 0; const qData = [{q:"What color was I wearing when we first met?", a:["Blue Shirt", "Black Hoodie"], c:1}, {q:"What is my favorite food?", a:["Biryani/Pizza", "You ;)"], c:1}];
         function initQuiz() { loadQ(); }
         function loadQ() { if(qIdx >= qData.length) { nextChapter(); return; } const q = qData[qIdx]; document.getElementById('quiz-q').innerText = q.q; const div = document.getElementById('quiz-options'); div.innerHTML = ""; q.a.forEach((opt, i) => { let b = document.createElement("button"); b.className = "soul-btn w-full mt-0"; b.innerText = opt; b.onclick = () => { if(i===q.c) { b.style.background = "#059669"; b.innerText += " ✅"; setTimeout(()=>{qIdx++; loadQ()}, 800); } else { b.style.background = "#b91c1c"; gsap.to(b, {x:10, duration:0.1, yoyo:true, repeat:3}); } }; div.appendChild(b); }); }
@@ -1044,19 +1315,38 @@
         function initFunny() { const d = document.getElementById('funny-grid'); d.innerHTML = ""; for(let i=1; i<=4; i++) { let div = document.createElement('div'); div.className = "overflow-hidden rounded-lg shadow-lg h-32 cursor-pointer"; div.innerHTML = `<img src="New folder (3)/funny${i}.jpg" onerror="this.src='https://placehold.co/150x150/pink/white?text=Funny+${i}'" class="w-full h-full object-cover transform hover:scale-110 transition duration-500">`; d.appendChild(div); } }
         function initPuzzle() { const c = document.getElementById('puzzle-container'); c.innerHTML = ""; let count = 0; for(let i=0; i<9; i++) { let p = document.createElement('div'); Object.assign(p.style, { position:'absolute', width:'100px', height:'100px', backgroundImage:`url('New folder (3)/mylove1.jpg')`, backgroundSize:"300px 300px", backgroundPosition:`${-(i%3)*100}px ${-Math.floor(i/3)*100}px`, left:(i%3)*100+'px', top:Math.floor(i/3)*100+'px', cursor:'pointer', border:'1px solid rgba(255,255,255,0.5)' }); gsap.fromTo(p, {x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, opacity:0, rotation:Math.random()*360}, {opacity:1, duration:1, delay: i*0.1}); p.onclick = function() { gsap.to(this, {x:0, y:0, rotation:0, zIndex:1, border:"none", duration:0.5}); this.style.pointerEvents = 'none'; count++; if(count>=5) gsap.to("#puz-btn", {opacity:1, pointerEvents:"auto"}); }; c.appendChild(p); } }
         function openLetter() { gsap.to('#letter-closed', {opacity:0, scale:0.8, duration:0.5, display:'none'}); document.getElementById('letter-open').classList.remove('hidden'); gsap.from('#letter-open', {opacity:0, y:20, duration:0.8, delay:0.4}); }
+        
         const promises = [ { text: "I promise to stay.", sub: "Through storms and silence.", img: "New folder (3)/promise1.jpg" }, { text: "I promise to listen.", sub: "Even to what you don't say.", img: "New folder (3)/promise2.jpg" }, { text: "I promise to love you daily.", sub: "Not just on good days.", img: "New folder (3)/promise3.jpg" }, { text: "I promise to be your home.", sub: "Your safe place.", img: "New folder (3)/promise4.jpg" }, { text: "I promise to be patient.", sub: "When things get tough.", img: "New folder (3)/promise5.jpg" }, { text: "I promise to support your dreams.", sub: "Your wins are my wins.", img: "New folder (3)/promise6.jpg" }, { text: "I promise to be honest.", sub: "Always.", img: "New folder (3)/promise7.jpg" }, { text: "I promise to protect your heart.", sub: "Like it's my own.", img: "New folder (3)/promise8.jpg" }, { text: "I promise to adventure with you.", sub: "Life is a journey.", img: "New folder (3)/promise9.jpg" }, { text: "I promise to grow with you.", sub: "Side by side.", img: "New folder (3)/promise10.jpg" }, { text: "I promise to respect you.", sub: "In every way.", img: "New folder (3)/promise11.jpg" }, { text: "I promise to comfort you.", sub: "When tears fall.", img: "New folder (3)/promise12.jpg" }, { text: "I promise to make you laugh.", sub: "Every single day.", img: "New folder (3)/promise13.jpg" }, { text: "I promise to be loyal.", sub: "You are my only one.", img: "New folder (3)/promise14.jpg" }, { text: "I promise to be your best friend.", sub: "Forever.", img: "New folder (3)/promise15.jpg" }, { text: "I promise to forgive.", sub: "We are only human.", img: "New folder (3)/promise16.jpg" }, { text: "I promise to prioritize you.", sub: "You come first.", img: "New folder (3)/promise17.jpg" }, { text: "I promise to love you forever.", sub: "To infinity.", img: "New folder (3)/promise18.jpg" } ];
         let pIdx = 0;
         function loadProm(i) { const txt = document.getElementById('prom-txt'), sub = document.getElementById('prom-sub'), img = document.getElementById('prom-img'); document.getElementById('prom-counter').innerText = `${i + 1} / ${promises.length}`; gsap.to([txt, sub], {opacity:0, y:10, duration:0.3, onComplete:()=>{ txt.innerText = promises[i].text; sub.innerText = promises[i].sub; gsap.to([txt, sub], {opacity:1, y:0, duration:0.5}); }}); gsap.to(img, {opacity:0, duration:0.3, onComplete:()=>{ img.src = promises[i].img; img.onerror = function() { this.src=`https://placehold.co/300x400/black/white?text=Promise`; }; gsap.to(img, {opacity:0.6, duration:0.5}); }}); }
         function nextProm() { if (pIdx < promises.length - 1) { pIdx++; loadProm(pIdx); if(pIdx===promises.length-1) document.getElementById("prom-btn").innerText = "Finish Vows"; } else { nextChapter(); } }
+        
         function openSurprise() { gsap.to("#surprise-box", {scale:1.5, opacity:0, duration:0.5, onComplete:()=>{ document.getElementById("surprise-box").style.display="none"; const c = document.getElementById("surprise-content"); c.classList.remove("hidden"); c.classList.add("flex"); gsap.fromTo(c, {scale:0.5, opacity:0}, {scale:1, opacity:1, duration:1, ease:"elastic.out"}); confetti({particleCount:50, spread:70}); }}); }
         function moveLoveNoBtn(btn) { document.getElementById("plea-msg").style.opacity = 1; gsap.to(btn, { x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*100, duration: 0.2 }); }
-        function handleLoveYes() { if(!isFluteMode) bgMusic.pause(); else fluteMusic.pause(); const ol = document.getElementById("love-video-overlay"); ol.style.display = "flex"; gsap.to(ol, {opacity:1, duration:1}); const v = document.getElementById("final-love-video"); v.play().catch(e=>console.log("Video fail")); v.onended = () => { if(!isFluteMode) bgMusic.play(); else fluteMusic.play(); }; }
-        function closeLoveVideo() { const ol = document.getElementById("love-video-overlay"); document.getElementById("final-love-video").pause(); gsap.to(ol, {opacity:0, duration:1, onComplete:()=>{ ol.style.display="none"; if(!isFluteMode) bgMusic.play(); nextChapter(); }}); }
+        
+        function handleLoveYes() { 
+            pauseBackgroundMusic(); 
+            const ol = document.getElementById("love-video-overlay"); 
+            ol.style.display = "flex"; 
+            gsap.to(ol, {opacity:1, duration:1}); 
+            const v = document.getElementById("final-love-video"); 
+            v.play().catch(e=>console.log("Video fail")); 
+        }
+        
+        function closeLoveVideo() { 
+            const ol = document.getElementById("love-video-overlay"); 
+            document.getElementById("final-love-video").pause(); 
+            gsap.to(ol, {opacity:0, duration:1, onComplete:()=>{ 
+                ol.style.display="none"; 
+                resumeBackgroundMusic();
+                nextChapter(); 
+            }}); 
+        }
+
         let candles = 0;
         function blow(el) { const flame = el.querySelector('.flame'); if(!flame.classList.contains('out')) { flame.classList.add('out'); candles++; if(navigator.vibrate) navigator.vibrate(50); } }
         function cutCake() { if(candles >= 3) { document.getElementById('cake-msg').style.opacity = 0; confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899'] }); setTimeout(nextChapter, 1500); } else { const msg = document.getElementById('cake-msg'); msg.innerText = "Blow the candles first! 🌬️"; gsap.fromTo(msg, {x:-5}, {x:5, duration:0.1, repeat:3, yoyo:true}); } }
         
-        // --- NEW FUNCTIONS FOR ADDED CHAPTERS ---
         function sendCapsule() {
             const input = document.getElementById('capsule-input');
             const btn = document.getElementById('capsule-btn');
@@ -1071,6 +1361,7 @@
             gsap.to("#capsule-next", {opacity: 1, pointerEvents: "auto", delay: 1});
             confetti({particleCount: 30, colors: ['#0f0']});
         }
+
         function initFog() {
             const canvas = document.getElementById('fog-canvas'); const ctx = canvas.getContext('2d'); const width = canvas.width; const height = canvas.height;
             ctx.fillStyle = "rgba(200, 200, 200, 0.9)"; ctx.fillRect(0, 0, width, height);
@@ -1084,20 +1375,34 @@
             canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } });
             function checkClear() { const imgData = ctx.getImageData(0,0, width, height); let transparent = 0; for(let i=3; i<imgData.data.length; i+=4) if(imgData.data[i] === 0) transparent++; if(transparent > (width*height)*0.6) { gsap.to(canvas, {opacity:0, duration:1, pointerEvents:'none'}); gsap.to("#mirror-btn", {opacity:1, pointerEvents:"auto"}); confetti({particleCount: 30, spread: 40}); } }
         }
+
         function checkBucket(el) {
             if(el.checked) { gsap.to(el.nextElementSibling, {color: "#ec4899", textShadow: "0 0 10px #ec4899", scale: 1.05, duration: 0.2}); confetti({particleCount: 10, spread: 30, origin: {y: 0.5}}); } else { gsap.to(el.nextElementSibling, {color: "#d1d5db", textShadow: "none", scale: 1}); }
         }
+
         let scanTimer;
         function startScan() { document.getElementById('scan-line').style.background = '#ec4899'; document.getElementById('scan-msg').innerText = "SCANNING..."; document.getElementById('scan-msg').style.color = "#ec4899"; scanTimer = setTimeout(() => { gsap.to("#print-2", {opacity: 0.5, duration: 2}); gsap.to("#print-1", {x: -10, rotation: -15, color: "#ec4899", duration: 2}); gsap.to("#print-2", {x: 10, rotation: 15, color: "#ec4899", opacity: 0.5, duration: 2}); setTimeout(() => { document.getElementById('scan-msg').innerText = "100% SOULMATE MATCH FOUND"; document.getElementById('scan-line').style.display = 'none'; confetti({particleCount: 50, colors: ['#ec4899']}); gsap.to("#match-btn", {opacity: 1, pointerEvents: "auto"}); }, 2000); }, 500); }
         function stopScan() { clearTimeout(scanTimer); }
-        function playNote(n) { const a = document.getElementById(`vp-${n}`); a.currentTime = 0; a.play().catch(e=>{}); if(navigator.vibrate) navigator.vibrate(30); }
+        
+        function playNote(n) { 
+            // We do NOT pause background music for short notes as it creates a choppy experience
+            const a = document.getElementById(`vp-${n}`); a.currentTime = 0; a.play().catch(e=>{}); if(navigator.vibrate) navigator.vibrate(30); 
+        }
+        
         function breakGlass() {
             const glass = document.getElementById('glass-case');
-            const vid = document.getElementById('comfort-video-container');
+            const vidContainer = document.getElementById('comfort-video-container');
             const v = document.getElementById('comfort-video');
             if(navigator.vibrate) navigator.vibrate([50,50,50]);
-            gsap.to(glass, {scale:1.1, opacity:0, duration:0.2, onComplete:()=>{ glass.style.display="none"; vid.classList.remove('hidden'); v.play().catch(e=>console.log("Video fail")); gsap.to("#break-btn", {opacity:1, pointerEvents:"auto", delay:2}); }});
+            gsap.to(glass, {scale:1.1, opacity:0, duration:0.2, onComplete:()=>{ 
+                glass.style.display="none"; 
+                vidContainer.classList.remove('hidden'); 
+                // Audio listeners attached in window.onload will handle the pausing/resuming
+                v.play().catch(e=>console.log("Video fail")); 
+                gsap.to("#break-btn", {opacity:1, pointerEvents:"auto", delay:2}); 
+            }});
         }
+
         function updateTimeline(val) { document.getElementById('timeline-year').innerText = val; document.getElementById('old-img').style.opacity = (val - 2024) / 50; }
         
         function initParticles() { const c=document.getElementById('bg-canvas'); const s=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000); const r=new THREE.WebGLRenderer({canvas:c, alpha:true}); r.setSize(window.innerWidth, window.innerHeight); const g=new THREE.BufferGeometry(); const count = 1500; const p=new Float32Array(count*3); for(let i=0;i<count*3;i++) p[i]=(Math.random()-0.5)*15; g.setAttribute('position',new THREE.BufferAttribute(p,3)); const m=new THREE.PointsMaterial({size:0.015, color:0xffffff, transparent:true, opacity:0.8}); const pts = new THREE.Points(g,m); s.add(pts); cam.position.z=5; function a(){ requestAnimationFrame(a); pts.rotation.y += 0.0005; pts.rotation.x += 0.0002; r.render(s,cam); } a(); window.addEventListener('resize', () => { cam.aspect = window.innerWidth / window.innerHeight; cam.updateProjectionMatrix(); r.setSize(window.innerWidth, window.innerHeight); }); }
