@@ -909,8 +909,31 @@
             </button>
         </div>
 
-        <!-- Chap 41: Finale (Renumbered from 38) -->
+        <!-- NEW CHAP 41: NEURAL REPLAY (The 7 Minutes Idea) -->
         <div id="chap-41" class="chapter-container">
+            <div id="neural-terminal" class="font-mono text-green-500 text-sm mb-4">
+                > SYSTEM CRITICAL<br>
+                > OXYGEN: 0%<br>
+                > INITIATING "LAST 7 MINUTES" PROTOCOL...
+            </div>
+            
+            <div class="relative w-80 h-80 bg-black border border-green-500/50 rounded-lg overflow-hidden flex items-center justify-center">
+                <!-- Brain Wave Visual -->
+                <div id="brain-wave" class="absolute inset-0 flex items-center justify-center opacity-30">
+                    <div class="w-full h-1 bg-green-500 shadow-[0_0_20px_#0f0] animate-pulse"></div>
+                </div>
+                
+                <!-- Rapid Fire Images -->
+                <img id="replay-img" src="New folder (3)/photo1.jpeg" class="w-full h-full object-cover opacity-0">
+            </div>
+
+            <p id="replay-text" class="text-white font-serif italic mt-8 text-center max-w-md h-16 transition-all duration-300"></p>
+            
+            <button id="replay-btn" onclick="nextChapter()" class="soul-btn mt-4 opacity-0 pointer-events-none">Wake Up</button>
+        </div>
+
+        <!-- Chap 42: Finale (Renumbered from 41) -->
+        <div id="chap-42" class="chapter-container">
             <div class="photo-frame p-2 bg-white transform rotate-2" style="width: 350px;">
                 <img src="New folder (3)/promise5.jpg" onerror="this.src='https://placehold.co/400x500/pink/white?text=I+Love+You'" class="w-full rounded mb-0" style="height: 350px;">
             </div>
@@ -935,7 +958,7 @@
 
         // --- GLOBAL VARIABLES ---
         let currentChap = 1;
-        const totalChap = 41; // Updated for new chapters
+        const totalChap = 42; // Updated for new chapters
         const bgMusic = document.getElementById('bg-music');
         const fluteMusic = document.getElementById('flute-music');
         const crowdAudio = document.getElementById('crowd-audio');
@@ -1108,8 +1131,9 @@
             if(id === 24) initVrindavan(); // NEW
             if(id === 25) loadProm(0);
             if(id === 33) initFog();
-            if(id === 39) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); } 
-            if(id === 41) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); }
+            if(id === 39) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); }
+            if(id === 41) initNeuralReplay(); // NEW LAST 7 MINS
+            if(id === 42) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); }
         }
 
         // --- NEW FEATURES LOGIC ---
@@ -1205,6 +1229,56 @@
             }
         }
 
+        // --- NEURAL REPLAY LOGIC ---
+        function initNeuralReplay() {
+            const term = document.getElementById('neural-terminal');
+            const img = document.getElementById('replay-img');
+            const txt = document.getElementById('replay-text');
+            const btn = document.getElementById('replay-btn');
+            
+            // Text Typing
+            gsap.fromTo(term, {opacity:0}, {opacity:1, duration:0.5, onComplete: () => {
+                // Start Flash Sequence
+                txt.innerText = "The brain replays its best memories...";
+                gsap.to(txt, {opacity: 1, duration: 1});
+                
+                const photos = [
+                    "New folder (3)/photo1.jpeg", "New folder (3)/mylove1.jpg", 
+                    "New folder (3)/promise1.jpg", "New folder (3)/promise2.jpg",
+                    "New folder (3)/promise3.jpg", "New folder (3)/promise4.jpg"
+                ];
+                
+                let count = 0;
+                let speed = 800;
+                
+                function flash() {
+                    if(speed < 50) speed = 50; // Max speed
+                    
+                    // Change Image
+                    img.src = photos[count % photos.length];
+                    gsap.fromTo(img, {opacity: 0, scale: 1.2}, {opacity: 1, scale: 1, duration: 0.1});
+                    
+                    count++;
+                    speed -= 50; // accelerate
+                    
+                    if(count < 20) {
+                        setTimeout(flash, speed);
+                    } else {
+                        // FINAL STOP
+                        img.src = "New folder (3)/mylove1.jpg"; // The favorite photo
+                        gsap.to(img, {opacity: 1, scale: 1, duration: 2});
+                        term.style.opacity = 0;
+                        txt.style.opacity = 0;
+                        setTimeout(() => {
+                            txt.innerHTML = "<span class='text-pink-400 text-xl'>I spent my last 7 minutes<br>just looking at you.</span>";
+                            gsap.to(txt, {opacity: 1, duration: 2});
+                            gsap.to(btn, {opacity: 1, pointerEvents: "auto", delay: 2});
+                        }, 500);
+                    }
+                }
+                setTimeout(flash, 1000);
+            }});
+        }
 
         // --- INTERACTION LOGIC ---
         function updatePerspective(val) {
