@@ -204,6 +204,46 @@
         /* Biometric & Red String */
         @keyframes scan { 0% {top:0%} 50% {top:100%} 100% {top:0%} }
 
+        /* --- PAINT CANVAS STYLES (NEW) --- */
+        .paint-canvas {
+            width: 300px; height: 400px; background: #fdfdfd;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+            border: 8px solid #333; /* Frame */
+            border-radius: 4px;
+        }
+        .paint-splash {
+            position: absolute; border-radius: 50%;
+            filter: blur(30px); mix-blend-mode: multiply;
+            opacity: 0; transform: scale(0.5);
+            transition: all 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .sketch-overlay {
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            opacity: 0; filter: grayscale(100%) contrast(150%);
+            mix-blend-mode: hard-light;
+            transition: opacity 2s ease;
+        }
+
+        /* --- LAST 7 MINUTES STYLES --- */
+        .ecg-path {
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: ecgDraw 2s linear infinite;
+        }
+        @keyframes ecgDraw {
+            0% { stroke-dashoffset: 500; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .flatline-active {
+            stroke-dasharray: 0 !important;
+            stroke-dashoffset: 0 !important;
+            animation: none !important;
+            stroke: #ef4444 !important; /* Red flatline */
+            filter: drop-shadow(0 0 10px red);
+        }
+
         #love-video-overlay {
             position: fixed; inset: 0; z-index: 500; background: black;
             display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -221,7 +261,7 @@
     <div class="romantic-bg" id="romance-bg"></div>
     <canvas id="bg-canvas" style="position: fixed; top:0; left:0; z-index:1; pointer-events:none;"></canvas>
     
-    <!-- Audio Sources - Error handling added in JS -->
+    <!-- Audio Sources -->
     <audio id="bg-music" loop preload="auto"><source src="songs1/love12.mp3" type="audio/mpeg"></audio>
     <audio id="flute-music" loop preload="auto"><source src="songs1/flute.mp3" type="audio/mpeg"></audio>
     <audio id="crowd-audio" loop preload="auto"><source src="songs1/crowd.mp3" type="audio/mpeg"></audio>
@@ -232,6 +272,10 @@
     <audio id="vp-2"><source src="songs1/vp2.mp3" type="audio/mpeg"></audio>
     <audio id="vp-3"><source src="songs1/vp3.mp3" type="audio/mpeg"></audio>
     <audio id="vp-4"><source src="songs1/vp4.mp3" type="audio/mpeg"></audio>
+
+    <!-- Hospital Audio -->
+    <audio id="monitor-beep-audio" preload="auto"><source src="songs1/monitor_beep.mp3" type="audio/mpeg"></audio>
+    <audio id="flatline-audio" preload="auto"><source src="songs1/flatline.mp3" type="audio/mpeg"></audio>
 
     <!-- Flute Toggle UI -->
     <div id="flute-btn" class="flute-toggle" onclick="toggleFluteMode()">
@@ -314,7 +358,7 @@
             <div id="progress" class="h-full bg-pink-500 w-0 shadow-[0_0_15px_#ec4899] transition-all duration-[1.5s]"></div>
         </div>
 
-        <!-- Chap 1: Reveal -->
+        <!-- Chapters 1-40 -->
         <div id="chap-1" class="chapter-container chapter-active">
             <div class="w-80 h-80 rounded-full border-[3px] border-pink-400 p-2 mb-8 shadow-[0_0_40px_rgba(236,72,153,0.4)]">
                 <img src="New folder (3)/mylove1.jpg" onerror="this.src='https://placehold.co/400x400/pink/white?text=My+Love'" class="w-full h-full object-cover rounded-full filter brightness-110">
@@ -324,7 +368,7 @@
             <button onclick="nextChapter()" class="soul-btn" style="z-index:99999; pointer-events:auto; cursor:pointer;">Enter</button>
         </div>
 
-        <!-- Chap 2: Ghost Text -->
+        <!-- Chap 2 -->
         <div id="chap-2" class="chapter-container">
             <div class="flex flex-col gap-4 w-full max-w-md p-6 font-sans">
                 <p id="g1" class="text-center text-gray-400 text-xs mb-4 opacity-0">May 22, 2024</p>
@@ -335,7 +379,7 @@
             <button id="g-btn" onclick="nextChapter()" class="soul-btn opacity-0 mt-8">Continue</button>
         </div>
 
-        <!-- Chap 3: Quiz -->
+        <!-- Chap 3 -->
         <div id="chap-3" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-8">Do you remember?</h2>
             <div class="glass-card w-full max-w-sm">
@@ -344,7 +388,7 @@
             </div>
         </div>
 
-        <!-- Chap 4: Perspective Shift -->
+        <!-- Chap 4 -->
         <div id="chap-4" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">How We See You</h2>
             <div class="relative w-80 h-96 bg-black rounded-lg overflow-hidden border border-white/20">
@@ -358,7 +402,7 @@
             <button id="persp-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">The Truth</button>
         </div>
 
-        <!-- Chap 5: Timeline -->
+        <!-- Chap 5 -->
         <div id="chap-5" class="chapter-container">
             <h2 class="romantic-heading mb-6">Our Infinity</h2>
             <div class="glass-card p-10 relative overflow-hidden group">
@@ -370,7 +414,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-10">Heal Me</button>
         </div>
 
-        <!-- Chap 6: Heart -->
+        <!-- Chap 6 -->
         <div id="chap-6" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-4">You Healed Me</h2>
             <div class="heart-container cursor-pointer transform hover:scale-110 transition duration-500" onclick="healHeart(this)">
@@ -383,7 +427,7 @@
             <button id="heal-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none">Sync Hearts</button>
         </div>
 
-        <!-- Chap 7: Sync -->
+        <!-- Chap 7 -->
         <div id="chap-7" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Feel My Heartbeat</h2>
             <div class="relative">
@@ -394,7 +438,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-10">Touch</button>
         </div>
 
-        <!-- Chap 8: Hand Drag -->
+        <!-- Chap 8 -->
         <div id="chap-8" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">Hold My Hand</h2>
             <div class="relative w-full h-80 max-w-md bg-white/5 rounded-xl border border-white/10 mt-4 touch-none overflow-hidden" id="drag-zone">
@@ -405,7 +449,7 @@
             <button id="hand-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">View Memories</button>
         </div>
 
-        <!-- Chap 9: Crowded Room -->
+        <!-- Chap 9 -->
         <div id="chap-9" class="chapter-container" onmouseenter="startCrowd()" onmouseleave="stopCrowd()">
             <div class="absolute inset-0 flex items-center justify-center overflow-hidden">
                 <div class="silhouette" style="left:10%; top:40%; animation-delay:0s"></div>
@@ -425,7 +469,7 @@
             <button id="crowd-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Continue</button>
         </div>
 
-        <!-- Chap 10: Photo Voice -->
+        <!-- Chap 10 -->
         <div id="chap-10" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-8">Voices & Memories</h2>
             <div class="flex flex-col md:flex-row gap-8 items-center justify-center">
@@ -441,7 +485,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-12">Secrets</button>
         </div>
 
-        <!-- Chap 11: Secrets -->
+        <!-- Chap 11 -->
         <div id="chap-11" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-10">Little Secrets</h2>
             <div class="grid grid-cols-2 gap-6 w-full max-w-md">
@@ -455,7 +499,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-10">Our Movie</button>
         </div>
 
-        <!-- Chap 12: Video -->
+        <!-- Chap 12 -->
         <div id="chap-12" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Our Moments</h2>
             <div class="cinema-container">
@@ -467,31 +511,23 @@
             <button onclick="stopVideo()" class="soul-btn mt-6">Continue</button>
         </div>
 
-        <!-- NEW CHAP 13: VIDEO CALL (Added Feature) -->
+        <!-- Chap 13 -->
         <div id="chap-13" class="chapter-container">
             <div class="bg-black/90 rounded-2xl border border-gray-700 w-80 h-[500px] relative overflow-hidden shadow-2xl flex flex-col items-center">
-                <!-- Header -->
                 <div class="w-full p-4 flex items-center justify-between bg-black/40 z-20">
                     <span class="text-white text-xs">WhatsApp Video...</span>
                     <span class="text-green-500 text-xs font-mono">ENCRYPTED</span>
                 </div>
-                <!-- Video/Image -->
                 <img src="New folder (3)/promise4.jpg" onerror="this.src='https://placehold.co/300x500/black/white?text=Sunu'" class="absolute inset-0 w-full h-full object-cover opacity-60">
-                
-                <!-- Overlay Elements -->
                 <div class="absolute inset-0 flex flex-col items-center justify-end pb-20 z-10">
                     <h3 class="text-2xl font-bold text-white mb-2">My World 🌎</h3>
                     <p class="text-white/70 font-mono text-sm mb-8 animate-pulse">02:45:12</p>
-                    
                     <div class="flex gap-8 items-center">
                         <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-xl">📷</div>
                         <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-xl">🎤</div>
-                        <!-- The Broken Button -->
                         <div id="end-call-btn" class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center text-3xl cursor-pointer transition-transform duration-100 shadow-[0_0_20px_red]" onmouseover="moveEndButton(this)" onclick="clickEndButton()">📞</div>
                     </div>
                 </div>
-
-                <!-- Error Message Layer -->
                 <div id="call-error" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-6 text-center hidden z-50">
                     <span class="text-red-500 text-6xl mb-4">⚠️</span>
                     <h2 class="text-red-500 font-mono text-xl mb-4">ERROR: CANNOT DISCONNECT</h2>
@@ -501,7 +537,7 @@
             </div>
         </div>
 
-        <!-- Chap 14: Silence (Renumbered from 13) -->
+        <!-- Chap 14 -->
         <div id="chap-14" class="chapter-container" onclick="revealSilence()">
             <h2 class="romantic-heading text-3xl mb-8">When we are silent...</h2>
             <div class="flex flex-col gap-6 text-center max-w-md">
@@ -513,7 +549,7 @@
             <button id="silence-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Next</button>
         </div>
 
-        <!-- Chap 15: Makhan Chor (Renumbered from 14) -->
+        <!-- Chap 15 -->
         <div id="chap-15" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Who is the Thief?</h2>
             <p class="text-white/60 mb-6 text-sm">Krishna stole butter. What did you steal?</p>
@@ -529,14 +565,14 @@
             <button id="matki-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">Guilty as Charged</button>
         </div>
 
-        <!-- Chap 16: Funny (Renumbered from 15) -->
+        <!-- Chap 16 -->
         <div id="chap-16" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Giggle Gallery</h2>
             <div class="grid grid-cols-2 gap-4 w-full max-w-md" id="funny-grid"></div>
             <button onclick="nextChapter()" class="soul-btn mt-8">Next</button>
         </div>
 
-        <!-- NEW CHAP 17: IRRITATION CONVERTER (Added Feature) -->
+        <!-- Chap 17 -->
         <div id="chap-17" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">I Love Your Moods</h2>
             <div class="relative w-64 h-64">
@@ -551,7 +587,7 @@
             <button id="tease-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Love You</button>
         </div>
 
-        <!-- Chap 18: Laugh Check (Renumbered from 16) -->
+        <!-- Chap 18 -->
         <div id="chap-18" class="chapter-container">
             <h1 class="romantic-heading text-4xl mb-12">Did you laugh?</h1>
             <div class="flex gap-8">
@@ -560,7 +596,7 @@
             </div>
         </div>
 
-        <!-- Chap 19: My Radha (Renumbered from 17) -->
+        <!-- Chap 19 -->
         <div id="chap-19" class="chapter-container">
             <div class="glass-card max-w-md relative overflow-hidden">
                 <div class="absolute top-[-50px] left-[-50px] w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-40"></div>
@@ -571,14 +607,14 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Continue</button>
         </div>
 
-        <!-- Chap 20: Puzzle (Renumbered from 18) -->
+        <!-- Chap 20 -->
         <div id="chap-20" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Fix Us</h2>
             <div id="puzzle-container" class="relative w-[300px] h-[300px] border border-white/20 shadow-2xl"></div>
             <button id="puz-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">Perfect Match</button>
         </div>
 
-        <!-- Chap 21: Letter (Renumbered from 19) -->
+        <!-- Chap 21 -->
         <div id="chap-21" class="chapter-container">
             <div id="letter-closed" class="glass-card p-12 cursor-pointer bg-gradient-to-br from-pink-900 to-purple-900 hover:scale-105 transition duration-500" onclick="openLetter()">
                 <div class="text-6xl mb-4">💌</div>
@@ -595,7 +631,7 @@
             </div>
         </div>
 
-        <!-- Chap 22: Brain Log (Renumbered from 20) -->
+        <!-- Chap 22 -->
         <div id="chap-22" class="chapter-container" onclick="playLog()">
             <h2 class="romantic-heading text-3xl mb-6">My Brain Log</h2>
             <ul id="brain-log" class="text-left font-mono text-sm space-y-4 max-w-xs mx-auto">
@@ -609,7 +645,7 @@
             <button id="log-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Always You</button>
         </div>
 
-        <!-- Chap 23: Sudarshan Shield (Renumbered from 21) -->
+        <!-- Chap 23 -->
         <div id="chap-23" class="chapter-container">
             <div class="relative w-80 h-80 flex items-center justify-center">
                 <div class="sudarshan-chakra"></div>
@@ -622,7 +658,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-8 border-blue-400 text-blue-100 hover:bg-blue-900/30">My Promises</button>
         </div>
 
-        <!-- NEW CHAP 24: VRINDAVAN WEDDING (Added Feature) -->
+        <!-- Chap 24 -->
         <div id="chap-24" class="chapter-container">
             <div class="absolute inset-0 bg-black z-[-1]">
                 <img src="New folder (3)/vrindavan_bg.jpg" onerror="this.src='https://placehold.co/800x600/1e1b4b/white?text=Prem+Mandir+Night'" class="w-full h-full object-cover opacity-60">
@@ -633,12 +669,10 @@
             <p class="text-xs text-yellow-100/70 mb-8 uppercase tracking-widest">Drag garlands to exchange vows</p>
 
             <div class="flex justify-between items-center w-full max-w-md px-4 h-64 relative" id="wedding-zone">
-                <!-- Groom Side -->
                 <div class="flex flex-col items-center">
                     <div id="target-groom" class="w-24 h-24 rounded-full border-2 border-yellow-500 overflow-hidden mb-4 shadow-[0_0_20px_orange] bg-black">
                         <img src="New folder (3)/photo1.jpeg" onerror="this.src='https://placehold.co/100x100/333/fff?text=Rudra'" class="w-full h-full object-cover">
                     </div>
-                    <!-- Marigold Garland (Draggable) -->
                     <div id="garland-yellow" class="w-20 h-20 cursor-grab active:cursor-grabbing z-20">
                          <svg viewBox="0 0 100 100" class="w-full h-full filter drop-shadow-lg">
                             <circle cx="50" cy="50" r="40" fill="none" stroke="#facc15" stroke-width="8" stroke-dasharray="5,5"/>
@@ -647,12 +681,10 @@
                     </div>
                 </div>
 
-                <!-- Bride Side -->
                 <div class="flex flex-col items-center">
                     <div id="target-bride" class="w-24 h-24 rounded-full border-2 border-red-500 overflow-hidden mb-4 shadow-[0_0_20px_red] bg-black">
                         <img src="New folder (3)/mylove1.jpg" onerror="this.src='https://placehold.co/100x100/333/fff?text=Nayanika'" class="w-full h-full object-cover">
                     </div>
-                    <!-- Red Rose Garland (Draggable) -->
                     <div id="garland-red" class="w-20 h-20 cursor-grab active:cursor-grabbing z-20">
                         <svg viewBox="0 0 100 100" class="w-full h-full filter drop-shadow-lg">
                             <circle cx="50" cy="50" r="40" fill="none" stroke="#ef4444" stroke-width="8" stroke-dasharray="5,5"/>
@@ -666,7 +698,7 @@
             <button id="wedding-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Jai Shri Krishna</button>
         </div>
 
-        <!-- Chap 25: Promises (Renumbered from 22) -->
+        <!-- Chap 25 -->
         <div id="chap-25" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">My Vows</h2>
             <div class="relative w-80 h-96 bg-black rounded-lg overflow-hidden shadow-[0_0_40px_rgba(236,72,153,0.3)] border border-pink-500/30">
@@ -681,7 +713,7 @@
             <button id="prom-btn" onclick="nextProm()" class="soul-btn mt-4">Next Promise</button>
         </div>
 
-        <!-- Chap 26: Waiting Room (Renumbered from 23) -->
+        <!-- Chap 26 -->
         <div id="chap-26" class="chapter-container">
             <div class="season-bg"></div>
             <h2 class="romantic-heading text-3xl mb-8">I Will Wait</h2>
@@ -690,7 +722,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">My Faith</button>
         </div>
 
-        <!-- Chap 27: Eternal Souls (Renumbered from 24) -->
+        <!-- Chap 27 -->
         <div id="chap-27" class="chapter-container">
             <div class="glass-card max-w-md border-blue-500/30">
                 <div class="text-4xl text-blue-400 mb-4">🕉️</div>
@@ -700,7 +732,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Surprise</button>
         </div>
 
-        <!-- Chap 28: Surprise Box (Renumbered from 25) -->
+        <!-- Chap 28 -->
         <div id="chap-28" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-6">A Little Surprise</h2>
             <div id="surprise-box" class="w-48 h-48 bg-pink-900/30 border border-pink-500/50 rounded-lg flex items-center justify-center cursor-pointer animate-bounce pointer-events-auto shadow-[0_0_30px_#ec4899]" onclick="openSurprise()">
@@ -713,7 +745,7 @@
             </div>
         </div>
 
-        <!-- Chap 29: Safe House (Renumbered from 26) -->
+        <!-- Chap 29 -->
         <div id="chap-29" class="chapter-container">
             <div class="rain-window"></div>
             <h2 class="romantic-heading text-3xl mb-6">Your Safe House</h2>
@@ -728,7 +760,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Last Question</button>
         </div>
 
-        <!-- Chap 30: Love Question (Renumbered from 27) -->
+        <!-- Chap 30 -->
         <div id="chap-30" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">One Last Question...</h2>
             <h1 class="text-5xl md:text-7xl font-serif text-pink-400 mb-12 italic">Do you love me?</h1>
@@ -739,7 +771,7 @@
             <p id="plea-msg" class="text-pink-400 font-mono mt-8 opacity-0 text-lg transition-opacity duration-300">Please click Yes 🥺</p>
         </div>
 
-        <!-- Chap 31: Virtual Diya (Renumbered from 28) -->
+        <!-- Chap 31 -->
         <div id="chap-31" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8 text-amber-200">Make a Wish</h2>
             <div class="relative w-64 h-80 flex flex-col items-center">
@@ -752,7 +784,7 @@
             <button id="diya-btn" onclick="nextChapter()" class="soul-btn mt-6 opacity-0 pointer-events-none border-amber-500 text-amber-200">Amen</button>
         </div>
 
-        <!-- Chap 32: Time Capsule (Renumbered from 29) -->
+        <!-- Chap 32 -->
         <div id="chap-32" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Time Capsule</h2>
             <div class="glass-card max-w-md w-full relative z-10">
@@ -773,7 +805,7 @@
             <button id="capsule-next" onclick="nextChapter()" class="soul-btn mt-8 opacity-0 pointer-events-none">Continue</button>
         </div>
 
-        <!-- Chap 33: Foggy Mirror (Renumbered from 30) -->
+        <!-- Chap 33 -->
         <div id="chap-33" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">Wipe the Mirror</h2>
             <p class="text-gray-400 text-xs mb-6 uppercase tracking-widest">The glass is foggy. Clear it to see the truth.</p>
@@ -789,7 +821,7 @@
             <button id="mirror-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">See Clearly</button>
         </div>
 
-        <!-- Chap 34: Bucket List (Renumbered from 31) -->
+        <!-- Chap 34 -->
         <div id="chap-34" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Our Bucket List</h2>
             <div class="grid grid-cols-1 gap-4 text-left w-72">
@@ -809,7 +841,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Let's Do Them All</button>
         </div>
 
-        <!-- Chap 35: Biometric (Renumbered from 32) -->
+        <!-- Chap 35 -->
         <div id="chap-35" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Identity Verification</h2>
             <div class="relative w-64 h-80 flex flex-col items-center justify-center">
@@ -824,7 +856,7 @@
             <button id="match-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">Match Confirmed</button>
         </div>
 
-        <!-- Chap 36: Vocal Piano (Renumbered from 33) -->
+        <!-- Chap 36 -->
         <div id="chap-36" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-8">Play My Voice</h2>
             <div class="flex gap-4 flex-wrap justify-center max-w-sm">
@@ -837,7 +869,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-8">Continue</button>
         </div>
 
-        <!-- Chap 37: Break Glass (Renumbered from 34) -->
+        <!-- Chap 37 -->
         <div id="chap-37" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-4">In Case of Sadness</h2>
             <div id="glass-case" class="relative w-full max-w-sm aspect-video border-8 border-gray-800 bg-gray-900 shadow-2xl cursor-pointer" onclick="breakGlass()">
@@ -857,7 +889,7 @@
             <button id="break-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">I Am Here</button>
         </div>
 
-        <!-- Chap 38: Reverse Timeline (Renumbered from 35) -->
+        <!-- Chap 38 -->
         <div id="chap-38" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-2">Grow Old With Me</h2>
             <div class="relative w-72 h-96 rounded-lg overflow-hidden border-2 border-white/20 mt-4">
@@ -872,7 +904,7 @@
             <button onclick="nextChapter()" class="soul-btn mt-6">Celebrate</button>
         </div>
 
-        <!-- Chap 39: Cake (Renumbered from 36) -->
+        <!-- Chap 39 -->
         <div id="chap-39" class="chapter-container">
             <h2 class="romantic-heading text-4xl mb-10">Happy Birthday!</h2>
             <p id="cake-msg" class="text-pink-300 text-sm mb-8 opacity-0 transition-opacity font-mono tracking-widest">Make a wish & blow the candles 🕯️</p>
@@ -887,7 +919,7 @@
             </div>
         </div>
 
-        <!-- Chap 40: Physics Teacher Shyari (Renumbered from 37) -->
+        <!-- Chap 40 -->
         <div id="chap-40" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">A Theory on Love</h2>
             <div class="glass-card p-4 border-green-500/30 bg-gray-900/60 shadow-[0_0_30px_rgba(16,185,129,0.2)] relative">
@@ -909,37 +941,59 @@
             </button>
         </div>
 
-        <!-- NEW CHAP 41: NEURAL REPLAY (The 7 Minutes Idea) -->
+        <!-- NEW CHAP 41: THE BLANK CANVAS (Added Feature) -->
         <div id="chap-41" class="chapter-container">
-            <div id="neural-terminal" class="font-mono text-green-500 text-sm mb-4">
-                > SYSTEM CRITICAL<br>
-                > OXYGEN: 0%<br>
-                > INITIATING "LAST 7 MINUTES" PROTOCOL...
+            <h2 class="romantic-heading text-3xl mb-6">Paint Our Story</h2>
+            <div class="paint-canvas">
+                <div id="splash-1" class="paint-splash bg-yellow-400" style="width:150px; height:150px; left:20%; top:20%;"></div>
+                <div id="splash-2" class="paint-splash bg-pink-500" style="width:180px; height:180px; right:10%; top:40%;"></div>
+                <div id="splash-3" class="paint-splash bg-blue-500" style="width:160px; height:160px; left:30%; bottom:10%;"></div>
+                <div id="masterpiece" class="sketch-overlay"></div>
             </div>
-            
-            <div class="relative w-80 h-80 bg-black border border-green-500/50 rounded-lg overflow-hidden flex items-center justify-center">
-                <!-- Brain Wave Visual -->
-                <div id="brain-wave" class="absolute inset-0 flex items-center justify-center opacity-30">
-                    <div class="w-full h-1 bg-green-500 shadow-[0_0_20px_#0f0] animate-pulse"></div>
-                </div>
-                
-                <!-- Rapid Fire Images -->
-                <img id="replay-img" src="New folder (3)/photo1.jpeg" class="w-full h-full object-cover opacity-0">
+            <div class="flex gap-4 mt-8">
+                <button id="paint-btn-1" onclick="addPaint(1, this)" class="w-12 h-12 rounded-full bg-yellow-400 border-2 border-white/50 hover:scale-110 transition"></button>
+                <button id="paint-btn-2" onclick="addPaint(2, this)" class="w-12 h-12 rounded-full bg-pink-500 border-2 border-white/50 hover:scale-110 transition"></button>
+                <button id="paint-btn-3" onclick="addPaint(3, this)" class="w-12 h-12 rounded-full bg-blue-500 border-2 border-white/50 hover:scale-110 transition"></button>
             </div>
-
-            <p id="replay-text" class="text-white font-serif italic mt-8 text-center max-w-md h-16 transition-all duration-300"></p>
-            
-            <button id="replay-btn" onclick="nextChapter()" class="soul-btn mt-4 opacity-0 pointer-events-none">Wake Up</button>
+            <p id="paint-msg" class="text-gray-400 text-xs mt-4 uppercase tracking-widest opacity-0">You are the artist who gave my life color.</p>
+            <button id="paint-next" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">See The Truth</button>
         </div>
 
-        <!-- Chap 42: Finale (Renumbered from 41) -->
+        <!-- CHAP 42: THE BIRTHDAY WISH -->
         <div id="chap-42" class="chapter-container">
             <div class="photo-frame p-2 bg-white transform rotate-2" style="width: 350px;">
                 <img src="New folder (3)/promise5.jpg" onerror="this.src='https://placehold.co/400x500/pink/white?text=I+Love+You'" class="w-full rounded mb-0" style="height: 350px;">
             </div>
             <h1 class="font-serif text-5xl text-white mt-8 mb-4 italic text-shadow">Happy Birthday Sunu, You Are My Answered Prayer.</h1>
             <p class="text-pink-200 mb-8 font-light">Forever & Always.</p>
-            <button onclick="location.reload()" class="soul-btn border-pink-500 text-pink-200 hover:bg-pink-900/50">Replay Our Story ↻</button>
+            <button onclick="nextChapter()" class="soul-btn border-pink-500 text-pink-200 hover:bg-pink-900/50">One Last Moment...</button>
+        </div>
+
+        <!-- CHAP 43: ADVANCED NEURAL REPLAY (HEARTBEAT SYNC - MOVED TO END) -->
+        <div id="chap-43" class="chapter-container">
+            <div id="monitor-screen" class="w-full max-w-lg relative flex flex-col items-center">
+                <!-- Overlay for Flash -->
+                <div id="flash-overlay" class="absolute inset-0 bg-white pointer-events-none opacity-0 z-50"></div>
+                
+                <!-- Terminal Text -->
+                <div id="term-text" class="font-mono text-green-500 text-xs mb-4 self-start">
+                    > VITALS: CRITICAL<br>
+                    > MEMORY DUMP: STARTING...
+                </div>
+
+                <!-- Image Container with ECG -->
+                <div class="relative w-full aspect-square bg-black border border-green-900 rounded-lg overflow-hidden mb-4 shadow-[0_0_20px_#0f0]">
+                    <img id="life-flash-img" src="" class="w-full h-full object-cover opacity-0">
+                    <!-- ECG Line Overlay -->
+                    <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-black to-transparent z-10"></div>
+                    <svg id="ecg-line" class="absolute bottom-4 left-0 w-full h-12 z-20" viewBox="0 0 500 100">
+                        <path d="M0,50 L50,50 L60,10 L70,90 L80,50 L500,50" fill="none" stroke="#0f0" stroke-width="2" class="ecg-path" />
+                    </svg>
+                </div>
+                
+                <p id="final-thought" class="text-white font-serif italic text-center h-12 opacity-0 transition-opacity duration-1000"></p>
+            </div>
+            <button id="wake-btn" onclick="location.reload()" class="soul-btn mt-4 opacity-0 pointer-events-none">Restart Life ↻</button>
         </div>
 
     </div>
@@ -958,7 +1012,7 @@
 
         // --- GLOBAL VARIABLES ---
         let currentChap = 1;
-        const totalChap = 42; // Updated for new chapters
+        const totalChap = 43; // Updated total
         const bgMusic = document.getElementById('bg-music');
         const fluteMusic = document.getElementById('flute-music');
         const crowdAudio = document.getElementById('crowd-audio');
@@ -976,7 +1030,6 @@
         }
 
         function resumeBackgroundMusic() {
-            // Only resume if we are past the prank stage
             if (document.getElementById('main-stage').classList.contains('visible')) {
                 if (isFluteMode) {
                     fluteMusic.play().catch(e => console.log("Audio waiting for interact"));
@@ -986,10 +1039,8 @@
             }
         }
 
-        // Apply logic to all videos automatically
         function attachMediaListeners() {
             const videoIds = ['mem-vid', 'comfort-video', 'phy-vid', 'final-love-video'];
-            
             videoIds.forEach(id => {
                 const vid = document.getElementById(id);
                 if(vid) {
@@ -1008,7 +1059,6 @@
             const now = Date.now();
             if (now - lastMouseTime < 50) return; 
             lastMouseTime = now;
-            
             const p = document.createElement('div');
             p.style.cssText = `position: fixed; pointer-events: none; z-index: 9999; left: ${x}px; top: ${y}px; width: 15px; height: 15px; background: radial-gradient(circle, #06b6d4, #10b981); border-radius: 50%; opacity: 0.8; box-shadow: 0 0 8px #06b6d4; transform: translate(-50%, -50%);`;
             document.body.appendChild(p);
@@ -1018,9 +1068,7 @@
         // --- FLUTE TOGGLE ---
         function toggleFluteMode() {
             const btn = document.getElementById('flute-btn');
-            // Stop currently playing voice if any
             if(currentVoice) { currentVoice.pause(); currentVoice = null; }
-
             if (!isFluteMode) {
                 bgMusic.pause(); 
                 fluteMusic.play().catch(e => console.log("Audio waiting"));
@@ -1042,8 +1090,6 @@
                 document.getElementById("prank-stage").classList.remove("hidden-section");
                 document.getElementById("prank-stage").classList.add("flex-section");
                 try { initParticles(); } catch(e) { console.log("WebGL error"); }
-                
-                // Initialize Audio Handlers
                 attachMediaListeners();
             }});
         };
@@ -1080,10 +1126,8 @@
             const prank = document.getElementById("prank-stage");
             prank.style.pointerEvents = "none";
             document.getElementById('flute-btn').style.display = 'flex';
-            
             bgMusic.volume = 0.5; 
             bgMusic.play().catch(e=>console.log("Audio blocked"));
-            
             gsap.to("#tech-bg", {opacity: 0, duration: 2});
             gsap.to("#romance-bg", {opacity: 1, duration: 2});
             gsap.to(prank, {opacity: 0, duration: 1.5, onComplete: () => {
@@ -1124,59 +1168,40 @@
             if(id === 3) initQuiz();
             if(id === 5) initTimer();
             if(id === 8) initHand();
-            if(id === 13) initVideoCall(); // NEW
+            if(id === 13) initVideoCall();
             if(id === 16) initFunny();
-            if(id === 17) initTease(); // NEW
+            if(id === 17) initTease();
             if(id === 20) initPuzzle();
-            if(id === 24) initVrindavan(); // NEW
+            if(id === 24) initVrindavan();
             if(id === 25) loadProm(0);
             if(id === 33) initFog();
             if(id === 39) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); }
-            if(id === 41) initNeuralReplay(); // NEW LAST 7 MINS
-            if(id === 42) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); }
+            if(id === 42) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } // Confetti for Birthday Wish
+            if(id === 43) initNeuralReplay(); 
         }
 
-        // --- NEW FEATURES LOGIC ---
-        function initVideoCall() {
-            // No specific init logic needed other than button interactions handled inline
-        }
-
-        function moveEndButton(btn) {
-            const x = (Math.random() - 0.5) * 200;
-            const y = (Math.random() - 0.5) * 200;
-            gsap.to(btn, {x: x, y: y, duration: 0.2});
-        }
-
+        // --- SPECIFIC FEATURE FUNCTIONS ---
+        function initVideoCall() {}
+        function moveEndButton(btn) { gsap.to(btn, {x: (Math.random() - 0.5) * 200, y: (Math.random() - 0.5) * 200, duration: 0.2}); }
         function clickEndButton() {
-            // If they manage to click it (mobile mainly)
             const btn = document.getElementById('end-call-btn');
             gsap.to(btn, {scale: 0, opacity: 0, duration: 0.2});
-            // Show error
             document.getElementById('call-error').style.display = 'flex';
-            // Play comfort voice note
-            playVoice('songs1/comfort_voice.mp3', null); // Ensure you name your file this or change it
+            playVoice('songs1/comfort_voice.mp3', null); 
         }
 
         let pokeCount = 0;
         function pokeHer() {
             pokeCount++;
-            const card = document.getElementById('tease-card');
-            const img = document.getElementById('tease-img');
-            const txt = document.getElementById('poke-text');
-            const msg = document.getElementById('tease-msg');
-            
-            // Shake effect
+            const card = document.getElementById('tease-card'), img = document.getElementById('tease-img'), txt = document.getElementById('poke-text'), msg = document.getElementById('tease-msg');
             gsap.fromTo(card, {x: -10}, {x: 10, duration: 0.1, yoyo: true, repeat: 3});
-            
             if(pokeCount < 6) {
-                // Irritation phase
                 if(navigator.vibrate) navigator.vibrate(50);
                 txt.innerText = ["Stop!", "Go away!", "I'm blocking u!", "Ughhh!", "Last warning!"][pokeCount-1] || "Don't!";
-                card.style.borderColor = `rgb(${255}, ${255 - (pokeCount*40)}, ${255 - (pokeCount*40)})`; // Redder
+                card.style.borderColor = `rgb(${255}, ${255 - (pokeCount*40)}, ${255 - (pokeCount*40)})`;
             } else {
-                // Love phase
-                img.src = "New folder (3)/photo1.jpeg"; // Your favorite smiling photo
-                card.style.borderColor = "#ec4899"; // Pink
+                img.src = "New folder (3)/photo1.jpeg";
+                card.style.borderColor = "#ec4899";
                 card.style.boxShadow = "0 0 40px #ec4899";
                 txt.style.display = "none";
                 msg.innerText = "But your smile is my favorite thing in the world.";
@@ -1187,104 +1212,137 @@
 
         function initVrindavan() {
             let placed = 0;
+            Draggable.create("#garland-yellow", { type: "x,y", onDragEnd: function() { if (this.hitTest("#target-bride", "50%")) { gsap.to(this.target, {x: 0, y: 0, opacity: 0, duration: 0.5}); placed++; checkWedding(); } else { gsap.to(this.target, {x: 0, y: 0, duration: 0.5}); } } });
+            Draggable.create("#garland-red", { type: "x,y", onDragEnd: function() { if (this.hitTest("#target-groom", "50%")) { gsap.to(this.target, {x: 0, y: 0, opacity: 0, duration: 0.5}); placed++; checkWedding(); } else { gsap.to(this.target, {x: 0, y: 0, duration: 0.5}); } } });
+            function checkWedding() { if(placed >= 2) { confetti({particleCount: 200, spread: 100, colors: ['#facc15', '#ef4444', '#ffffff']}); gsap.to("#wedding-msg", {opacity: 1, delay: 0.5}); gsap.to("#wedding-btn", {opacity: 1, pointerEvents: "auto", delay: 1}); } }
+        }
+
+        // --- NEW PAINT CANVAS LOGIC (CHAP 41) ---
+        let paintCount = 0;
+        function addPaint(id, btn) {
+            const splash = document.getElementById(`splash-${id}`);
+            if(splash.style.opacity == 1) return;
             
-            // Setup Draggables
-            Draggable.create("#garland-yellow", {
-                type: "x,y",
-                onDragEnd: function() {
-                    if (this.hitTest("#target-bride", "50%")) {
-                        gsap.to(this.target, {x: 0, y: 0, opacity: 0, duration: 0.5}); // Garland worn (disappear logic for simple UI)
-                        // Or animate it onto the neck if you had specific CSS for it. For now, simple consume logic.
-                        placed++;
-                        checkWedding();
-                    } else {
-                        gsap.to(this.target, {x: 0, y: 0, duration: 0.5}); // Return
-                    }
-                }
-            });
-
-            Draggable.create("#garland-red", {
-                type: "x,y",
-                onDragEnd: function() {
-                    if (this.hitTest("#target-groom", "50%")) {
-                        gsap.to(this.target, {x: 0, y: 0, opacity: 0, duration: 0.5});
-                        placed++;
-                        checkWedding();
-                    } else {
-                        gsap.to(this.target, {x: 0, y: 0, duration: 0.5});
-                    }
-                }
-            });
-
-            function checkWedding() {
-                if(placed >= 2) {
-                    confetti({particleCount: 200, spread: 100, colors: ['#facc15', '#ef4444', '#ffffff']});
-                    gsap.to("#wedding-msg", {opacity: 1, delay: 0.5});
-                    gsap.to("#wedding-btn", {opacity: 1, pointerEvents: "auto", delay: 1});
-                    if(!isFluteMode) {
-                        // Optional: play flute sound specifically here if desired
-                        // fluteMusic.play(); 
-                    }
-                }
+            // Visual feedback
+            paintCount++;
+            gsap.to(btn, {scale: 0.8, opacity: 0.5, duration: 0.2});
+            gsap.to(splash, {opacity: 0.8, scale: 1.5, duration: 1});
+            
+            if(paintCount === 3) {
+                setTimeout(() => {
+                    gsap.to(".paint-splash", {scale: 3, opacity: 0.6, duration: 2});
+                    gsap.to("#masterpiece", {opacity: 1, duration: 2, delay: 0.5});
+                    gsap.to("#paint-msg", {opacity: 1, delay: 1.5});
+                    gsap.to("#paint-next", {opacity: 1, pointerEvents: "auto", delay: 2});
+                    confetti({particleCount: 30, spread: 50});
+                }, 1000);
             }
         }
 
-        // --- NEURAL REPLAY LOGIC ---
+        // --- ADVANCED NEURAL REPLAY LOGIC (CHAP 43) ---
         function initNeuralReplay() {
-            const term = document.getElementById('neural-terminal');
-            const img = document.getElementById('replay-img');
-            const txt = document.getElementById('replay-text');
-            const btn = document.getElementById('replay-btn');
+            // 1. Pause background ambient
+            pauseBackgroundMusic();
             
-            // Text Typing
-            gsap.fromTo(term, {opacity:0}, {opacity:1, duration:0.5, onComplete: () => {
-                // Start Flash Sequence
-                txt.innerText = "The brain replays its best memories...";
-                gsap.to(txt, {opacity: 1, duration: 1});
-                
-                const photos = [
-                    "New folder (3)/photo1.jpeg", "New folder (3)/mylove1.jpg", 
-                    "New folder (3)/promise1.jpg", "New folder (3)/promise2.jpg",
-                    "New folder (3)/promise3.jpg", "New folder (3)/promise4.jpg"
-                ];
-                
+            const term = document.getElementById('term-text');
+            const img = document.getElementById('life-flash-img');
+            const overlay = document.getElementById('flash-overlay');
+            const path = document.querySelector('.ecg-path');
+            const finalTxt = document.getElementById('final-thought');
+            const btn = document.getElementById('wake-btn');
+            
+            // NEW AUDIO HANDLERS
+            const beepAudio = document.getElementById('monitor-beep-audio');
+            const flatAudio = document.getElementById('flatline-audio');
+            
+            // Text typing effect
+            gsap.to(term, {text: {value: "> VITALS: CRITICAL<br>> MEMORY DUMP: STARTING...", delimiter: ""}, duration: 2, ease: "none", onComplete: startHeartbeat});
+            
+            const photos = [
+                "New folder (3)/photo1.jpeg", "New folder (3)/mylove1.jpg", 
+                "New folder (3)/promise1.jpg", "New folder (3)/promise2.jpg",
+                "New folder (3)/promise3.jpg", "New folder (3)/promise4.jpg"
+            ];
+
+            function startHeartbeat() {
+                // Initial Slow Pulse Loop
+                let interval = 1200; // start slow (1.2s)
                 let count = 0;
-                let speed = 800;
                 
-                function flash() {
-                    if(speed < 50) speed = 50; // Max speed
+                function pulse() {
+                    // PLAY THE SINGLE BEEP
+                    beepAudio.currentTime = 0;
+                    beepAudio.play().catch(e=>{});
                     
-                    // Change Image
+                    // Visual Flash
+                    gsap.fromTo(overlay, {opacity: 0.4}, {opacity: 0, duration: 0.2});
+                    
+                    // Show Image
                     img.src = photos[count % photos.length];
-                    gsap.fromTo(img, {opacity: 0, scale: 1.2}, {opacity: 1, scale: 1, duration: 0.1});
+                    gsap.to(img, {opacity: 1, duration: 0.1});
+                    
+                    // Vibrate
+                    if(navigator.vibrate) navigator.vibrate(50);
                     
                     count++;
-                    speed -= 50; // accelerate
                     
-                    if(count < 20) {
-                        setTimeout(flash, speed);
+                    // ACCELERATION LOGIC
+                    interval = interval * 0.90; // Get faster by 10% each beat
+                    
+                    if (interval > 150) {
+                        setTimeout(pulse, interval);
                     } else {
-                        // FINAL STOP
-                        img.src = "New folder (3)/mylove1.jpg"; // The favorite photo
-                        gsap.to(img, {opacity: 1, scale: 1, duration: 2});
-                        term.style.opacity = 0;
-                        txt.style.opacity = 0;
-                        setTimeout(() => {
-                            txt.innerHTML = "<span class='text-pink-400 text-xl'>I spent my last 7 minutes<br>just looking at you.</span>";
-                            gsap.to(txt, {opacity: 1, duration: 2});
-                            gsap.to(btn, {opacity: 1, pointerEvents: "auto", delay: 2});
-                        }, 500);
+                        // TERMINAL VELOCITY (Rapid Fire)
+                        rapidFire();
                     }
                 }
-                setTimeout(flash, 1000);
-            }});
+                pulse();
+            }
+            
+            function rapidFire() {
+                // Ultra fast flashing for 2 seconds
+                let rapidCount = 0;
+                let rapidInt = setInterval(() => {
+                    img.src = photos[rapidCount % photos.length];
+                    rapidCount++;
+                    if(navigator.vibrate) navigator.vibrate(20);
+                }, 80); // very fast 80ms
+                
+                setTimeout(() => {
+                    clearInterval(rapidInt);
+                    flatline();
+                }, 2000);
+            }
+            
+            function flatline() {
+                // 1. Stop Beeps
+                beepAudio.pause();
+                
+                // 2. Play Flatline Sound
+                flatAudio.play().catch(e=>{});
+                
+                // 3. Stop Heartbeat Animation
+                path.classList.add('flatline-active');
+                
+                // 4. Show Final Static Image
+                img.src = "New folder (3)/mylove1.jpg";
+                img.style.filter = "grayscale(100%) contrast(1.5)";
+                gsap.to(img, {opacity: 0.5, duration: 3});
+                
+                // 5. Fade Text
+                term.innerHTML = "> SYSTEM SHUTDOWN.<br>> CAUSE: LOVE OVERDOSE.";
+                term.style.color = "red";
+                
+                gsap.to(finalTxt, {opacity: 1, text: "If my life flashed before my eyes...<br>It would just be you.", duration: 3, delay: 1});
+                
+                // 6. Button
+                gsap.to(btn, {opacity: 1, pointerEvents: "auto", delay: 4});
+            }
         }
 
-        // --- INTERACTION LOGIC ---
+        // --- REST OF FUNCTIONS (Same as before) ---
         function updatePerspective(val) {
-            const img = document.getElementById('persp-img');
-            const txt = document.getElementById('persp-txt');
-            const btn = document.getElementById('persp-btn');
+            const img = document.getElementById('persp-img'), txt = document.getElementById('persp-txt'), btn = document.getElementById('persp-btn');
             img.style.filter = `grayscale(${100-val}%) brightness(${75 + (val*0.25)}%)`;
             if(val > 80) { txt.innerText = "MASTERPIECE"; txt.style.color = "#ec4899"; gsap.to(btn, {opacity:1, pointerEvents:'auto'}); }
             else { txt.innerText = "MESSY"; txt.style.color = "rgba(156, 163, 175, 0.5)"; }
@@ -1292,96 +1350,26 @@
 
         function startCrowd() { if(crowdAudio) crowdAudio.play().catch(e=>{}); }
         function stopCrowd() { if(crowdAudio) crowdAudio.pause(); }
-        function foundHer() {
-            stopCrowd();
-            gsap.to("#crowd-msg", {opacity:1});
-            gsap.to("#crowd-btn", {opacity:1, pointerEvents:'auto'});
-        }
-
-        function revealSilence() {
-            gsap.to("#silence-1", {opacity:1, duration:1});
-            gsap.to("#silence-2", {opacity:1, duration:1, delay:2});
-            gsap.to("#silence-3", {opacity:1, duration:1, delay:4});
-            gsap.to("#silence-btn", {opacity:1, pointerEvents:'auto', delay:5});
-        }
-
-        function playLog() {
-            const items = document.querySelectorAll('#brain-log li');
-            items.forEach((item, i) => gsap.to(item, {opacity:1, delay: i*0.8}));
-            gsap.to("#log-btn", {opacity:1, pointerEvents:'auto', delay: items.length*0.8});
-        }
-
-        function toggleRain() {
-            if(rainAudio.paused) rainAudio.play().catch(e=>{}); else rainAudio.pause();
-        }
-
-        function healHeart(el) { 
-            if(el.classList.contains('healed')) return; el.classList.add("healed"); 
-            confetti({particleCount: 50, spread: 60, colors:['#ec4899']}); 
-            gsap.to("#heal-msg", {opacity:1, delay:0.5}); gsap.to("#heal-btn", {opacity:1, delay:1, pointerEvents:"auto"}); 
-        }
-        function initHand() {
-            setTimeout(() => { Draggable.create("#her-hand", { type:"x,y", bounds:"#drag-zone", onDragEnd: function() {
-                const h1 = document.getElementById('my-hand').getBoundingClientRect(); const h2 = this.target.getBoundingClientRect();
-                if(Math.hypot(h1.x - h2.x, h1.y - h2.y) < 100) { 
-                    confetti({particleCount: 30, spread: 50}); 
-                    gsap.to("#her-hand", {x:0, y:0, duration:0.5}); 
-                    gsap.to("#hand-btn", {opacity:1, pointerEvents:"auto"}); 
-                }
-            }});}, 100);
-        }
-
-        // --- REWRITTEN VOICE PLAYER ---
+        function foundHer() { stopCrowd(); gsap.to("#crowd-msg", {opacity:1}); gsap.to("#crowd-btn", {opacity:1, pointerEvents:'auto'}); }
+        function revealSilence() { gsap.to("#silence-1", {opacity:1, duration:1}); gsap.to("#silence-2", {opacity:1, duration:1, delay:2}); gsap.to("#silence-3", {opacity:1, duration:1, delay:4}); gsap.to("#silence-btn", {opacity:1, pointerEvents:'auto', delay:5}); }
+        function playLog() { const items = document.querySelectorAll('#brain-log li'); items.forEach((item, i) => gsap.to(item, {opacity:1, delay: i*0.8})); gsap.to("#log-btn", {opacity:1, pointerEvents:'auto', delay: items.length*0.8}); }
+        function toggleRain() { if(rainAudio.paused) rainAudio.play().catch(e=>{}); else rainAudio.pause(); }
+        function healHeart(el) { if(el.classList.contains('healed')) return; el.classList.add("healed"); confetti({particleCount: 50, spread: 60, colors:['#ec4899']}); gsap.to("#heal-msg", {opacity:1, delay:0.5}); gsap.to("#heal-btn", {opacity:1, delay:1, pointerEvents:"auto"}); }
+        function initHand() { setTimeout(() => { Draggable.create("#her-hand", { type:"x,y", bounds:"#drag-zone", onDragEnd: function() { const h1 = document.getElementById('my-hand').getBoundingClientRect(); const h2 = this.target.getBoundingClientRect(); if(Math.hypot(h1.x - h2.x, h1.y - h2.y) < 100) { confetti({particleCount: 30, spread: 50}); gsap.to("#her-hand", {x:0, y:0, duration:0.5}); gsap.to("#hand-btn", {opacity:1, pointerEvents:"auto"}); } } });}, 100); }
+        
         function playVoice(src, el) { 
-            // 1. Pause background music
             pauseBackgroundMusic();
-
-            // 2. Stop any existing voice to prevent overlap
-            if(currentVoice) {
-                currentVoice.pause();
-                currentVoice = null;
-                document.querySelectorAll('.photo-frame').forEach(p => p.classList.remove('playing'));
-            }
-
-            // 3. Create and play new voice
+            if(currentVoice) { currentVoice.pause(); currentVoice = null; document.querySelectorAll('.photo-frame').forEach(p => p.classList.remove('playing')); }
             currentVoice = new Audio(src); 
             currentVoice.play().catch(e => console.log("Audio missing"));
-            
-            // Visual effects
-            if(el) { 
-                el.classList.add('playing'); 
-                gsap.to(el, {scale: 1.05, duration: 0.2, yoyo: true, repeat: 1}); 
-            }
-
-            // 4. Resume background music when voice ends
-            currentVoice.onended = () => { 
-                if(el) el.classList.remove('playing'); 
-                currentVoice = null;
-                resumeBackgroundMusic();
-            };
+            if(el) { el.classList.add('playing'); gsap.to(el, {scale: 1.05, duration: 0.2, yoyo: true, repeat: 1}); }
+            currentVoice.onended = () => { if(el) el.classList.remove('playing'); currentVoice = null; resumeBackgroundMusic(); };
         }
 
-        function stopVideo() { 
-            const v = document.getElementById('mem-vid'); 
-            if(v) v.pause(); 
-            // Logic handled by event listeners now, but extra safety:
-            resumeBackgroundMusic();
-            nextChapter(); 
-        }
-        
-        function stopPhyVideo() { 
-            const v = document.getElementById('phy-vid'); 
-            if(v) v.pause(); 
-            resumeBackgroundMusic();
-            nextChapter(); 
-        }
-        
-        function breakMatki() {
-            const m = document.getElementById('matki');
-            gsap.to(m, {scale:0, opacity:0, duration:0.3, onComplete:()=>{ m.style.display="none"; document.getElementById('matki-secret').classList.remove('hidden'); document.getElementById('matki-secret').classList.add('flex'); confetti({particleCount:100, spread:70}); gsap.to("#matki-btn", {opacity:1, pointerEvents:"auto", delay:1}); }});
-        }
+        function stopVideo() { const v = document.getElementById('mem-vid'); if(v) v.pause(); resumeBackgroundMusic(); nextChapter(); }
+        function stopPhyVideo() { const v = document.getElementById('phy-vid'); if(v) v.pause(); resumeBackgroundMusic(); nextChapter(); }
+        function breakMatki() { const m = document.getElementById('matki'); gsap.to(m, {scale:0, opacity:0, duration:0.3, onComplete:()=>{ m.style.display="none"; document.getElementById('matki-secret').classList.remove('hidden'); document.getElementById('matki-secret').classList.add('flex'); confetti({particleCount:100, spread:70}); gsap.to("#matki-btn", {opacity:1, pointerEvents:"auto", delay:1}); }}); }
         function lightDiya(el) { const f = el.querySelector('.diya-flame'); if(f.style.opacity != 1) { f.style.opacity = 1; gsap.to("#diya-msg", {opacity:1, delay:0.5}); gsap.to("#diya-btn", {opacity:1, pointerEvents:"auto", delay:1.5}); } }
-        
         let qIdx = 0; const qData = [{q:"What color was I wearing when we first met?", a:["Blue Shirt", "Black Hoodie"], c:1}, {q:"What is my favorite food?", a:["Biryani/Pizza", "You ;)"], c:1}];
         function initQuiz() { loadQ(); }
         function loadQ() { if(qIdx >= qData.length) { nextChapter(); return; } const q = qData[qIdx]; document.getElementById('quiz-q').innerText = q.q; const div = document.getElementById('quiz-options'); div.innerHTML = ""; q.a.forEach((opt, i) => { let b = document.createElement("button"); b.className = "soul-btn w-full mt-0"; b.innerText = opt; b.onclick = () => { if(i===q.c) { b.style.background = "#059669"; b.innerText += " ✅"; setTimeout(()=>{qIdx++; loadQ()}, 800); } else { b.style.background = "#b91c1c"; gsap.to(b, {x:10, duration:0.1, yoyo:true, repeat:3}); } }; div.appendChild(b); }); }
@@ -1394,91 +1382,22 @@
         let pIdx = 0;
         function loadProm(i) { const txt = document.getElementById('prom-txt'), sub = document.getElementById('prom-sub'), img = document.getElementById('prom-img'); document.getElementById('prom-counter').innerText = `${i + 1} / ${promises.length}`; gsap.to([txt, sub], {opacity:0, y:10, duration:0.3, onComplete:()=>{ txt.innerText = promises[i].text; sub.innerText = promises[i].sub; gsap.to([txt, sub], {opacity:1, y:0, duration:0.5}); }}); gsap.to(img, {opacity:0, duration:0.3, onComplete:()=>{ img.src = promises[i].img; img.onerror = function() { this.src=`https://placehold.co/300x400/black/white?text=Promise`; }; gsap.to(img, {opacity:0.6, duration:0.5}); }}); }
         function nextProm() { if (pIdx < promises.length - 1) { pIdx++; loadProm(pIdx); if(pIdx===promises.length-1) document.getElementById("prom-btn").innerText = "Finish Vows"; } else { nextChapter(); } }
-        
         function openSurprise() { gsap.to("#surprise-box", {scale:1.5, opacity:0, duration:0.5, onComplete:()=>{ document.getElementById("surprise-box").style.display="none"; const c = document.getElementById("surprise-content"); c.classList.remove("hidden"); c.classList.add("flex"); gsap.fromTo(c, {scale:0.5, opacity:0}, {scale:1, opacity:1, duration:1, ease:"elastic.out"}); confetti({particleCount:50, spread:70}); }}); }
         function moveLoveNoBtn(btn) { document.getElementById("plea-msg").style.opacity = 1; gsap.to(btn, { x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*100, duration: 0.2 }); }
-        
-        function handleLoveYes() { 
-            pauseBackgroundMusic(); 
-            const ol = document.getElementById("love-video-overlay"); 
-            ol.style.display = "flex"; 
-            gsap.to(ol, {opacity:1, duration:1}); 
-            const v = document.getElementById("final-love-video"); 
-            v.play().catch(e=>console.log("Video fail")); 
-        }
-        
-        function closeLoveVideo() { 
-            const ol = document.getElementById("love-video-overlay"); 
-            document.getElementById("final-love-video").pause(); 
-            gsap.to(ol, {opacity:0, duration:1, onComplete:()=>{ 
-                ol.style.display="none"; 
-                resumeBackgroundMusic();
-                nextChapter(); 
-            }}); 
-        }
-
+        function handleLoveYes() { pauseBackgroundMusic(); const ol = document.getElementById("love-video-overlay"); ol.style.display = "flex"; gsap.to(ol, {opacity:1, duration:1}); const v = document.getElementById("final-love-video"); v.play().catch(e=>console.log("Video fail")); }
+        function closeLoveVideo() { const ol = document.getElementById("love-video-overlay"); document.getElementById("final-love-video").pause(); gsap.to(ol, {opacity:0, duration:1, onComplete:()=>{ ol.style.display="none"; resumeBackgroundMusic(); nextChapter(); }}); }
         let candles = 0;
         function blow(el) { const flame = el.querySelector('.flame'); if(!flame.classList.contains('out')) { flame.classList.add('out'); candles++; if(navigator.vibrate) navigator.vibrate(50); } }
         function cutCake() { if(candles >= 3) { document.getElementById('cake-msg').style.opacity = 0; confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899'] }); setTimeout(nextChapter, 1500); } else { const msg = document.getElementById('cake-msg'); msg.innerText = "Blow the candles first! 🌬️"; gsap.fromTo(msg, {x:-5}, {x:5, duration:0.1, repeat:3, yoyo:true}); } }
-        
-        function sendCapsule() {
-            const input = document.getElementById('capsule-input');
-            const btn = document.getElementById('capsule-btn');
-            const lock = document.getElementById('capsule-lock');
-            const stream = document.getElementById('data-stream');
-            if(input.value.trim() === "") { input.placeholder = "Please write something first..."; gsap.to(input, {x:10, duration:0.1, yoyo:true, repeat:3}); return; }
-            gsap.to(input, {duration: 0.5, opacity: 0.3});
-            gsap.to(lock, {opacity: 1, duration: 0.5, pointerEvents: 'auto'});
-            gsap.to(btn, {opacity: 0, scale: 0, duration: 0.3});
-            stream.classList.remove('hidden');
-            gsap.fromTo(stream, {y: 0, opacity: 1, scaleY: 1}, {y: -500, opacity: 0, scaleY: 20, duration: 1, ease: "power2.in"});
-            gsap.to("#capsule-next", {opacity: 1, pointerEvents: "auto", delay: 1});
-            confetti({particleCount: 30, colors: ['#0f0']});
-        }
-
-        function initFog() {
-            const canvas = document.getElementById('fog-canvas'); const ctx = canvas.getContext('2d'); const width = canvas.width; const height = canvas.height;
-            ctx.fillStyle = "rgba(200, 200, 200, 0.9)"; ctx.fillRect(0, 0, width, height);
-            ctx.font = "20px Serif"; ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.textAlign = "center"; ctx.fillText("Wipe Me", width/2, height/2);
-            let isDrawing = false;
-            function wipe(x, y) { ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI * 2); ctx.fill(); checkClear(); }
-            function getPos(e) { const rect = canvas.getBoundingClientRect(); return { x: (e.clientX || e.touches[0].clientX) - rect.left, y: (e.clientY || e.touches[0].clientY) - rect.top }; }
-            canvas.addEventListener('mousedown', () => isDrawing = true); canvas.addEventListener('mouseup', () => isDrawing = false);
-            canvas.addEventListener('mousemove', (e) => { if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } });
-            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }); canvas.addEventListener('touchend', () => isDrawing = false);
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } });
-            function checkClear() { const imgData = ctx.getImageData(0,0, width, height); let transparent = 0; for(let i=3; i<imgData.data.length; i+=4) if(imgData.data[i] === 0) transparent++; if(transparent > (width*height)*0.6) { gsap.to(canvas, {opacity:0, duration:1, pointerEvents:'none'}); gsap.to("#mirror-btn", {opacity:1, pointerEvents:"auto"}); confetti({particleCount: 30, spread: 40}); } }
-        }
-
-        function checkBucket(el) {
-            if(el.checked) { gsap.to(el.nextElementSibling, {color: "#ec4899", textShadow: "0 0 10px #ec4899", scale: 1.05, duration: 0.2}); confetti({particleCount: 10, spread: 30, origin: {y: 0.5}}); } else { gsap.to(el.nextElementSibling, {color: "#d1d5db", textShadow: "none", scale: 1}); }
-        }
-
+        function sendCapsule() { const input = document.getElementById('capsule-input'); const btn = document.getElementById('capsule-btn'); const lock = document.getElementById('capsule-lock'); const stream = document.getElementById('data-stream'); if(input.value.trim() === "") { input.placeholder = "Please write something first..."; gsap.to(input, {x:10, duration:0.1, yoyo:true, repeat:3}); return; } gsap.to(input, {duration: 0.5, opacity: 0.3}); gsap.to(lock, {opacity: 1, duration: 0.5, pointerEvents: 'auto'}); gsap.to(btn, {opacity: 0, scale: 0, duration: 0.3}); stream.classList.remove('hidden'); gsap.fromTo(stream, {y: 0, opacity: 1, scaleY: 1}, {y: -500, opacity: 0, scaleY: 20, duration: 1, ease: "power2.in"}); gsap.to("#capsule-next", {opacity: 1, pointerEvents: "auto", delay: 1}); confetti({particleCount: 30, colors: ['#0f0']}); }
+        function initFog() { const canvas = document.getElementById('fog-canvas'); const ctx = canvas.getContext('2d'); const width = canvas.width; const height = canvas.height; ctx.fillStyle = "rgba(200, 200, 200, 0.9)"; ctx.fillRect(0, 0, width, height); ctx.font = "20px Serif"; ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.textAlign = "center"; ctx.fillText("Wipe Me", width/2, height/2); let isDrawing = false; function wipe(x, y) { ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI * 2); ctx.fill(); checkClear(); } function getPos(e) { const rect = canvas.getBoundingClientRect(); return { x: (e.clientX || e.touches[0].clientX) - rect.left, y: (e.clientY || e.touches[0].clientY) - rect.top }; } canvas.addEventListener('mousedown', () => isDrawing = true); canvas.addEventListener('mouseup', () => isDrawing = false); canvas.addEventListener('mousemove', (e) => { if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } }); canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }); canvas.addEventListener('touchend', () => isDrawing = false); canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } }); function checkClear() { const imgData = ctx.getImageData(0,0, width, height); let transparent = 0; for(let i=3; i<imgData.data.length; i+=4) if(imgData.data[i] === 0) transparent++; if(transparent > (width*height)*0.6) { gsap.to(canvas, {opacity:0, duration:1, pointerEvents:'none'}); gsap.to("#mirror-btn", {opacity:1, pointerEvents:"auto"}); confetti({particleCount: 30, spread: 40}); } } }
+        function checkBucket(el) { if(el.checked) { gsap.to(el.nextElementSibling, {color: "#ec4899", textShadow: "0 0 10px #ec4899", scale: 1.05, duration: 0.2}); confetti({particleCount: 10, spread: 30, origin: {y: 0.5}}); } else { gsap.to(el.nextElementSibling, {color: "#d1d5db", textShadow: "none", scale: 1}); } }
         let scanTimer;
         function startScan() { document.getElementById('scan-line').style.background = '#ec4899'; document.getElementById('scan-msg').innerText = "SCANNING..."; document.getElementById('scan-msg').style.color = "#ec4899"; scanTimer = setTimeout(() => { gsap.to("#print-2", {opacity: 0.5, duration: 2}); gsap.to("#print-1", {x: -10, rotation: -15, color: "#ec4899", duration: 2}); gsap.to("#print-2", {x: 10, rotation: 15, color: "#ec4899", opacity: 0.5, duration: 2}); setTimeout(() => { document.getElementById('scan-msg').innerText = "100% SOULMATE MATCH FOUND"; document.getElementById('scan-line').style.display = 'none'; confetti({particleCount: 50, colors: ['#ec4899']}); gsap.to("#match-btn", {opacity: 1, pointerEvents: "auto"}); }, 2000); }, 500); }
         function stopScan() { clearTimeout(scanTimer); }
-        
-        function playNote(n) { 
-            // We do NOT pause background music for short notes as it creates a choppy experience
-            const a = document.getElementById(`vp-${n}`); a.currentTime = 0; a.play().catch(e=>{}); if(navigator.vibrate) navigator.vibrate(30); 
-        }
-        
-        function breakGlass() {
-            const glass = document.getElementById('glass-case');
-            const vidContainer = document.getElementById('comfort-video-container');
-            const v = document.getElementById('comfort-video');
-            if(navigator.vibrate) navigator.vibrate([50,50,50]);
-            gsap.to(glass, {scale:1.1, opacity:0, duration:0.2, onComplete:()=>{ 
-                glass.style.display="none"; 
-                vidContainer.classList.remove('hidden'); 
-                // Audio listeners attached in window.onload will handle the pausing/resuming
-                v.play().catch(e=>console.log("Video fail")); 
-                gsap.to("#break-btn", {opacity:1, pointerEvents:"auto", delay:2}); 
-            }});
-        }
-
+        function playNote(n) { const a = document.getElementById(`vp-${n}`); a.currentTime = 0; a.play().catch(e=>{}); if(navigator.vibrate) navigator.vibrate(30); }
+        function breakGlass() { const glass = document.getElementById('glass-case'); const vidContainer = document.getElementById('comfort-video-container'); const v = document.getElementById('comfort-video'); if(navigator.vibrate) navigator.vibrate([50,50,50]); gsap.to(glass, {scale:1.1, opacity:0, duration:0.2, onComplete:()=>{ glass.style.display="none"; vidContainer.classList.remove('hidden'); v.play().catch(e=>console.log("Video fail")); gsap.to("#break-btn", {opacity:1, pointerEvents:"auto", delay:2}); }}); }
         function updateTimeline(val) { document.getElementById('timeline-year').innerText = val; document.getElementById('old-img').style.opacity = (val - 2024) / 50; }
-        
         function initParticles() { const c=document.getElementById('bg-canvas'); const s=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000); const r=new THREE.WebGLRenderer({canvas:c, alpha:true}); r.setSize(window.innerWidth, window.innerHeight); const g=new THREE.BufferGeometry(); const count = 1500; const p=new Float32Array(count*3); for(let i=0;i<count*3;i++) p[i]=(Math.random()-0.5)*15; g.setAttribute('position',new THREE.BufferAttribute(p,3)); const m=new THREE.PointsMaterial({size:0.015, color:0xffffff, transparent:true, opacity:0.8}); const pts = new THREE.Points(g,m); s.add(pts); cam.position.z=5; function a(){ requestAnimationFrame(a); pts.rotation.y += 0.0005; pts.rotation.x += 0.0002; r.render(s,cam); } a(); window.addEventListener('resize', () => { cam.aspect = window.innerWidth / window.innerHeight; cam.updateProjectionMatrix(); r.setSize(window.innerWidth, window.innerHeight); }); }
     </script>
 </body>
