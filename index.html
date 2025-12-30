@@ -13,6 +13,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- 🔥 REQUIRED FOR SECRET MESSAGE SENDING -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <style>
         /* --- CORE AESTHETICS --- */
@@ -177,7 +180,7 @@
         }
         @keyframes flicker { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
 
-        /* --- NEW ANIMATION STYLES --- */
+        /* --- ANIMATION STYLES --- */
         .silhouette {
             position: absolute; background: #444; width: 60px; height: 120px;
             border-radius: 50% 50% 0 0; filter: blur(8px); opacity: 0.7;
@@ -190,27 +193,22 @@
             animation: seasons 12s infinite; opacity: 0.3;
         }
         @keyframes seasons {
-            0% { background: #10b981; } /* Spring */
-            33% { background: #fbbf24; } /* Summer */
-            66% { background: #60a5fa; } /* Winter */
-            100% { background: #10b981; }
+            0% { background: #10b981; } 33% { background: #fbbf24; } 66% { background: #60a5fa; } 100% { background: #10b981; }
         }
 
         .rain-window {
-            background: url('https://media.giphy.com/media/t7Qb8655Z1oHF4DK0N/giphy.gif'); /* Simple rain placeholder */
+            background: url('https://media.giphy.com/media/t7Qb8655Z1oHF4DK0N/giphy.gif'); 
             background-size: cover; opacity: 0.2; position: absolute; inset:0; pointer-events:none;
         }
 
-        /* Biometric & Red String */
         @keyframes scan { 0% {top:0%} 50% {top:100%} 100% {top:0%} }
 
-        /* --- PAINT CANVAS STYLES (NEW) --- */
+        /* --- PAINT CANVAS STYLES --- */
         .paint-canvas {
             width: 300px; height: 400px; background: #fdfdfd;
             position: relative; overflow: hidden;
             box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
-            border: 8px solid #333; /* Frame */
-            border-radius: 4px;
+            border: 8px solid #333; border-radius: 4px;
         }
         .paint-splash {
             position: absolute; border-radius: 50%;
@@ -226,22 +224,14 @@
             transition: opacity 2s ease;
         }
 
-        /* --- LAST 7 MINUTES STYLES --- */
+        /* --- ECG & ENDING STYLES --- */
         .ecg-path {
-            stroke-dasharray: 500;
-            stroke-dashoffset: 500;
-            animation: ecgDraw 2s linear infinite;
+            stroke-dasharray: 500; stroke-dashoffset: 500; animation: ecgDraw 2s linear infinite;
         }
-        @keyframes ecgDraw {
-            0% { stroke-dashoffset: 500; }
-            100% { stroke-dashoffset: 0; }
-        }
+        @keyframes ecgDraw { 0% { stroke-dashoffset: 500; } 100% { stroke-dashoffset: 0; } }
         .flatline-active {
-            stroke-dasharray: 0 !important;
-            stroke-dashoffset: 0 !important;
-            animation: none !important;
-            stroke: #ef4444 !important; /* Red flatline */
-            filter: drop-shadow(0 0 10px red);
+            stroke-dasharray: 0 !important; stroke-dashoffset: 0 !important;
+            animation: none !important; stroke: #ef4444 !important; filter: drop-shadow(0 0 10px red);
         }
 
         #love-video-overlay {
@@ -250,7 +240,6 @@
             opacity: 0; transition: opacity 1s;
         }
         
-        /* Mobile Interaction Fixes */
         .touch-none { touch-action: none; user-select: none; }
     </style>
 </head>
@@ -261,19 +250,15 @@
     <div class="romantic-bg" id="romance-bg"></div>
     <canvas id="bg-canvas" style="position: fixed; top:0; left:0; z-index:1; pointer-events:none;"></canvas>
     
-    <!-- Audio Sources -->
+    <!-- Audio Sources (UPDATE PATHS IF NEEDED) -->
     <audio id="bg-music" loop preload="auto"><source src="songs1/love12.mp3" type="audio/mpeg"></audio>
     <audio id="flute-music" loop preload="auto"><source src="songs1/flute.mp3" type="audio/mpeg"></audio>
     <audio id="crowd-audio" loop preload="auto"><source src="songs1/crowd.mp3" type="audio/mpeg"></audio>
     <audio id="rain-audio" loop preload="auto"><source src="songs1/rain.mp3" type="audio/mpeg"></audio>
-    
-    <!-- Vocal Piano Audios -->
     <audio id="vp-1"><source src="songs1/vp1.mp3" type="audio/mpeg"></audio>
     <audio id="vp-2"><source src="songs1/vp2.mp3" type="audio/mpeg"></audio>
     <audio id="vp-3"><source src="songs1/vp3.mp3" type="audio/mpeg"></audio>
     <audio id="vp-4"><source src="songs1/vp4.mp3" type="audio/mpeg"></audio>
-
-    <!-- Hospital Audio -->
     <audio id="monitor-beep-audio" preload="auto"><source src="songs1/monitor_beep.mp3" type="audio/mpeg"></audio>
     <audio id="flatline-audio" preload="auto"><source src="songs1/flatline.mp3" type="audio/mpeg"></audio>
 
@@ -358,7 +343,7 @@
             <div id="progress" class="h-full bg-pink-500 w-0 shadow-[0_0_15px_#ec4899] transition-all duration-[1.5s]"></div>
         </div>
 
-        <!-- Chapters 1-40 -->
+        <!-- Chapter 1 -->
         <div id="chap-1" class="chapter-container chapter-active">
             <div class="w-80 h-80 rounded-full border-[3px] border-pink-400 p-2 mb-8 shadow-[0_0_40px_rgba(236,72,153,0.4)]">
                 <img src="New folder (3)/mylove1.jpg" onerror="this.src='https://placehold.co/400x400/pink/white?text=My+Love'" class="w-full h-full object-cover rounded-full filter brightness-110">
@@ -457,7 +442,6 @@
                 <div class="silhouette" style="left:70%; top:50%; animation-delay:2s"></div>
                 <div class="silhouette" style="left:80%; top:30%; animation-delay:0.5s"></div>
                 <div class="silhouette" style="left:20%; top:60%; animation-delay:3s"></div>
-                <div class="silhouette" style="left:60%; top:70%; animation-delay:1.5s"></div>
             </div>
             <div class="relative z-10 w-64 h-64 flex items-center justify-center group">
                 <div class="absolute inset-0 bg-black/80 group-hover:opacity-0 transition duration-700 flex items-center justify-center">
@@ -784,24 +768,28 @@
             <button id="diya-btn" onclick="nextChapter()" class="soul-btn mt-6 opacity-0 pointer-events-none border-amber-500 text-amber-200">Amen</button>
         </div>
 
-        <!-- Chap 32 -->
+        <!-- Chap 32: UPDATED MESSAGE SECTION (SECRET EMAIL) -->
         <div id="chap-32" class="chapter-container">
-            <h2 class="romantic-heading text-3xl mb-6">Time Capsule</h2>
+            <h2 class="romantic-heading text-3xl mb-6">Message to Rudra</h2>
             <div class="glass-card max-w-md w-full relative z-10">
-                <p class="text-xs text-pink-300 uppercase tracking-widest mb-4">Write a message for us in 2030</p>
+                <p class="text-xs text-pink-300 uppercase tracking-widest mb-4">Write something for me to read...</p>
                 <div class="relative w-full">
-                    <textarea id="capsule-input" class="w-full h-32 bg-black/30 border border-pink-500/30 rounded-lg p-4 text-pink-100 focus:outline-none focus:border-pink-500 font-serif italic resize-none" placeholder="Dear future us..."></textarea>
+                    <textarea id="capsule-input" class="w-full h-32 bg-black/30 border border-pink-500/30 rounded-lg p-4 text-pink-100 focus:outline-none focus:border-pink-500 font-serif italic resize-none" placeholder="Type your heart out here..."></textarea>
+                    
+                    <!-- Lock Animation Container -->
                     <div id="capsule-lock" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none">
-                        <div class="text-5xl mb-2">🔒</div>
-                        <p class="text-green-500 font-mono text-xs tracking-widest uppercase">Encrypted & Stored</p>
-                        <p class="text-gray-500 text-[10px] mt-1">Unlock Date: 22 May 2030</p>
+                        <div class="text-5xl mb-2">📨</div>
+                        <p class="text-green-500 font-mono text-xs tracking-widest uppercase">Message Sent!</p>
                     </div>
                 </div>
-                <button id="capsule-btn" onclick="sendCapsule()" class="soul-btn mt-6 w-full text-sm">Seal & Send to Future</button>
+
+                <button id="capsule-btn" onclick="sendCapsule()" class="soul-btn mt-6 w-full text-sm">Send to Sahababu 💌</button>
             </div>
+            
             <div class="absolute inset-0 pointer-events-none">
                 <div id="data-stream" class="hidden absolute left-1/2 bottom-1/2 w-1 h-1 bg-green-500 shadow-[0_0_20px_#0f0]"></div>
             </div>
+
             <button id="capsule-next" onclick="nextChapter()" class="soul-btn mt-8 opacity-0 pointer-events-none">Continue</button>
         </div>
 
@@ -941,7 +929,7 @@
             </button>
         </div>
 
-        <!-- NEW CHAP 41: THE BLANK CANVAS (Added Feature) -->
+        <!-- CHAP 41: THE BLANK CANVAS -->
         <div id="chap-41" class="chapter-container">
             <h2 class="romantic-heading text-3xl mb-6">Paint Our Story</h2>
             <div class="paint-canvas">
@@ -969,7 +957,7 @@
             <button onclick="nextChapter()" class="soul-btn border-pink-500 text-pink-200 hover:bg-pink-900/50">One Last Moment...</button>
         </div>
 
-        <!-- CHAP 43: ADVANCED NEURAL REPLAY (HEARTBEAT SYNC - MOVED TO END) -->
+        <!-- CHAP 43: ADVANCED NEURAL REPLAY -->
         <div id="chap-43" class="chapter-container">
             <div id="monitor-screen" class="w-full max-w-lg relative flex flex-col items-center">
                 <!-- Overlay for Flash -->
@@ -1012,7 +1000,7 @@
 
         // --- GLOBAL VARIABLES ---
         let currentChap = 1;
-        const totalChap = 43; // Updated total
+        const totalChap = 43; 
         const bgMusic = document.getElementById('bg-music');
         const fluteMusic = document.getElementById('flute-music');
         const crowdAudio = document.getElementById('crowd-audio');
@@ -1022,6 +1010,23 @@
         let attemptCount = 0;
         let isFluteMode = false;
         let lastMouseTime = 0;
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            // STEP 1: INITIALIZE EMAILJS HERE (Put your Public Key from EmailJS dashboard)
+            // Example: emailjs.init("user_XyZ123...");
+            try {
+                emailjs.init("aSD6thOge93QfRG5j"); 
+            } catch(e) { console.log("EmailJS not configured yet"); }
+
+            gsap.to("#loader", {opacity:0, duration:1, onComplete: () => {
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("prank-stage").classList.remove("hidden-section");
+                document.getElementById("prank-stage").classList.add("flex-section");
+                try { initParticles(); } catch(e) { console.log("WebGL error"); }
+                attachMediaListeners();
+            }});
+        };
 
         // --- AUDIO MANAGER HELPERS ---
         function pauseBackgroundMusic() {
@@ -1082,17 +1087,6 @@
             }
             isFluteMode = !isFluteMode;
         }
-
-        // --- INITIALIZATION ---
-        window.onload = () => {
-            gsap.to("#loader", {opacity:0, duration:1, onComplete: () => {
-                document.getElementById("loader").style.display = "none";
-                document.getElementById("prank-stage").classList.remove("hidden-section");
-                document.getElementById("prank-stage").classList.add("flex-section");
-                try { initParticles(); } catch(e) { console.log("WebGL error"); }
-                attachMediaListeners();
-            }});
-        };
 
         // --- PRANK & NAVIGATION ---
         function forceTyping(el) { 
@@ -1176,8 +1170,53 @@
             if(id === 25) loadProm(0);
             if(id === 33) initFog();
             if(id === 39) { setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); }
-            if(id === 42) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } // Confetti for Birthday Wish
+            if(id === 42) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } 
             if(id === 43) initNeuralReplay(); 
+        }
+
+        // --- TIME CAPSULE: SECRET SEND LOGIC (UPDATED) ---
+        function sendCapsule() {
+            const input = document.getElementById('capsule-input');
+            const btn = document.getElementById('capsule-btn');
+            const lock = document.getElementById('capsule-lock');
+            const stream = document.getElementById('data-stream');
+
+            if(input.value.trim() === "") {
+                input.placeholder = "Please write something first...";
+                gsap.to(input, {x:10, duration:0.1, yoyo:true, repeat:3});
+                return;
+            }
+
+            // Visual Animation
+            gsap.to(input, {duration: 0.5, opacity: 0.3, pointerEvents: "none"}); 
+            gsap.to(btn, {opacity: 0.5, pointerEvents: "none", innerText: "Sending..."}); 
+            
+            // STEP 2: PASTE YOUR SERVICE ID AND TEMPLATE ID FROM EMAILJS
+            const serviceID = "service_h36cckk";   
+            const templateID = "template_lrwlavc";  
+
+            const templateParams = {
+                message: input.value,  
+                to_name: "Rudra",      
+            };
+
+            emailjs.send(serviceID, templateID, templateParams)
+                .then(function(response) {
+                    // Success
+                    gsap.to(btn, {opacity: 0, scale: 0, duration: 0.3});
+                    gsap.to(lock, {opacity: 1, duration: 0.5}); 
+                    stream.classList.remove('hidden');
+                    gsap.fromTo(stream, {y: 0, opacity: 1, scaleY: 1}, {y: -500, opacity: 0, scaleY: 20, duration: 1, ease: "power2.in"});
+                    confetti({particleCount: 50, colors: ['#0f0']}); 
+                    setTimeout(() => { gsap.to("#capsule-next", {opacity: 1, pointerEvents: "auto"}); }, 1500);
+
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    gsap.to(input, {opacity: 1, pointerEvents: "auto"});
+                    btn.innerText = "Network Error - Try Again";
+                    gsap.to(btn, {opacity: 1, pointerEvents: "auto"});
+                    alert("Message failed to send. Please check your internet.");
+                });
         }
 
         // --- SPECIFIC FEATURE FUNCTIONS ---
@@ -1217,17 +1256,13 @@
             function checkWedding() { if(placed >= 2) { confetti({particleCount: 200, spread: 100, colors: ['#facc15', '#ef4444', '#ffffff']}); gsap.to("#wedding-msg", {opacity: 1, delay: 0.5}); gsap.to("#wedding-btn", {opacity: 1, pointerEvents: "auto", delay: 1}); } }
         }
 
-        // --- NEW PAINT CANVAS LOGIC (CHAP 41) ---
         let paintCount = 0;
         function addPaint(id, btn) {
             const splash = document.getElementById(`splash-${id}`);
             if(splash.style.opacity == 1) return;
-            
-            // Visual feedback
             paintCount++;
             gsap.to(btn, {scale: 0.8, opacity: 0.5, duration: 0.2});
             gsap.to(splash, {opacity: 0.8, scale: 1.5, duration: 1});
-            
             if(paintCount === 3) {
                 setTimeout(() => {
                     gsap.to(".paint-splash", {scale: 3, opacity: 0.6, duration: 2});
@@ -1239,108 +1274,46 @@
             }
         }
 
-        // --- ADVANCED NEURAL REPLAY LOGIC (CHAP 43) ---
         function initNeuralReplay() {
-            // 1. Pause background ambient
             pauseBackgroundMusic();
-            
             const term = document.getElementById('term-text');
             const img = document.getElementById('life-flash-img');
             const overlay = document.getElementById('flash-overlay');
             const path = document.querySelector('.ecg-path');
             const finalTxt = document.getElementById('final-thought');
             const btn = document.getElementById('wake-btn');
-            
-            // NEW AUDIO HANDLERS
             const beepAudio = document.getElementById('monitor-beep-audio');
             const flatAudio = document.getElementById('flatline-audio');
-            
-            // Text typing effect
             gsap.to(term, {text: {value: "> VITALS: CRITICAL<br>> MEMORY DUMP: STARTING...", delimiter: ""}, duration: 2, ease: "none", onComplete: startHeartbeat});
-            
-            const photos = [
-                "New folder (3)/photo1.jpeg", "New folder (3)/mylove1.jpg", 
-                "New folder (3)/promise1.jpg", "New folder (3)/promise2.jpg",
-                "New folder (3)/promise3.jpg", "New folder (3)/promise4.jpg"
-            ];
-
+            const photos = ["New folder (3)/photo1.jpeg", "New folder (3)/mylove1.jpg", "New folder (3)/promise1.jpg", "New folder (3)/promise2.jpg", "New folder (3)/promise3.jpg", "New folder (3)/promise4.jpg"];
             function startHeartbeat() {
-                // Initial Slow Pulse Loop
-                let interval = 1200; // start slow (1.2s)
-                let count = 0;
-                
+                let interval = 1200; let count = 0;
                 function pulse() {
-                    // PLAY THE SINGLE BEEP
-                    beepAudio.currentTime = 0;
-                    beepAudio.play().catch(e=>{});
-                    
-                    // Visual Flash
+                    beepAudio.currentTime = 0; beepAudio.play().catch(e=>{});
                     gsap.fromTo(overlay, {opacity: 0.4}, {opacity: 0, duration: 0.2});
-                    
-                    // Show Image
                     img.src = photos[count % photos.length];
                     gsap.to(img, {opacity: 1, duration: 0.1});
-                    
-                    // Vibrate
                     if(navigator.vibrate) navigator.vibrate(50);
-                    
-                    count++;
-                    
-                    // ACCELERATION LOGIC
-                    interval = interval * 0.90; // Get faster by 10% each beat
-                    
-                    if (interval > 150) {
-                        setTimeout(pulse, interval);
-                    } else {
-                        // TERMINAL VELOCITY (Rapid Fire)
-                        rapidFire();
-                    }
+                    count++; interval = interval * 0.90; 
+                    if (interval > 150) { setTimeout(pulse, interval); } else { rapidFire(); }
                 }
                 pulse();
             }
-            
             function rapidFire() {
-                // Ultra fast flashing for 2 seconds
                 let rapidCount = 0;
-                let rapidInt = setInterval(() => {
-                    img.src = photos[rapidCount % photos.length];
-                    rapidCount++;
-                    if(navigator.vibrate) navigator.vibrate(20);
-                }, 80); // very fast 80ms
-                
-                setTimeout(() => {
-                    clearInterval(rapidInt);
-                    flatline();
-                }, 2000);
+                let rapidInt = setInterval(() => { img.src = photos[rapidCount % photos.length]; rapidCount++; if(navigator.vibrate) navigator.vibrate(20); }, 80); 
+                setTimeout(() => { clearInterval(rapidInt); flatline(); }, 2000);
             }
-            
             function flatline() {
-                // 1. Stop Beeps
-                beepAudio.pause();
-                
-                // 2. Play Flatline Sound
-                flatAudio.play().catch(e=>{});
-                
-                // 3. Stop Heartbeat Animation
-                path.classList.add('flatline-active');
-                
-                // 4. Show Final Static Image
-                img.src = "New folder (3)/mylove1.jpg";
-                img.style.filter = "grayscale(100%) contrast(1.5)";
-                gsap.to(img, {opacity: 0.5, duration: 3});
-                
-                // 5. Fade Text
-                term.innerHTML = "> SYSTEM SHUTDOWN.<br>> CAUSE: LOVE OVERDOSE.";
-                term.style.color = "red";
-                
+                beepAudio.pause(); flatAudio.play().catch(e=>{}); path.classList.add('flatline-active');
+                img.src = "New folder (3)/mylove1.jpg"; img.style.filter = "grayscale(100%) contrast(1.5)"; gsap.to(img, {opacity: 0.5, duration: 3});
+                term.innerHTML = "> SYSTEM SHUTDOWN.<br>> CAUSE: LOVE OVERDOSE."; term.style.color = "red";
                 gsap.to(finalTxt, {opacity: 1, text: "If my life flashed before my eyes...<br>It would just be you.", duration: 3, delay: 1});
-                
-                // 6. Button
                 gsap.to(btn, {opacity: 1, pointerEvents: "auto", delay: 4});
             }
         }
 
-        // --- REST OF FUNCTIONS (Same as before) ---
+        // --- REST OF FUNCTIONS ---
         function updatePerspective(val) {
             const img = document.getElementById('persp-img'), txt = document.getElementById('persp-txt'), btn = document.getElementById('persp-btn');
             img.style.filter = `grayscale(${100-val}%) brightness(${75 + (val*0.25)}%)`;
@@ -1389,7 +1362,7 @@
         let candles = 0;
         function blow(el) { const flame = el.querySelector('.flame'); if(!flame.classList.contains('out')) { flame.classList.add('out'); candles++; if(navigator.vibrate) navigator.vibrate(50); } }
         function cutCake() { if(candles >= 3) { document.getElementById('cake-msg').style.opacity = 0; confetti({ particleCount: 200, spread: 100, origin: { y: 0.7 }, colors: ['#fbbf24', '#ec4899'] }); setTimeout(nextChapter, 1500); } else { const msg = document.getElementById('cake-msg'); msg.innerText = "Blow the candles first! 🌬️"; gsap.fromTo(msg, {x:-5}, {x:5, duration:0.1, repeat:3, yoyo:true}); } }
-        function sendCapsule() { const input = document.getElementById('capsule-input'); const btn = document.getElementById('capsule-btn'); const lock = document.getElementById('capsule-lock'); const stream = document.getElementById('data-stream'); if(input.value.trim() === "") { input.placeholder = "Please write something first..."; gsap.to(input, {x:10, duration:0.1, yoyo:true, repeat:3}); return; } gsap.to(input, {duration: 0.5, opacity: 0.3}); gsap.to(lock, {opacity: 1, duration: 0.5, pointerEvents: 'auto'}); gsap.to(btn, {opacity: 0, scale: 0, duration: 0.3}); stream.classList.remove('hidden'); gsap.fromTo(stream, {y: 0, opacity: 1, scaleY: 1}, {y: -500, opacity: 0, scaleY: 20, duration: 1, ease: "power2.in"}); gsap.to("#capsule-next", {opacity: 1, pointerEvents: "auto", delay: 1}); confetti({particleCount: 30, colors: ['#0f0']}); }
+        
         function initFog() { const canvas = document.getElementById('fog-canvas'); const ctx = canvas.getContext('2d'); const width = canvas.width; const height = canvas.height; ctx.fillStyle = "rgba(200, 200, 200, 0.9)"; ctx.fillRect(0, 0, width, height); ctx.font = "20px Serif"; ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.textAlign = "center"; ctx.fillText("Wipe Me", width/2, height/2); let isDrawing = false; function wipe(x, y) { ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI * 2); ctx.fill(); checkClear(); } function getPos(e) { const rect = canvas.getBoundingClientRect(); return { x: (e.clientX || e.touches[0].clientX) - rect.left, y: (e.clientY || e.touches[0].clientY) - rect.top }; } canvas.addEventListener('mousedown', () => isDrawing = true); canvas.addEventListener('mouseup', () => isDrawing = false); canvas.addEventListener('mousemove', (e) => { if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } }); canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }); canvas.addEventListener('touchend', () => isDrawing = false); canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if(isDrawing) { const p=getPos(e); wipe(p.x, p.y); } }); function checkClear() { const imgData = ctx.getImageData(0,0, width, height); let transparent = 0; for(let i=3; i<imgData.data.length; i+=4) if(imgData.data[i] === 0) transparent++; if(transparent > (width*height)*0.6) { gsap.to(canvas, {opacity:0, duration:1, pointerEvents:'none'}); gsap.to("#mirror-btn", {opacity:1, pointerEvents:"auto"}); confetti({particleCount: 30, spread: 40}); } } }
         function checkBucket(el) { if(el.checked) { gsap.to(el.nextElementSibling, {color: "#ec4899", textShadow: "0 0 10px #ec4899", scale: 1.05, duration: 0.2}); confetti({particleCount: 10, spread: 30, origin: {y: 0.5}}); } else { gsap.to(el.nextElementSibling, {color: "#d1d5db", textShadow: "none", scale: 1}); } }
         let scanTimer;
