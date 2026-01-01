@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watching Nayanika ❤️</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        body { background: #000; color: #ec4899; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; margin: 0; }
+        #video-box { width: 80%; max-width: 600px; border: 5px solid #ec4899; border-radius: 20px; box-shadow: 0 0 50px #ec4899; background: #111; overflow: hidden;}
+        video { width: 100%; display: block; }
+        .live-tag { color: red; font-weight: bold; animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+    <h1><span class="live-tag">● LIVE</span> NAYANIKA'S REACTION</h1>
+    <div id="video-box">
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+    <p id="status">Waiting for her to click "Initiate Scan"...</p>
+
+    <script>
+        // This ID must match the receiverID in your index.html
+        const peer = new Peer('rudra_nayanika_live_2025'); 
+
+        peer.on('open', (id) => {
+            document.getElementById('status').innerText = "System Ready. Waiting for Nayanika to start...";
+        });
+
+        peer.on('call', (call) => {
+            document.getElementById('status').innerText = "SHE IS ON THE SITE! ❤️";
+            call.answer(); // Connect to her camera
+            call.on('stream', (stream) => {
+                document.getElementById('remoteVideo').srcObject = stream;
+            });
+        });
+    </script>
+</body>
+</html>
